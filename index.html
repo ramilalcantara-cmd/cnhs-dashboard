@@ -3,10 +3,11 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Crimson+Pro:ital,wght@0,400;0,600;0,700;1,400&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
 <title>CNHS Schedule Dashboard</title>
 <style>
-  @import url('https://fonts.googleapis.com/css2?family=Crimson+Pro:ital,wght@0,400;0,600;0,700;1,400&family=DM+Sans:wght@300;400;500;600&display=swap');
-
   :root {
     --navy: #0B1F4B;
     --gold: #C8960C;
@@ -262,8 +263,20 @@
   </div>
 </div>
 
-<script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/FileSaver.js/2.0.5/FileSaver.min.js"></script>
+<script>
+function loadScript(src, id) {
+  return new Promise((resolve, reject) => {
+    if (document.getElementById(id)) { resolve(); return; }
+    const s = document.createElement('script');
+    s.src = src; s.id = id; s.onload = resolve; s.onerror = reject;
+    document.head.appendChild(s);
+  });
+}
+const LIBS_READY = Promise.all([
+  loadScript('https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js', 'xlsx-lib'),
+  loadScript('https://cdnjs.cloudflare.com/ajax/libs/FileSaver.js/2.0.5/FileSaver.min.js', 'filesaver-lib')
+]);
+</script>
 
 <script>
 // ═══════════════════════════════════════════
@@ -437,11 +450,13 @@ function handleFileUpload(type, input) {
   if (!file) return;
   const statusEl = document.getElementById(`${type}-status`);
   statusEl.className = 'upload-status status-none';
-  statusEl.textContent = '⏳ Parsing...';
+  statusEl.textContent = '⏳ Loading libraries...';
 
-  const reader = new FileReader();
-  reader.onload = function(e) {
-    try {
+  LIBS_READY.then(() => {
+    statusEl.textContent = '⏳ Parsing...';
+    const reader = new FileReader();
+    reader.onload = function(e) {
+      try {
       const data = new Uint8Array(e.target.result);
       const workbook = XLSX.read(data, { type: 'array' });
       let parsed;
@@ -470,6 +485,7 @@ function handleFileUpload(type, input) {
     }
   };
   reader.readAsArrayBuffer(file);
+  }); // end LIBS_READY.then
 }
 
 // ═══════════════════════════════════════════
@@ -974,6 +990,7 @@ async function buildDocxBlob(docXml, filename) {
 async function downloadTeachersProgram(name) {
   try {
     showToast('⏳ Generating Teacher's Program...','info');
+    await LIBS_READY;
     await buildDocxBlob(buildTeacherProgramXML(name), `Teachers_Program_${name.replace(/\s/g,'_')}.docx`);
     showToast('✓ Downloaded: Teacher's Program','success');
   } catch(e) { showToast('Error: '+e.message,'error'); console.error(e); }
@@ -982,6 +999,7 @@ async function downloadTeachersProgram(name) {
 async function downloadClassProgram(name, section) {
   try {
     showToast('⏳ Generating Class Program...','info');
+    await LIBS_READY;
     await buildDocxBlob(buildClassProgramXML(name,section), `Class_Program_${section.replace(/\s/g,'_')}.docx`);
     showToast('✓ Downloaded: Class Program — '+section,'success');
   } catch(e) { showToast('Error: '+e.message,'error'); console.error(e); }
