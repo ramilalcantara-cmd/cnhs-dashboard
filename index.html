@@ -280,6 +280,9 @@ const LIBS_READY = Promise.all([
 
 <script>
 // ═══════════════════════════════════════════
+// CONSTANTS & STATE
+// ═══════════════════════════════════════════
+// ═══════════════════════════════════════════
 // CONSTANTS
 // ═══════════════════════════════════════════
 const SCHOOL = {
@@ -306,130 +309,12 @@ let scheduleData = { jhs: null, shs: null, teachers: {} };
 // ═══════════════════════════════════════════
 // STARTUP — load from localStorage
 // ═══════════════════════════════════════════
-function dismissOverlay() {
-  document.getElementById('loading-overlay').classList.add('hidden');
-}
 
-// Safety net: always dismiss after 3 seconds no matter what
-setTimeout(dismissOverlay, 3000);
 
-window.addEventListener('DOMContentLoaded', () => {
-  const overlay = document.getElementById('loading-overlay');
 
-  // Check if localStorage is available at all (some browsers block it)
-  let storageOk = false;
-  try { localStorage.setItem('_test','1'); localStorage.removeItem('_test'); storageOk = true; }
-  catch(e) { storageOk = false; }
-
-  if (!storageOk) {
-    showNoScheduleBanner(true);
-    dismissOverlay();
-    return;
-  }
-
-  try {
-    const jhsRaw  = localStorage.getItem(STORAGE_KEY_JHS);
-    const shsRaw  = localStorage.getItem(STORAGE_KEY_SHS);
-    const metaRaw = localStorage.getItem(STORAGE_KEY_META);
-
-    // Only show the spinner if there's actually something to restore
-    if (jhsRaw || shsRaw) {
-      overlay.classList.remove('hidden');
-    }
-
-    if (jhsRaw)  scheduleData.jhs = JSON.parse(jhsRaw);
-    if (shsRaw)  scheduleData.shs = JSON.parse(shsRaw);
-
-    if (jhsRaw || shsRaw) {
-      buildTeacherMap();
-      refreshAdminPreview();
-      refreshTeacherDropdown();
-
-      const meta = metaRaw ? JSON.parse(metaRaw) : {};
-      updateSavedBar(meta);
-
-      if (scheduleData.jhs) {
-        document.getElementById('jhs-status').className = 'upload-status status-saved';
-        document.getElementById('jhs-status').textContent = '💾 Loaded from saved data';
-      }
-      if (scheduleData.shs) {
-        document.getElementById('shs-status').className = 'upload-status status-saved';
-        document.getElementById('shs-status').textContent = '💾 Loaded from saved data';
-      }
-    } else {
-      showNoScheduleBanner(true);
-    }
-  } catch(e) {
-    console.warn('Could not load saved data:', e);
-    showNoScheduleBanner(true);
-  }
-
-  dismissOverlay();
-});
-
-// ═══════════════════════════════════════════
-// STORAGE HELPERS
-// ═══════════════════════════════════════════
-function saveToStorage(type, parsedData, filename) {
-  try {
-    localStorage.setItem(
-      type === 'jhs' ? STORAGE_KEY_JHS : STORAGE_KEY_SHS,
-      JSON.stringify(parsedData)
-    );
-    // Update meta
-    const meta = JSON.parse(localStorage.getItem(STORAGE_KEY_META) || '{}');
-    meta[type] = { filename, savedAt: new Date().toISOString() };
-    localStorage.setItem(STORAGE_KEY_META, JSON.stringify(meta));
-    updateSavedBar(meta);
-    return true;
-  } catch(e) {
-    if (e.name === 'QuotaExceededError') {
-      showToast('Storage full — try clearing old data first.', 'error');
-    }
-    return false;
-  }
-}
-
-function clearAllData() {
-  if (!confirm('Clear all saved schedule data? Teachers will see an empty dashboard until you re-upload.')) return;
-  localStorage.removeItem(STORAGE_KEY_JHS);
-  localStorage.removeItem(STORAGE_KEY_SHS);
-  localStorage.removeItem(STORAGE_KEY_META);
-  scheduleData = { jhs: null, shs: null, teachers: {} };
-  refreshAdminPreview();
-  refreshTeacherDropdown();
-  showNoScheduleBanner(true);
-  document.getElementById('saved-bar').style.display = 'none';
-  document.getElementById('jhs-status').className = 'upload-status status-none';
-  document.getElementById('jhs-status').textContent = 'No file loaded';
-  document.getElementById('shs-status').className = 'upload-status status-none';
-  document.getElementById('shs-status').textContent = 'No file loaded';
-  showToast('All saved data cleared.', 'info');
-}
-
-function updateSavedBar(meta) {
-  const bar = document.getElementById('saved-bar');
-  const parts = [];
-  if (meta.jhs) parts.push(`JHS: ${meta.jhs.filename}`);
-  if (meta.shs) parts.push(`SHS: ${meta.shs.filename}`);
-  if (parts.length === 0) { bar.style.display = 'none'; return; }
-
-  bar.style.display = 'flex';
-  document.getElementById('saved-bar-text').textContent = parts.join(' · ');
-
-  // Show most recent save time
-  const dates = [meta.jhs?.savedAt, meta.shs?.savedAt].filter(Boolean).sort().reverse();
-  if (dates.length) {
-    const d = new Date(dates[0]);
-    document.getElementById('saved-bar-date').textContent =
-      'Last updated: ' + d.toLocaleDateString('en-PH', { month:'long', day:'numeric', year:'numeric' }) +
-      ' at ' + d.toLocaleTimeString('en-PH', { hour:'2-digit', minute:'2-digit' });
-  }
-}
-
-function showNoScheduleBanner(show) {
-  document.getElementById('no-schedule-banner').style.display = show ? 'flex' : 'none';
-}
+// ═══════════════════════════════════
+// INIT — runs after all functions are defined
+// ═══════════════════════════════════
 
 // ═══════════════════════════════════════════
 // TAB SWITCHING
@@ -1032,6 +917,138 @@ function showToast(msg,type='') {
     if (!file) return;
     handleFileUpload(type,{files:[file]});
   });
+});
+
+// ═══════════════════════════════════════════
+// INIT — runs after all functions are defined
+// ═══════════════════════════════════════════
+
+// ═══════════════════════════════════════════
+// STORAGE HELPERS
+// ═══════════════════════════════════════════
+function saveToStorage(type, parsedData, filename) {
+  try {
+    localStorage.setItem(
+      type === 'jhs' ? STORAGE_KEY_JHS : STORAGE_KEY_SHS,
+      JSON.stringify(parsedData)
+    );
+    // Update meta
+    const meta = JSON.parse(localStorage.getItem(STORAGE_KEY_META) || '{}');
+    meta[type] = { filename, savedAt: new Date().toISOString() };
+    localStorage.setItem(STORAGE_KEY_META, JSON.stringify(meta));
+    updateSavedBar(meta);
+    return true;
+  } catch(e) {
+    if (e.name === 'QuotaExceededError') {
+      showToast('Storage full — try clearing old data first.', 'error');
+    }
+    return false;
+  }
+}
+
+function clearAllData() {
+  if (!confirm('Clear all saved schedule data? Teachers will see an empty dashboard until you re-upload.')) return;
+  localStorage.removeItem(STORAGE_KEY_JHS);
+  localStorage.removeItem(STORAGE_KEY_SHS);
+  localStorage.removeItem(STORAGE_KEY_META);
+  scheduleData = { jhs: null, shs: null, teachers: {} };
+  refreshAdminPreview();
+  refreshTeacherDropdown();
+  showNoScheduleBanner(true);
+  document.getElementById('saved-bar').style.display = 'none';
+  document.getElementById('jhs-status').className = 'upload-status status-none';
+  document.getElementById('jhs-status').textContent = 'No file loaded';
+  document.getElementById('shs-status').className = 'upload-status status-none';
+  document.getElementById('shs-status').textContent = 'No file loaded';
+  showToast('All saved data cleared.', 'info');
+}
+
+function updateSavedBar(meta) {
+  const bar = document.getElementById('saved-bar');
+  const parts = [];
+  if (meta.jhs) parts.push(`JHS: ${meta.jhs.filename}`);
+  if (meta.shs) parts.push(`SHS: ${meta.shs.filename}`);
+  if (parts.length === 0) { bar.style.display = 'none'; return; }
+
+  bar.style.display = 'flex';
+  document.getElementById('saved-bar-text').textContent = parts.join(' · ');
+
+  // Show most recent save time
+  const dates = [meta.jhs?.savedAt, meta.shs?.savedAt].filter(Boolean).sort().reverse();
+  if (dates.length) {
+    const d = new Date(dates[0]);
+    document.getElementById('saved-bar-date').textContent =
+      'Last updated: ' + d.toLocaleDateString('en-PH', { month:'long', day:'numeric', year:'numeric' }) +
+      ' at ' + d.toLocaleTimeString('en-PH', { hour:'2-digit', minute:'2-digit' });
+  }
+}
+
+function showNoScheduleBanner(show) {
+  document.getElementById('no-schedule-banner').style.display = show ? 'flex' : 'none';
+}
+
+// ═══════════════════════════════════════════
+// INIT — all functions defined above before this runs
+// ═══════════════════════════════════════════
+function dismissOverlay() {
+  document.getElementById('loading-overlay').classList.add('hidden');
+}
+
+// Safety net: always dismiss after 3 seconds no matter what
+setTimeout(dismissOverlay, 3000);
+
+window.addEventListener('DOMContentLoaded', () => {
+  const overlay = document.getElementById('loading-overlay');
+
+  // Check if localStorage is available at all (some browsers block it)
+  let storageOk = false;
+  try { localStorage.setItem('_test','1'); localStorage.removeItem('_test'); storageOk = true; }
+  catch(e) { storageOk = false; }
+
+  if (!storageOk) {
+    showNoScheduleBanner(true);
+    dismissOverlay();
+    return;
+  }
+
+  try {
+    const jhsRaw  = localStorage.getItem(STORAGE_KEY_JHS);
+    const shsRaw  = localStorage.getItem(STORAGE_KEY_SHS);
+    const metaRaw = localStorage.getItem(STORAGE_KEY_META);
+
+    // Only show the spinner if there's actually something to restore
+    if (jhsRaw || shsRaw) {
+      overlay.classList.remove('hidden');
+    }
+
+    if (jhsRaw)  scheduleData.jhs = JSON.parse(jhsRaw);
+    if (shsRaw)  scheduleData.shs = JSON.parse(shsRaw);
+
+    if (jhsRaw || shsRaw) {
+      buildTeacherMap();
+      refreshAdminPreview();
+      refreshTeacherDropdown();
+
+      const meta = metaRaw ? JSON.parse(metaRaw) : {};
+      updateSavedBar(meta);
+
+      if (scheduleData.jhs) {
+        document.getElementById('jhs-status').className = 'upload-status status-saved';
+        document.getElementById('jhs-status').textContent = '💾 Loaded from saved data';
+      }
+      if (scheduleData.shs) {
+        document.getElementById('shs-status').className = 'upload-status status-saved';
+        document.getElementById('shs-status').textContent = '💾 Loaded from saved data';
+      }
+    } else {
+      showNoScheduleBanner(true);
+    }
+  } catch(e) {
+    console.warn('Could not load saved data:', e);
+    showNoScheduleBanner(true);
+  }
+
+  dismissOverlay();
 });
 </script>
 </body>
