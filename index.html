@@ -27,339 +27,138 @@
   }
 
   * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: 'DM Sans', sans-serif; background: var(--cream); color: var(--navy); min-height: 100vh; }
 
-  body {
-    font-family: 'DM Sans', sans-serif;
-    background: var(--cream);
-    color: var(--navy);
-    min-height: 100vh;
-  }
-
-  /* ─── HEADER ─── */
-  .site-header {
-    background: var(--navy);
-    padding: 0;
-    position: sticky; top: 0; z-index: 100;
-    box-shadow: 0 2px 20px rgba(0,0,0,0.3);
-  }
-  .header-inner {
-    max-width: 1200px; margin: 0 auto;
-    display: flex; align-items: center; gap: 16px;
-    padding: 12px 24px;
-  }
-  .header-logos {
-    display: flex; align-items: center; gap: 10px; flex-shrink: 0;
-  }
+  .site-header { background: var(--navy); position: sticky; top: 0; z-index: 100; box-shadow: 0 2px 20px rgba(0,0,0,0.3); }
+  .header-inner { max-width: 1200px; margin: 0 auto; display: flex; align-items: center; gap: 16px; padding: 12px 24px; }
+  .header-logos { display: flex; align-items: center; gap: 10px; flex-shrink: 0; }
   .header-logos img { height: 50px; width: 50px; object-fit: contain; }
-  .header-text {
-    flex: 1;
-  }
-  .header-text h1 {
-    font-family: 'Crimson Pro', serif;
-    font-size: 1.25rem; font-weight: 700;
-    color: var(--white); line-height: 1.2;
-    letter-spacing: 0.01em;
-  }
-  .header-text p {
-    font-size: 0.72rem; color: rgba(255,255,255,0.65);
-    font-weight: 300; letter-spacing: 0.04em; text-transform: uppercase;
-    margin-top: 2px;
-  }
-  .header-badge {
-    background: var(--gold);
-    color: var(--navy);
-    font-size: 0.65rem; font-weight: 600;
-    letter-spacing: 0.06em; text-transform: uppercase;
-    padding: 4px 10px; border-radius: 20px;
-    white-space: nowrap;
-  }
+  .header-text { flex: 1; }
+  .header-text h1 { font-family: 'Crimson Pro', serif; font-size: 1.25rem; font-weight: 700; color: var(--white); line-height: 1.2; letter-spacing: 0.01em; }
+  .header-text p { font-size: 0.72rem; color: rgba(255,255,255,0.65); font-weight: 300; letter-spacing: 0.04em; text-transform: uppercase; margin-top: 2px; }
+  .header-badge { background: var(--gold); color: var(--navy); font-size: 0.65rem; font-weight: 600; letter-spacing: 0.06em; text-transform: uppercase; padding: 4px 10px; border-radius: 20px; white-space: nowrap; }
 
-  /* ─── TABS ─── */
-  .tabs {
-    background: var(--white);
-    border-bottom: 2px solid var(--gray-200);
-    display: flex; justify-content: center;
-  }
-  .tab-btn {
-    padding: 14px 32px;
-    font-family: 'DM Sans', sans-serif;
-    font-size: 0.85rem; font-weight: 500;
-    color: var(--gray-500); cursor: pointer;
-    border: none; background: none;
-    border-bottom: 3px solid transparent;
-    margin-bottom: -2px;
-    transition: all 0.2s;
-    letter-spacing: 0.02em;
-  }
+  .tabs { background: var(--white); border-bottom: 2px solid var(--gray-200); display: flex; justify-content: center; }
+  .tab-btn { padding: 14px 32px; font-family: 'DM Sans', sans-serif; font-size: 0.85rem; font-weight: 500; color: var(--gray-500); cursor: pointer; border: none; background: none; border-bottom: 3px solid transparent; margin-bottom: -2px; transition: all 0.2s; letter-spacing: 0.02em; }
   .tab-btn:hover { color: var(--navy); }
-  .tab-btn.active {
-    color: var(--navy); font-weight: 600;
-    border-bottom-color: var(--gold);
-  }
+  .tab-btn.active { color: var(--navy); font-weight: 600; border-bottom-color: var(--gold); }
 
-  /* ─── PANELS ─── */
   .panel { display: none; }
   .panel.active { display: block; }
 
-  /* ─── TEACHER PANEL ─── */
-  .teacher-panel {
-    max-width: 860px; margin: 0 auto; padding: 40px 24px;
-  }
+  .teacher-panel { max-width: 860px; margin: 0 auto; padding: 40px 24px; }
+  .panel-title { font-family: 'Crimson Pro', serif; font-size: 1.9rem; font-weight: 700; color: var(--navy); margin-bottom: 4px; }
+  .panel-subtitle { color: var(--gray-500); font-size: 0.875rem; margin-bottom: 32px; }
 
-  .panel-title {
-    font-family: 'Crimson Pro', serif;
-    font-size: 1.9rem; font-weight: 700;
-    color: var(--navy); margin-bottom: 4px;
-  }
-  .panel-subtitle {
-    color: var(--gray-500); font-size: 0.875rem;
-    margin-bottom: 32px;
-  }
+  /* Loading overlay */
+  .loading-overlay { position: fixed; inset: 0; background: rgba(11,31,75,0.7); z-index: 9000; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 16px; }
+  .loading-overlay.hidden { display: none; }
+  .loading-box { background: white; border-radius: var(--radius-lg); padding: 36px 48px; text-align: center; box-shadow: var(--shadow-lg); }
+  .loading-box h3 { font-family: 'Crimson Pro', serif; font-size: 1.3rem; margin-bottom: 8px; color: var(--navy); }
+  .loading-box p { color: var(--gray-500); font-size: 0.85rem; }
+  .big-spinner { width: 48px; height: 48px; border: 4px solid var(--gray-200); border-top-color: var(--navy); border-radius: 50%; animation: spin 0.8s linear infinite; margin: 0 auto 16px; }
 
-  /* Teacher selector */
-  .selector-card {
-    background: var(--white);
-    border: 1px solid var(--gray-200);
-    border-radius: var(--radius-lg);
-    padding: 28px 32px;
-    box-shadow: var(--shadow-sm);
-    margin-bottom: 28px;
-  }
-  .selector-card label {
-    display: block; font-size: 0.78rem; font-weight: 600;
-    letter-spacing: 0.08em; text-transform: uppercase;
-    color: var(--gray-500); margin-bottom: 10px;
-  }
-  .selector-card select {
-    width: 100%;
-    padding: 12px 16px;
-    font-family: 'DM Sans', sans-serif;
-    font-size: 1rem; color: var(--navy);
-    background: var(--cream);
-    border: 1.5px solid var(--gray-200);
-    border-radius: var(--radius);
-    cursor: pointer; outline: none;
-    appearance: none;
-    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%230B1F4B' stroke-width='2'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E");
-    background-repeat: no-repeat;
-    background-position: right 14px center;
-    padding-right: 42px;
-    transition: border-color 0.2s;
-  }
+  .selector-card { background: var(--white); border: 1px solid var(--gray-200); border-radius: var(--radius-lg); padding: 28px 32px; box-shadow: var(--shadow-sm); margin-bottom: 28px; }
+  .selector-card label { display: block; font-size: 0.78rem; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; color: var(--gray-500); margin-bottom: 10px; }
+  .selector-card select { width: 100%; padding: 12px 16px; font-family: 'DM Sans', sans-serif; font-size: 1rem; color: var(--navy); background: var(--cream); border: 1.5px solid var(--gray-200); border-radius: var(--radius); cursor: pointer; outline: none; appearance: none; background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%230B1F4B' stroke-width='2'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E"); background-repeat: no-repeat; background-position: right 14px center; padding-right: 42px; transition: border-color 0.2s; }
   .selector-card select:focus { border-color: var(--gold); }
 
-  /* Teacher result */
-  .teacher-result {
-    animation: fadeUp 0.3s ease;
-  }
-  @keyframes fadeUp {
-    from { opacity:0; transform: translateY(12px); }
-    to { opacity:1; transform: translateY(0); }
-  }
+  .teacher-result { animation: fadeUp 0.3s ease; }
+  @keyframes fadeUp { from { opacity:0; transform: translateY(12px); } to { opacity:1; transform: translateY(0); } }
 
-  .teacher-name-bar {
-    background: linear-gradient(135deg, var(--navy) 0%, #1a3a7a 100%);
-    border-radius: var(--radius-lg) var(--radius-lg) 0 0;
-    padding: 22px 28px;
-    display: flex; align-items: center; justify-content: space-between;
-  }
-  .teacher-name-bar h2 {
-    font-family: 'Crimson Pro', serif;
-    font-size: 1.4rem; font-weight: 700; color: var(--white);
-  }
-  .teacher-name-bar .teacher-meta {
-    font-size: 0.8rem; color: rgba(255,255,255,0.65); margin-top: 3px;
-  }
+  .teacher-name-bar { background: linear-gradient(135deg, var(--navy) 0%, #1a3a7a 100%); border-radius: var(--radius-lg) var(--radius-lg) 0 0; padding: 22px 28px; display: flex; align-items: center; justify-content: space-between; }
+  .teacher-name-bar h2 { font-family: 'Crimson Pro', serif; font-size: 1.4rem; font-weight: 700; color: var(--white); }
+  .teacher-name-bar .teacher-meta { font-size: 0.8rem; color: rgba(255,255,255,0.65); margin-top: 3px; }
   .badge-jhs { background: #2980B9; color: white; padding: 3px 10px; border-radius: 20px; font-size: 0.7rem; font-weight: 600; }
   .badge-shs { background: #8E44AD; color: white; padding: 3px 10px; border-radius: 20px; font-size: 0.7rem; font-weight: 600; }
   .badge-both { background: var(--gold); color: var(--navy); padding: 3px 10px; border-radius: 20px; font-size: 0.7rem; font-weight: 600; }
 
-  .download-cards {
-    background: var(--white);
-    border: 1px solid var(--gray-200);
-    border-top: none;
-    border-radius: 0 0 var(--radius-lg) var(--radius-lg);
-    padding: 24px;
-    box-shadow: var(--shadow-sm);
-  }
-  .download-cards-title {
-    font-size: 0.75rem; font-weight: 600; letter-spacing: 0.08em;
-    text-transform: uppercase; color: var(--gray-500); margin-bottom: 16px;
-  }
-  .download-grid {
-    display: grid; grid-template-columns: 1fr 1fr; gap: 12px;
-  }
-  @media (max-width: 600px) {
-    .download-grid { grid-template-columns: 1fr; }
-  }
-  .download-card {
-    border: 1.5px solid var(--gray-200);
-    border-radius: var(--radius);
-    padding: 16px 18px;
-    display: flex; align-items: center; gap: 14px;
-    cursor: pointer; transition: all 0.2s;
-    background: var(--cream);
-    position: relative; overflow: hidden;
-  }
-  .download-card:hover {
-    border-color: var(--gold);
-    box-shadow: var(--shadow-sm);
-    transform: translateY(-2px);
-  }
+  .download-cards { background: var(--white); border: 1px solid var(--gray-200); border-top: none; border-radius: 0 0 var(--radius-lg) var(--radius-lg); padding: 24px; box-shadow: var(--shadow-sm); }
+  .download-cards-title { font-size: 0.75rem; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; color: var(--gray-500); margin-bottom: 16px; }
+  .download-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+  @media (max-width: 600px) { .download-grid { grid-template-columns: 1fr; } }
+
+  .download-card { border: 1.5px solid var(--gray-200); border-radius: var(--radius); padding: 16px 18px; display: flex; align-items: center; gap: 14px; cursor: pointer; transition: all 0.2s; background: var(--cream); position: relative; overflow: hidden; }
+  .download-card:hover { border-color: var(--gold); box-shadow: var(--shadow-sm); transform: translateY(-2px); }
   .download-card:active { transform: translateY(0); }
-  .download-icon {
-    width: 40px; height: 40px; border-radius: 8px;
-    display: flex; align-items: center; justify-content: center;
-    font-size: 1.2rem; flex-shrink: 0;
-  }
+  .download-icon { width: 40px; height: 40px; border-radius: 8px; display: flex; align-items: center; justify-content: center; font-size: 1.2rem; flex-shrink: 0; }
   .icon-teacher { background: #EBF5FB; }
   .icon-class { background: #EBF8F0; }
-  .download-card-text h3 {
-    font-size: 0.875rem; font-weight: 600; color: var(--navy); margin-bottom: 2px;
-  }
-  .download-card-text p {
-    font-size: 0.75rem; color: var(--gray-500);
-  }
-  .download-arrow {
-    margin-left: auto; color: var(--gray-500); font-size: 1rem;
-    transition: transform 0.2s;
-  }
+  .download-card-text h3 { font-size: 0.875rem; font-weight: 600; color: var(--navy); margin-bottom: 2px; }
+  .download-card-text p { font-size: 0.75rem; color: var(--gray-500); }
+  .download-arrow { margin-left: auto; color: var(--gray-500); font-size: 1rem; transition: transform 0.2s; }
   .download-card:hover .download-arrow { transform: translateX(4px); color: var(--gold); }
-  .download-card.loading { opacity: 0.6; cursor: default; }
 
-  .no-result {
-    text-align: center; padding: 60px 20px;
-    color: var(--gray-500);
-  }
+  .no-result { text-align: center; padding: 60px 20px; color: var(--gray-500); }
   .no-result .icon { font-size: 3rem; margin-bottom: 12px; }
-  .no-result p { font-size: 0.9rem; }
 
-  /* ─── ADMIN PANEL ─── */
-  .admin-panel {
-    max-width: 900px; margin: 0 auto; padding: 40px 24px;
-  }
+  /* no-schedule banner */
+  .no-schedule-banner { background: #FFF8E1; border: 1.5px solid #F5C842; border-radius: var(--radius-lg); padding: 20px 24px; display: flex; align-items: center; gap: 14px; margin-bottom: 24px; }
+  .no-schedule-banner .ns-icon { font-size: 1.5rem; flex-shrink: 0; }
+  .no-schedule-banner p { font-size: 0.875rem; color: var(--gray-700); }
+  .no-schedule-banner strong { color: var(--navy); }
 
-  .admin-grid {
-    display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-bottom: 28px;
-  }
+  /* Admin */
+  .admin-panel { max-width: 900px; margin: 0 auto; padding: 40px 24px; }
+  .admin-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-bottom: 28px; }
   @media (max-width: 640px) { .admin-grid { grid-template-columns: 1fr; } }
 
-  .upload-card {
-    background: var(--white);
-    border: 2px dashed var(--gray-200);
-    border-radius: var(--radius-lg);
-    padding: 28px 24px;
-    text-align: center;
-    transition: all 0.2s; cursor: pointer;
-    position: relative;
-  }
-  .upload-card:hover, .upload-card.drag-over {
-    border-color: var(--gold); background: #FFFDF0;
-  }
-  .upload-card input[type=file] {
-    position: absolute; inset: 0; opacity: 0; cursor: pointer; width: 100%; height: 100%;
-  }
+  .upload-card { background: var(--white); border: 2px dashed var(--gray-200); border-radius: var(--radius-lg); padding: 28px 24px; text-align: center; transition: all 0.2s; cursor: pointer; position: relative; }
+  .upload-card:hover, .upload-card.drag-over { border-color: var(--gold); background: #FFFDF0; }
+  .upload-card input[type=file] { position: absolute; inset: 0; opacity: 0; cursor: pointer; width: 100%; height: 100%; }
   .upload-card .upload-icon { font-size: 2rem; margin-bottom: 10px; }
   .upload-card h3 { font-weight: 600; margin-bottom: 4px; font-size: 0.95rem; }
   .upload-card p { color: var(--gray-500); font-size: 0.8rem; }
-  .upload-status {
-    margin-top: 12px; font-size: 0.78rem; font-weight: 600;
-    padding: 6px 12px; border-radius: 20px; display: inline-block;
-  }
+  .upload-status { margin-top: 12px; font-size: 0.78rem; font-weight: 600; padding: 6px 12px; border-radius: 20px; display: inline-block; }
   .status-none { color: var(--gray-500); background: var(--gray-100); }
   .status-ok { color: var(--green-ok); background: #D4EDDA; }
+  .status-saved { color: #6C3483; background: #E8DAEF; }
   .status-err { color: var(--red-accent); background: #FADBD8; }
 
-  /* Admin data preview */
-  .data-preview {
-    background: var(--white);
-    border: 1px solid var(--gray-200);
-    border-radius: var(--radius-lg);
-    overflow: hidden;
-    box-shadow: var(--shadow-sm);
-  }
-  .data-preview-header {
-    background: var(--navy);
-    padding: 16px 24px;
-    display: flex; align-items: center; justify-content: space-between;
-  }
-  .data-preview-header h3 {
-    font-family: 'Crimson Pro', serif;
-    color: var(--white); font-size: 1.1rem;
-  }
-  .data-preview-header .stats {
-    display: flex; gap: 16px;
-  }
-  .stat-chip {
-    background: rgba(255,255,255,0.15);
-    color: white; font-size: 0.72rem; font-weight: 600;
-    padding: 4px 10px; border-radius: 20px;
-  }
-  .data-preview-body {
-    padding: 20px 24px;
-    max-height: 360px; overflow-y: auto;
-  }
+  /* Saved schedule info bar */
+  .saved-bar { background: var(--white); border: 1px solid var(--gray-200); border-radius: var(--radius-lg); padding: 16px 20px; margin-bottom: 20px; display: flex; align-items: center; justify-content: space-between; gap: 12px; box-shadow: var(--shadow-sm); }
+  .saved-bar .sb-left { display: flex; align-items: center; gap: 10px; }
+  .saved-bar .sb-icon { font-size: 1.3rem; }
+  .saved-bar .sb-text p { font-size: 0.8rem; color: var(--gray-500); }
+  .saved-bar .sb-text strong { font-size: 0.9rem; color: var(--navy); }
+  .clear-btn { background: none; border: 1.5px solid var(--gray-200); border-radius: 8px; padding: 6px 14px; font-size: 0.78rem; font-weight: 600; color: var(--red-accent); cursor: pointer; transition: all 0.2s; white-space: nowrap; }
+  .clear-btn:hover { background: #FADBD8; border-color: var(--red-accent); }
 
-  .teacher-list-admin {
-    display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 8px;
-  }
-  .teacher-chip {
-    background: var(--gray-100);
-    border: 1px solid var(--gray-200);
-    border-radius: 8px;
-    padding: 8px 12px;
-    font-size: 0.8rem;
-  }
+  .data-preview { background: var(--white); border: 1px solid var(--gray-200); border-radius: var(--radius-lg); overflow: hidden; box-shadow: var(--shadow-sm); }
+  .data-preview-header { background: var(--navy); padding: 16px 24px; display: flex; align-items: center; justify-content: space-between; }
+  .data-preview-header h3 { font-family: 'Crimson Pro', serif; color: var(--white); font-size: 1.1rem; }
+  .stat-chip { background: rgba(255,255,255,0.15); color: white; font-size: 0.72rem; font-weight: 600; padding: 4px 10px; border-radius: 20px; }
+  .data-preview-body { padding: 20px 24px; max-height: 360px; overflow-y: auto; }
+  .teacher-list-admin { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 8px; }
+  .teacher-chip { background: var(--gray-100); border: 1px solid var(--gray-200); border-radius: 8px; padding: 8px 12px; font-size: 0.8rem; }
   .teacher-chip .tc-name { font-weight: 600; color: var(--navy); }
   .teacher-chip .tc-badges { display: flex; gap: 4px; margin-top: 4px; flex-wrap: wrap; }
   .tc-badge { font-size: 0.65rem; padding: 2px 7px; border-radius: 10px; font-weight: 600; }
   .tc-jhs { background: #D6EAF8; color: #1A5276; }
   .tc-shs { background: #E8DAEF; color: #6C3483; }
 
-  .empty-state {
-    text-align: center; padding: 48px; color: var(--gray-500);
-  }
+  .empty-state { text-align: center; padding: 48px; color: var(--gray-500); }
   .empty-state .big-icon { font-size: 3.5rem; margin-bottom: 12px; }
   .empty-state h3 { font-size: 1rem; color: var(--gray-700); margin-bottom: 6px; }
-  .empty-state p { font-size: 0.85rem; }
 
-  /* Toast */
-  .toast {
-    position: fixed; bottom: 24px; right: 24px;
-    background: var(--navy); color: white;
-    padding: 12px 20px; border-radius: var(--radius);
-    font-size: 0.875rem; font-weight: 500;
-    box-shadow: var(--shadow-lg);
-    z-index: 9999;
-    animation: slideIn 0.3s ease;
-    max-width: 320px;
-  }
+  .toast { position: fixed; bottom: 24px; right: 24px; background: var(--navy); color: white; padding: 12px 20px; border-radius: var(--radius); font-size: 0.875rem; font-weight: 500; box-shadow: var(--shadow-lg); z-index: 9999; animation: slideIn 0.3s ease; max-width: 340px; }
   .toast.success { background: #1E7E34; }
   .toast.error { background: var(--red-accent); }
-  @keyframes slideIn {
-    from { transform: translateY(20px); opacity: 0; }
-    to { transform: translateY(0); opacity: 1; }
-  }
-
-  /* Spinner */
-  .spinner {
-    display: inline-block; width: 14px; height: 14px;
-    border: 2px solid rgba(255,255,255,0.4);
-    border-top-color: white;
-    border-radius: 50%;
-    animation: spin 0.6s linear infinite;
-    margin-right: 6px;
-    vertical-align: middle;
-  }
+  .toast.info { background: #1A5276; }
+  @keyframes slideIn { from { transform: translateY(20px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
   @keyframes spin { to { transform: rotate(360deg); } }
-
-  hr.divider {
-    border: none; border-top: 1px solid var(--gray-200);
-    margin: 24px 0;
-  }
 </style>
 </head>
 <body>
+
+<!-- LOADING OVERLAY -->
+<div class="loading-overlay" id="loading-overlay">
+  <div class="loading-box">
+    <div class="big-spinner"></div>
+    <h3>Loading Saved Schedule</h3>
+    <p>Restoring previously uploaded data...</p>
+  </div>
+</div>
 
 <!-- HEADER -->
 <header class="site-header">
@@ -386,7 +185,12 @@
 <div id="panel-teacher" class="panel active">
   <div class="teacher-panel">
     <div class="panel-title">Download Your Program</div>
-    <div class="panel-subtitle">Select your name to generate and download your personalized Teacher's Program and Class Program documents.</div>
+    <div class="panel-subtitle">Select your name to generate and download your Teacher's Program and Class Program documents.</div>
+
+    <div id="no-schedule-banner" class="no-schedule-banner" style="display:none">
+      <div class="ns-icon">⚠️</div>
+      <p><strong>No schedule loaded yet.</strong> An admin needs to go to the <strong>Admin tab</strong> and upload the JHS and/or SHS Excel files first.</p>
+    </div>
 
     <div class="selector-card">
       <label>Select Teacher Name</label>
@@ -408,33 +212,41 @@
 <div id="panel-admin" class="panel">
   <div class="admin-panel">
     <div class="panel-title">Manage Class Schedules</div>
-    <div class="panel-subtitle">Upload the JHS and/or SHS Excel schedule files. The teacher dashboard will instantly reflect the changes.</div>
+    <div class="panel-subtitle">Upload the JHS and/or SHS Excel schedule files. Data is saved automatically — teachers will see updates instantly without re-uploading.</div>
+
+    <!-- Saved schedule info bar -->
+    <div id="saved-bar" class="saved-bar" style="display:none">
+      <div class="sb-left">
+        <div class="sb-icon">💾</div>
+        <div class="sb-text">
+          <strong id="saved-bar-text">Schedule data is saved</strong>
+          <p id="saved-bar-date">Loaded from storage</p>
+        </div>
+      </div>
+      <button class="clear-btn" onclick="clearAllData()">🗑 Clear All Saved Data</button>
+    </div>
 
     <div class="admin-grid">
-      <!-- JHS Upload -->
       <div class="upload-card" id="jhs-upload-card">
         <input type="file" accept=".xlsx,.xls" id="jhs-file-input" onchange="handleFileUpload('jhs', this)">
         <div class="upload-icon">📗</div>
         <h3>JHS Class Schedule</h3>
-        <p>Junior High School<br>Grade 7 – Grade 10</p>
+        <p>Junior High School · Grade 7–10</p>
         <div class="upload-status status-none" id="jhs-status">No file loaded</div>
       </div>
-
-      <!-- SHS Upload -->
       <div class="upload-card" id="shs-upload-card">
         <input type="file" accept=".xlsx,.xls" id="shs-file-input" onchange="handleFileUpload('shs', this)">
         <div class="upload-icon">📘</div>
         <h3>SHS Class Schedule</h3>
-        <p>Senior High School<br>Grade 11 – Grade 12</p>
+        <p>Senior High School · Grade 11–12</p>
         <div class="upload-status status-none" id="shs-status">No file loaded</div>
       </div>
     </div>
 
-    <!-- Data Preview -->
     <div class="data-preview">
       <div class="data-preview-header">
         <h3>Recognized Teachers</h3>
-        <div class="stats">
+        <div style="display:flex;gap:8px">
           <span class="stat-chip" id="stat-teachers">0 teachers</span>
           <span class="stat-chip" id="stat-sections">0 sections</span>
         </div>
@@ -443,22 +255,20 @@
         <div class="empty-state">
           <div class="big-icon">📂</div>
           <h3>No schedule loaded yet</h3>
-          <p>Upload the JHS and/or SHS Excel files above to get started.</p>
+          <p>Upload the JHS and/or SHS Excel files above.</p>
         </div>
       </div>
     </div>
   </div>
 </div>
 
-<!-- Load SheetJS from CDN -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
-<!-- Load docx from CDN -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/FileSaver.js/2.0.5/FileSaver.min.js"></script>
 
 <script>
-// ═══════════════════════════════════════════════════════
-// STATE
-// ═══════════════════════════════════════════════════════
+// ═══════════════════════════════════════════
+// CONSTANTS
+// ═══════════════════════════════════════════
 const SCHOOL = {
   district: "HILONGOS EAST",
   school: "CONCEPCION NATIONAL HIGH SCHOOL",
@@ -473,250 +283,134 @@ const SCHOOL = {
   approved_title: "Schools Division Superintendent"
 };
 
-let scheduleData = {
-  jhs: null,  // parsed JHS data
-  shs: null,  // parsed SHS data
-  teachers: {} // merged teacher map
-};
+const STORAGE_KEY_JHS     = 'cnhs_jhs_schedule_v1';
+const STORAGE_KEY_SHS     = 'cnhs_shs_schedule_v1';
+const STORAGE_KEY_META    = 'cnhs_schedule_meta_v1';
+const DAYS = ['Monday','Tuesday','Wednesday','Thursday','Friday'];
 
-// ═══════════════════════════════════════════════════════
+let scheduleData = { jhs: null, shs: null, teachers: {} };
+
+// ═══════════════════════════════════════════
+// STARTUP — load from localStorage
+// ═══════════════════════════════════════════
+window.addEventListener('DOMContentLoaded', async () => {
+  const overlay = document.getElementById('loading-overlay');
+  try {
+    const jhsRaw  = localStorage.getItem(STORAGE_KEY_JHS);
+    const shsRaw  = localStorage.getItem(STORAGE_KEY_SHS);
+    const metaRaw = localStorage.getItem(STORAGE_KEY_META);
+
+    if (jhsRaw)  scheduleData.jhs = JSON.parse(jhsRaw);
+    if (shsRaw)  scheduleData.shs = JSON.parse(shsRaw);
+
+    if (jhsRaw || shsRaw) {
+      buildTeacherMap();
+      refreshAdminPreview();
+      refreshTeacherDropdown();
+
+      const meta = metaRaw ? JSON.parse(metaRaw) : {};
+      updateSavedBar(meta);
+
+      if (scheduleData.jhs) {
+        document.getElementById('jhs-status').className = 'upload-status status-saved';
+        document.getElementById('jhs-status').textContent = '💾 Loaded from saved data';
+      }
+      if (scheduleData.shs) {
+        document.getElementById('shs-status').className = 'upload-status status-saved';
+        document.getElementById('shs-status').textContent = '💾 Loaded from saved data';
+      }
+    } else {
+      showNoScheduleBanner(true);
+    }
+  } catch(e) {
+    console.warn('Could not load saved data:', e);
+    showNoScheduleBanner(true);
+  } finally {
+    overlay.classList.add('hidden');
+  }
+});
+
+// ═══════════════════════════════════════════
+// STORAGE HELPERS
+// ═══════════════════════════════════════════
+function saveToStorage(type, parsedData, filename) {
+  try {
+    localStorage.setItem(
+      type === 'jhs' ? STORAGE_KEY_JHS : STORAGE_KEY_SHS,
+      JSON.stringify(parsedData)
+    );
+    // Update meta
+    const meta = JSON.parse(localStorage.getItem(STORAGE_KEY_META) || '{}');
+    meta[type] = { filename, savedAt: new Date().toISOString() };
+    localStorage.setItem(STORAGE_KEY_META, JSON.stringify(meta));
+    updateSavedBar(meta);
+    return true;
+  } catch(e) {
+    if (e.name === 'QuotaExceededError') {
+      showToast('Storage full — try clearing old data first.', 'error');
+    }
+    return false;
+  }
+}
+
+function clearAllData() {
+  if (!confirm('Clear all saved schedule data? Teachers will see an empty dashboard until you re-upload.')) return;
+  localStorage.removeItem(STORAGE_KEY_JHS);
+  localStorage.removeItem(STORAGE_KEY_SHS);
+  localStorage.removeItem(STORAGE_KEY_META);
+  scheduleData = { jhs: null, shs: null, teachers: {} };
+  refreshAdminPreview();
+  refreshTeacherDropdown();
+  showNoScheduleBanner(true);
+  document.getElementById('saved-bar').style.display = 'none';
+  document.getElementById('jhs-status').className = 'upload-status status-none';
+  document.getElementById('jhs-status').textContent = 'No file loaded';
+  document.getElementById('shs-status').className = 'upload-status status-none';
+  document.getElementById('shs-status').textContent = 'No file loaded';
+  showToast('All saved data cleared.', 'info');
+}
+
+function updateSavedBar(meta) {
+  const bar = document.getElementById('saved-bar');
+  const parts = [];
+  if (meta.jhs) parts.push(`JHS: ${meta.jhs.filename}`);
+  if (meta.shs) parts.push(`SHS: ${meta.shs.filename}`);
+  if (parts.length === 0) { bar.style.display = 'none'; return; }
+
+  bar.style.display = 'flex';
+  document.getElementById('saved-bar-text').textContent = parts.join(' · ');
+
+  // Show most recent save time
+  const dates = [meta.jhs?.savedAt, meta.shs?.savedAt].filter(Boolean).sort().reverse();
+  if (dates.length) {
+    const d = new Date(dates[0]);
+    document.getElementById('saved-bar-date').textContent =
+      'Last updated: ' + d.toLocaleDateString('en-PH', { month:'long', day:'numeric', year:'numeric' }) +
+      ' at ' + d.toLocaleTimeString('en-PH', { hour:'2-digit', minute:'2-digit' });
+  }
+}
+
+function showNoScheduleBanner(show) {
+  document.getElementById('no-schedule-banner').style.display = show ? 'flex' : 'none';
+}
+
+// ═══════════════════════════════════════════
 // TAB SWITCHING
-// ═══════════════════════════════════════════════════════
+// ═══════════════════════════════════════════
 function switchTab(tab) {
   document.querySelectorAll('.tab-btn').forEach((b, i) => {
-    b.classList.toggle('active', (i === 0 && tab === 'teacher') || (i === 1 && tab === 'admin'));
+    b.classList.toggle('active', (i===0 && tab==='teacher') || (i===1 && tab==='admin'));
   });
-  document.getElementById('panel-teacher').classList.toggle('active', tab === 'teacher');
-  document.getElementById('panel-admin').classList.toggle('active', tab === 'admin');
+  document.getElementById('panel-teacher').classList.toggle('active', tab==='teacher');
+  document.getElementById('panel-admin').classList.toggle('active', tab==='admin');
 }
 
-// ═══════════════════════════════════════════════════════
-// JHS PARSER
-// ═══════════════════════════════════════════════════════
-function parseJHS(workbook) {
-  const ws = workbook.Sheets[workbook.SheetNames[0]];
-  const rows = XLSX.utils.sheet_to_json(ws, { header: 1, defval: null });
-
-  // Find section header row (row with ARIES, VIRGO etc.)
-  let sectionRow = -1, timeCol = 0;
-  let sections = [];
-  for (let r = 0; r < rows.length; r++) {
-    const row = rows[r];
-    if (row && row.some(c => c && typeof c === 'string' && c.trim() === 'ARIES')) {
-      sectionRow = r;
-      // Sections start at col 2 (after Time, Min.)
-      for (let c = 2; c < row.length; c++) {
-        if (row[c] && typeof row[c] === 'string' && row[c].trim()) {
-          sections.push({ name: row[c].trim(), col: c });
-        }
-      }
-      break;
-    }
-  }
-  if (sectionRow === -1) throw new Error("JHS: Cannot find section header row");
-
-  // Time slots start after sectionRow
-  const TIME_SLOTS = [];
-  const SKIP_KEYWORDS = ['FLAG', 'RECESS', 'LUNCH', 'ARAL READING', 'CULMINATING', 'HEALTH'];
-
-  for (let r = sectionRow + 1; r < rows.length; r++) {
-    const row = rows[r];
-    if (!row || !row[0]) continue;
-    const timeStr = String(row[0]).trim();
-    if (!timeStr.match(/\d+:\d+/)) continue;  // must look like a time
-
-    const mins = row[1] ? parseInt(row[1]) : null;
-    const firstData = row[2] ? String(row[2]).trim() : '';
-
-    // Detect break rows
-    if (SKIP_KEYWORDS.some(k => firstData.toUpperCase().startsWith(k))) {
-      TIME_SLOTS.push({ time: timeStr, mins, isBreak: true, breakLabel: firstData, sections: {} });
-      continue;
-    }
-
-    const slotData = { time: timeStr, mins, isBreak: false, sections: {} };
-    for (const sec of sections) {
-      const cell = row[sec.col] ? String(row[sec.col]).trim() : '';
-      if (cell) {
-        slotData.sections[sec.name] = parseJHSCell(cell);
-      }
-    }
-    TIME_SLOTS.push(slotData);
-  }
-
-  return { sections: sections.map(s => s.name), slots: TIME_SLOTS, level: 'JHS' };
-}
-
-function parseJHSCell(cell) {
-  // Format: "SUBJECT (M-F) Teacher" or "SUBJECT (F) Teacher"
-  const match = cell.match(/^(.+?)\s*\((M-F|F|M)\)\s*(.*)$/);
-  if (match) {
-    return {
-      subject: match[1].trim().replace(/\.+$/, ''),
-      days: match[2].trim(),
-      teacher: match[3].trim().replace(/\.$/, '')
-    };
-  }
-  // HGP or similar without days tag
-  return { subject: cell, days: 'M-F', teacher: '' };
-}
-
-// ═══════════════════════════════════════════════════════
-// SHS PARSER
-// ═══════════════════════════════════════════════════════
-function parseSHS(workbook) {
-  const ws = workbook.Sheets[workbook.SheetNames[0]];
-  const rows = XLSX.utils.sheet_to_json(ws, { header: 1, defval: null });
-
-  // Row 0: Time Slot | Grade11-Pacioli(x5) | Grade11-Keynes(x5) | Grade12-Drucker(x5) | Grade12-Kotler(x5)
-  // Row 1: null | Mon Tue Wed Thu Fri | ...repeated
-  const headerRow = rows[0];
-  const dayRow = rows[1];
-
-  const sections = [];
-  let col = 1;
-  while (col < headerRow.length) {
-    const secName = headerRow[col];
-    if (secName && typeof secName === 'string' && secName.trim()) {
-      sections.push({ name: secName.trim(), startCol: col });
-    }
-    col++;
-  }
-  // Each section spans 5 columns (Mon-Fri)
-  const DAYS = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday'];
-
-  const SKIP_KEYWORDS = ['flag', 'health break', 'lunch', 'aral reading', 'dismissal'];
-
-  const TIME_SLOTS = [];
-  for (let r = 2; r < rows.length; r++) {
-    const row = rows[r];
-    if (!row || !row[0]) continue;
-    const timeStr = String(row[0]).trim();
-
-    // Check for special rows (Flag, Health, Lunch, etc.)
-    const lc = timeStr.toLowerCase();
-    if (SKIP_KEYWORDS.some(k => lc.includes(k))) {
-      TIME_SLOTS.push({ time: timeStr, isBreak: true, breakLabel: timeStr, sections: {} });
-      continue;
-    }
-    if (!timeStr.match(/\d+:\d+/)) continue;
-
-    const slotData = { time: timeStr, isBreak: false, sections: {} };
-
-    for (const sec of sections) {
-      const secSlot = { subject: null, teacher: null, dayMap: {} };
-      // Subject row = r, Teacher row = r+1
-      const subjectRow = rows[r] || [];
-      const teacherRow = rows[r + 1] || [];
-
-      for (let d = 0; d < 5; d++) {
-        const subj = subjectRow[sec.startCol + d];
-        const tchr = teacherRow[sec.startCol + d];
-        if (subj && typeof subj === 'string' && subj.trim()) {
-          secSlot.dayMap[DAYS[d]] = {
-            subject: subj.trim().replace(/\n/g, ' '),
-            teacher: (tchr && typeof tchr === 'string') ? tchr.trim() : ''
-          };
-        }
-      }
-      slotData.sections[sec.name] = secSlot;
-    }
-    TIME_SLOTS.push(slotData);
-  }
-
-  // Skip teacher rows (every other row was teacher)
-  const filtered = TIME_SLOTS.filter((s, i) => {
-    // SHS rows come in pairs (subject + teacher), we already handled this above
-    // Just keep non-duplicate time slots
-    return true;
-  });
-
-  return { sections: sections.map(s => s.name), slots: TIME_SLOTS, level: 'SHS' };
-}
-
-// ═══════════════════════════════════════════════════════
-// TEACHER MAP BUILDER
-// ═══════════════════════════════════════════════════════
-function buildTeacherMap() {
-  const teachers = {};
-
-  function normalizeName(raw) {
-    if (!raw) return null;
-    // Handle "Last, First M." format (SHS) and "Lastname" only (JHS)
-    return raw.trim().replace(/\s+/g, ' ');
-  }
-
-  // JHS
-  if (scheduleData.jhs) {
-    const { sections, slots } = scheduleData.jhs;
-    for (const slot of slots) {
-      if (slot.isBreak) continue;
-      for (const secName of sections) {
-        const entry = slot.sections[secName];
-        if (!entry || !entry.teacher) continue;
-        const tname = normalizeName(entry.teacher);
-        if (!tname) continue;
-        if (!teachers[tname]) teachers[tname] = { name: tname, jhs: [], shs: [] };
-        // Avoid duplicates
-        const exists = teachers[tname].jhs.some(e =>
-          e.time === slot.time && e.section === secName
-        );
-        if (!exists) {
-          teachers[tname].jhs.push({
-            time: slot.time,
-            mins: slot.mins,
-            section: secName,
-            subject: entry.subject,
-            days: entry.days
-          });
-        }
-      }
-    }
-  }
-
-  // SHS
-  if (scheduleData.shs) {
-    const { sections, slots } = scheduleData.shs;
-    const DAYS = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday'];
-    for (const slot of slots) {
-      if (slot.isBreak) continue;
-      for (const secName of sections) {
-        const secSlot = slot.sections[secName];
-        if (!secSlot || !secSlot.dayMap) continue;
-        for (const day of DAYS) {
-          const entry = secSlot.dayMap[day];
-          if (!entry || !entry.teacher) continue;
-          const tname = normalizeName(entry.teacher);
-          if (!tname) continue;
-          if (!teachers[tname]) teachers[tname] = { name: tname, jhs: [], shs: [] };
-          const exists = teachers[tname].shs.some(e =>
-            e.time === slot.time && e.section === secName && e.day === day
-          );
-          if (!exists) {
-            teachers[tname].shs.push({
-              time: slot.time,
-              section: secName,
-              subject: entry.subject,
-              teacher: entry.teacher,
-              day
-            });
-          }
-        }
-      }
-    }
-  }
-
-  scheduleData.teachers = teachers;
-  return teachers;
-}
-
-// ═══════════════════════════════════════════════════════
-// FILE UPLOAD HANDLER
-// ═══════════════════════════════════════════════════════
+// ═══════════════════════════════════════════
+// FILE UPLOAD
+// ═══════════════════════════════════════════
 function handleFileUpload(type, input) {
   const file = input.files[0];
   if (!file) return;
-
   const statusEl = document.getElementById(`${type}-status`);
   statusEl.className = 'upload-status status-none';
   statusEl.textContent = '⏳ Parsing...';
@@ -726,846 +420,575 @@ function handleFileUpload(type, input) {
     try {
       const data = new Uint8Array(e.target.result);
       const workbook = XLSX.read(data, { type: 'array' });
-
+      let parsed;
       if (type === 'jhs') {
-        scheduleData.jhs = parseJHS(workbook);
-        statusEl.className = 'upload-status status-ok';
-        statusEl.textContent = `✓ Loaded: ${file.name}`;
-        showToast(`JHS schedule loaded — ${scheduleData.jhs.sections.length} sections`, 'success');
+        parsed = parseJHS(workbook);
+        scheduleData.jhs = parsed;
       } else {
-        scheduleData.shs = parseSHS(workbook);
-        statusEl.className = 'upload-status status-ok';
-        statusEl.textContent = `✓ Loaded: ${file.name}`;
-        showToast(`SHS schedule loaded — ${scheduleData.shs.sections.length} sections`, 'success');
+        parsed = parseSHS(workbook);
+        scheduleData.shs = parsed;
       }
+
+      const saved = saveToStorage(type, parsed, file.name);
+      statusEl.className = 'upload-status status-ok';
+      statusEl.textContent = saved ? `✓ Saved: ${file.name}` : `✓ Loaded: ${file.name}`;
 
       buildTeacherMap();
       refreshAdminPreview();
       refreshTeacherDropdown();
+      showNoScheduleBanner(false);
+      showToast(`${type.toUpperCase()} schedule saved — ${parsed.sections.length} sections found`, 'success');
     } catch(err) {
       statusEl.className = 'upload-status status-err';
       statusEl.textContent = `✗ Error: ${err.message}`;
-      showToast('Failed to parse file: ' + err.message, 'error');
+      showToast('Failed to parse: ' + err.message, 'error');
       console.error(err);
     }
   };
   reader.readAsArrayBuffer(file);
 }
 
-// ═══════════════════════════════════════════════════════
-// ADMIN PREVIEW
-// ═══════════════════════════════════════════════════════
+// ═══════════════════════════════════════════
+// JHS PARSER
+// ═══════════════════════════════════════════
+function parseJHS(workbook) {
+  const ws = workbook.Sheets[workbook.SheetNames[0]];
+  const rows = XLSX.utils.sheet_to_json(ws, { header:1, defval:null });
+  let sectionRow = -1;
+  let sections = [];
+  for (let r = 0; r < rows.length; r++) {
+    if (rows[r] && rows[r].some(c => c && typeof c==='string' && c.trim()==='ARIES')) {
+      sectionRow = r;
+      for (let c = 2; c < rows[r].length; c++) {
+        if (rows[r][c] && typeof rows[r][c]==='string' && rows[r][c].trim())
+          sections.push({ name: rows[r][c].trim(), col: c });
+      }
+      break;
+    }
+  }
+  if (sectionRow === -1) throw new Error('JHS: Cannot find section header row');
+
+  const SKIP = ['FLAG','RECESS','LUNCH','ARAL READING','CULMINATING','HEALTH'];
+  const slots = [];
+  for (let r = sectionRow+1; r < rows.length; r++) {
+    const row = rows[r];
+    if (!row || !row[0]) continue;
+    const timeStr = String(row[0]).trim();
+    if (!timeStr.match(/\d+:\d+/)) continue;
+    const mins = row[1] ? parseInt(row[1]) : null;
+    const firstData = row[2] ? String(row[2]).trim() : '';
+    if (SKIP.some(k => firstData.toUpperCase().startsWith(k))) {
+      slots.push({ time: timeStr, mins, isBreak:true, breakLabel: firstData, sections:{} });
+      continue;
+    }
+    const slot = { time: timeStr, mins, isBreak:false, sections:{} };
+    for (const sec of sections) {
+      const cell = row[sec.col] ? String(row[sec.col]).trim() : '';
+      if (cell) slot.sections[sec.name] = parseJHSCell(cell);
+    }
+    slots.push(slot);
+  }
+  return { sections: sections.map(s=>s.name), slots, level:'JHS' };
+}
+
+function parseJHSCell(cell) {
+  const m = cell.match(/^(.+?)\s*\((M-F|F|M)\)\s*(.*)$/);
+  if (m) return { subject: m[1].trim().replace(/\.+$/,''), days: m[2].trim(), teacher: m[3].trim().replace(/\.$/, '') };
+  return { subject: cell, days:'M-F', teacher:'' };
+}
+
+// ═══════════════════════════════════════════
+// SHS PARSER
+// ═══════════════════════════════════════════
+function parseSHS(workbook) {
+  const ws = workbook.Sheets[workbook.SheetNames[0]];
+  const rows = XLSX.utils.sheet_to_json(ws, { header:1, defval:null });
+  const headerRow = rows[0];
+  const sections = [];
+  for (let c = 1; c < headerRow.length; c++) {
+    if (headerRow[c] && typeof headerRow[c]==='string' && headerRow[c].trim())
+      sections.push({ name: headerRow[c].trim(), startCol: c });
+  }
+  const SKIP = ['flag','health break','lunch','aral reading','dismissal'];
+  const slots = [];
+  for (let r = 2; r < rows.length; r++) {
+    const row = rows[r];
+    if (!row || !row[0]) continue;
+    const timeStr = String(row[0]).trim();
+    const lc = timeStr.toLowerCase();
+    if (SKIP.some(k => lc.includes(k))) {
+      slots.push({ time: timeStr, isBreak:true, breakLabel: timeStr, sections:{} });
+      continue;
+    }
+    if (!timeStr.match(/\d+:\d+/)) continue;
+    const slot = { time: timeStr, isBreak:false, sections:{} };
+    for (const sec of sections) {
+      const dayMap = {};
+      const subjectRow = rows[r] || [];
+      const teacherRow = rows[r+1] || [];
+      for (let d = 0; d < 5; d++) {
+        const subj = subjectRow[sec.startCol+d];
+        const tchr = teacherRow[sec.startCol+d];
+        if (subj && typeof subj==='string' && subj.trim())
+          dayMap[DAYS[d]] = { subject: subj.trim().replace(/\n/g,' '), teacher: (tchr && typeof tchr==='string') ? tchr.trim() : '' };
+      }
+      slot.sections[sec.name] = { dayMap };
+    }
+    slots.push(slot);
+  }
+  return { sections: sections.map(s=>s.name), slots, level:'SHS' };
+}
+
+// ═══════════════════════════════════════════
+// TEACHER MAP
+// ═══════════════════════════════════════════
+function buildTeacherMap() {
+  const teachers = {};
+  const norm = s => s ? s.trim().replace(/\s+/g,' ') : null;
+
+  if (scheduleData.jhs) {
+    for (const slot of scheduleData.jhs.slots) {
+      if (slot.isBreak) continue;
+      for (const secName of scheduleData.jhs.sections) {
+        const entry = slot.sections[secName];
+        if (!entry || !entry.teacher) continue;
+        const tn = norm(entry.teacher);
+        if (!tn) continue;
+        if (!teachers[tn]) teachers[tn] = { name:tn, jhs:[], shs:[] };
+        if (!teachers[tn].jhs.some(e => e.time===slot.time && e.section===secName))
+          teachers[tn].jhs.push({ time:slot.time, mins:slot.mins, section:secName, subject:entry.subject, days:entry.days });
+      }
+    }
+  }
+
+  if (scheduleData.shs) {
+    for (const slot of scheduleData.shs.slots) {
+      if (slot.isBreak) continue;
+      for (const secName of scheduleData.shs.sections) {
+        const secSlot = slot.sections[secName];
+        if (!secSlot || !secSlot.dayMap) continue;
+        for (const day of DAYS) {
+          const entry = secSlot.dayMap[day];
+          if (!entry || !entry.teacher) continue;
+          const tn = norm(entry.teacher);
+          if (!tn) continue;
+          if (!teachers[tn]) teachers[tn] = { name:tn, jhs:[], shs:[] };
+          if (!teachers[tn].shs.some(e => e.time===slot.time && e.section===secName && e.day===day))
+            teachers[tn].shs.push({ time:slot.time, section:secName, subject:entry.subject, teacher:entry.teacher, day });
+        }
+      }
+    }
+  }
+  scheduleData.teachers = teachers;
+}
+
+// ═══════════════════════════════════════════
+// UI REFRESH
+// ═══════════════════════════════════════════
 function refreshAdminPreview() {
-  const teachers = scheduleData.teachers;
-  const names = Object.keys(teachers).sort();
-  const totalSections = new Set([
-    ...(scheduleData.jhs?.sections || []),
-    ...(scheduleData.shs?.sections || [])
+  const names = Object.keys(scheduleData.teachers).sort();
+  const totalSec = new Set([
+    ...(scheduleData.jhs?.sections||[]),
+    ...(scheduleData.shs?.sections||[])
   ]).size;
-
-  document.getElementById('stat-teachers').textContent = `${names.length} teacher${names.length !== 1 ? 's' : ''}`;
-  document.getElementById('stat-sections').textContent = `${totalSections} section${totalSections !== 1 ? 's' : ''}`;
-
+  document.getElementById('stat-teachers').textContent = `${names.length} teacher${names.length!==1?'s':''}`;
+  document.getElementById('stat-sections').textContent = `${totalSec} section${totalSec!==1?'s':''}`;
   const body = document.getElementById('admin-preview-body');
-  if (names.length === 0) {
+  if (!names.length) {
     body.innerHTML = `<div class="empty-state"><div class="big-icon">📂</div><h3>No teachers found</h3><p>Upload valid schedule files above.</p></div>`;
     return;
   }
-
-  const chips = names.map(n => {
-    const t = teachers[n];
-    const hasJHS = t.jhs.length > 0;
-    const hasSHS = t.shs.length > 0;
-    return `<div class="teacher-chip">
-      <div class="tc-name">${n}</div>
-      <div class="tc-badges">
-        ${hasJHS ? '<span class="tc-badge tc-jhs">JHS</span>' : ''}
-        ${hasSHS ? '<span class="tc-badge tc-shs">SHS</span>' : ''}
-      </div>
-    </div>`;
-  }).join('');
-
-  body.innerHTML = `<div class="teacher-list-admin">${chips}</div>`;
+  body.innerHTML = `<div class="teacher-list-admin">${names.map(n => {
+    const t = scheduleData.teachers[n];
+    return `<div class="teacher-chip"><div class="tc-name">${n}</div><div class="tc-badges">
+      ${t.jhs.length?'<span class="tc-badge tc-jhs">JHS</span>':''}
+      ${t.shs.length?'<span class="tc-badge tc-shs">SHS</span>':''}
+    </div></div>`;
+  }).join('')}</div>`;
 }
 
-// ═══════════════════════════════════════════════════════
-// TEACHER DROPDOWN
-// ═══════════════════════════════════════════════════════
 function refreshTeacherDropdown() {
   const sel = document.getElementById('teacher-select');
   const current = sel.value;
   sel.innerHTML = '<option value="">— Choose your name —</option>';
-  const names = Object.keys(scheduleData.teachers).sort();
-  for (const name of names) {
+  Object.keys(scheduleData.teachers).sort().forEach(name => {
     const opt = document.createElement('option');
-    opt.value = name;
-    opt.textContent = name;
+    opt.value = opt.textContent = name;
     sel.appendChild(opt);
-  }
-  if (current && scheduleData.teachers[current]) {
-    sel.value = current;
-    onTeacherSelect();
-  } else {
-    document.getElementById('teacher-result').innerHTML = `<div class="no-result"><div class="icon">👆</div><p>Select your name above to see your downloadable files.</p></div>`;
-  }
+  });
+  if (current && scheduleData.teachers[current]) { sel.value = current; onTeacherSelect(); }
+  else document.getElementById('teacher-result').innerHTML =
+    `<div class="no-result"><div class="icon">👆</div><p>Select your name above to see your downloadable files.</p></div>`;
+  showNoScheduleBanner(Object.keys(scheduleData.teachers).length === 0);
 }
 
 function onTeacherSelect() {
   const name = document.getElementById('teacher-select').value;
   const result = document.getElementById('teacher-result');
   if (!name) {
-    result.innerHTML = `<div class="no-result"><div class="icon">👆</div><p>Select your name above to see your downloadable files.</p></div>`;
+    result.innerHTML = `<div class="no-result"><div class="icon">👆</div><p>Select your name above.</p></div>`;
     return;
   }
-  const teacher = scheduleData.teachers[name];
-  if (!teacher) return;
+  const t = scheduleData.teachers[name];
+  if (!t) return;
+  const hasJHS = t.jhs.length > 0, hasSHS = t.shs.length > 0;
+  const badge = (hasJHS&&hasSHS) ? '<span class="badge-both">JHS + SHS</span>' : hasJHS ? '<span class="badge-jhs">JHS</span>' : '<span class="badge-shs">SHS</span>';
+  const jhsSecs = [...new Set(t.jhs.map(e=>e.section))];
+  const shsSecs = [...new Set(t.shs.map(e=>e.section))];
+  const allSecs = [...jhsSecs,...shsSecs];
 
-  const hasJHS = teacher.jhs.length > 0;
-  const hasSHS = teacher.shs.length > 0;
-  const levelBadge = (hasJHS && hasSHS)
-    ? '<span class="badge-both">JHS + SHS</span>'
-    : hasJHS ? '<span class="badge-jhs">JHS</span>'
-    : '<span class="badge-shs">SHS</span>';
-
-  // Count unique sections for this teacher
-  const jhsSecs = [...new Set(teacher.jhs.map(e => e.section))];
-  const shsSecs = [...new Set(teacher.shs.map(e => e.section))];
-  const allSecs = [...jhsSecs, ...shsSecs];
-
-  result.innerHTML = `
-    <div class="teacher-result">
-      <div class="teacher-name-bar">
-        <div>
-          <h2>${name}</h2>
-          <div class="teacher-meta">${allSecs.length} section${allSecs.length !== 1 ? 's' : ''} · ${hasJHS ? jhsSecs.length + ' JHS' : ''}${hasJHS && hasSHS ? ' + ' : ''}${hasSHS ? shsSecs.length + ' SHS' : ''}</div>
+  result.innerHTML = `<div class="teacher-result">
+    <div class="teacher-name-bar">
+      <div><h2>${name}</h2><div class="teacher-meta">${allSecs.length} section${allSecs.length!==1?'s':''} · ${hasJHS?jhsSecs.length+' JHS':''}${hasJHS&&hasSHS?' + ':''}${hasSHS?shsSecs.length+' SHS':''}</div></div>
+      ${badge}
+    </div>
+    <div class="download-cards">
+      <div class="download-cards-title">Your Documents</div>
+      <div class="download-grid">
+        <div class="download-card" onclick="downloadTeachersProgram('${name}')">
+          <div class="download-icon icon-teacher">📋</div>
+          <div class="download-card-text"><h3>Teacher's Program</h3><p>Your full weekly schedule</p></div>
+          <span class="download-arrow">→</span>
         </div>
-        ${levelBadge}
+        ${allSecs.map(sec=>`
+        <div class="download-card" onclick="downloadClassProgram('${name}','${sec}')">
+          <div class="download-icon icon-class">🏫</div>
+          <div class="download-card-text"><h3>Class Program</h3><p>${sec}</p></div>
+          <span class="download-arrow">→</span>
+        </div>`).join('')}
       </div>
-      <div class="download-cards">
-        <div class="download-cards-title">Your Documents</div>
-        <div class="download-grid">
-          <div class="download-card" onclick="downloadTeachersProgram('${name}')">
-            <div class="download-icon icon-teacher">📋</div>
-            <div class="download-card-text">
-              <h3>Teacher's Program</h3>
-              <p>Your full weekly schedule</p>
-            </div>
-            <span class="download-arrow">→</span>
-          </div>
-          ${allSecs.map(sec => `
-          <div class="download-card" onclick="downloadClassProgram('${name}', '${sec}')">
-            <div class="download-icon icon-class">🏫</div>
-            <div class="download-card-text">
-              <h3>Class Program</h3>
-              <p>${sec}</p>
-            </div>
-            <span class="download-arrow">→</span>
-          </div>`).join('')}
-        </div>
-      </div>
-    </div>`;
+    </div>
+  </div>`;
 }
 
-// ═══════════════════════════════════════════════════════
-// DOCX GENERATION (using docx.js loaded via CDN)
-// ═══════════════════════════════════════════════════════
+// ═══════════════════════════════════════════
+// DOCX HELPERS
+// ═══════════════════════════════════════════
+function esc(s) { return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
 
-// We'll use a pure JS approach via the docx library
-// Since docx.js is not available as CDN easily, we build DOCX manually as Open XML
-// using a ZIP library approach — we'll use the blob approach
-
-// Helper to create DOCX blob from XML content
-async function buildDocxBlob(xmlContent, filename) {
-  // We construct a minimal valid DOCX as a zip using JSZip-like approach
-  // Using the built-in approach: create the OOXML parts
-  // We'll use a fetch-based approach to the Anthropic API to generate the docx
-  // Actually, let's build it using raw XML + zip
-
-  // Use a lightweight approach: construct the DOCX XML manually
-  const zip = await createDocxZip(xmlContent);
-  const blob = new Blob([zip], { type: 'application/vnd.openxmlformats-officedocument.wordprocessingml.document' });
-  saveAs(blob, filename);
+function mkPara(text, opts={}) {
+  const sz=opts.sz||18, bold=opts.bold?'<w:b/>':'', center=opts.center?'<w:jc w:val="center"/>':'';
+  const sp=opts.spacing?`<w:spacing w:before="${opts.spacing.before||0}" w:after="${opts.spacing.after||0}"/>`:'';
+  return `<w:p><w:pPr>${center}${sp}</w:pPr><w:r><w:rPr>${bold}<w:sz w:val="${sz}"/><w:szCs w:val="${sz}"/></w:rPr><w:t xml:space="preserve">${esc(text)}</w:t></w:r></w:p>`;
 }
 
-// ═══════════════════════════════════════════════════════
-// JHS TIME SLOT NORMALIZER
-// ═══════════════════════════════════════════════════════
-const DAYS_ORDER = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday'];
-const DAYS_LABELS = { 'M-F': 'M T W Th F', 'F': 'F', 'M': 'M' };
-
-// Build a teacher's JHS weekly program rows from raw data
-function buildTeacherJHSRows(teacher) {
-  const jhs = scheduleData.jhs;
-  if (!jhs) return [];
-
-  const teacherName = teacher.name;
-  const rows = [];
-
-  for (const slot of jhs.slots) {
-    if (slot.isBreak) {
-      rows.push({ time: slot.time, mins: slot.mins || '', isBreak: true, label: slot.breakLabel });
-      continue;
-    }
-
-    // For each section, check if this teacher teaches at this time
-    const dayEntries = { Monday: null, Tuesday: null, Wednesday: null, Thursday: null, Friday: null };
-    let hasAny = false;
-
-    for (const secName of jhs.sections) {
-      const entry = slot.sections[secName];
-      if (!entry) continue;
-      // Match teacher by last name (JHS stores last name only)
-      const entryTeacher = (entry.teacher || '').trim().toLowerCase();
-      const teacherLast = teacherName.split(/[,\s]/)[0].toLowerCase();
-      // Also try full last name match
-      const teacherParts = teacherName.toLowerCase().split(/\s+/);
-
-      let matched = false;
-      if (entryTeacher) {
-        // JHS cells have last name only like "Demafelis" or "Dumalag Jr."
-        // Try matching against teacher's last name
-        for (const part of teacherParts) {
-          if (part.length > 2 && entryTeacher.includes(part)) {
-            matched = true; break;
-          }
-        }
-        // Also try reverse: teacher name contains entry teacher
-        const entryParts = entryTeacher.split(/[\s,]+/);
-        for (const ep of entryParts) {
-          if (ep.length > 2 && teacherName.toLowerCase().includes(ep)) {
-            matched = true; break;
-          }
-        }
-      }
-
-      if (matched) {
-        hasAny = true;
-        // Apply to days based on days field
-        const days = entry.days === 'F' ? ['Friday'] :
-                     entry.days === 'M' ? ['Monday'] : DAYS_ORDER;
-        for (const day of days) {
-          dayEntries[day] = `${entry.subject} ${secName}`;
-        }
-      }
-    }
-
-    if (hasAny) {
-      rows.push({ time: slot.time, mins: slot.mins || '', isBreak: false, ...dayEntries });
-    } else {
-      // Check if this is a fixed slot (flag, break etc.) or preparation time
-      // For teacher program: non-teaching slots get prep activities
-      rows.push({ time: slot.time, mins: slot.mins || '', isBreak: false,
-        Monday: '', Tuesday: '', Wednesday: '', Thursday: '', Friday: '' });
-    }
-  }
-  return rows;
-}
-
-// ═══════════════════════════════════════════════════════
-// DOCX XML BUILDER
-// ═══════════════════════════════════════════════════════
-
-// We use a pure Open XML approach: build the XML strings directly and zip them
-// using the XLSX library's zip capabilities (since XLSX already loaded JSZip)
-
-async function createDocxZip(docXml) {
-  // XLSX uses a zip internally; we can use the same approach
-  // Build a minimal DOCX structure
-  const ct = `<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<Types xmlns="http://schemas.openxmlformats.org/package/2006/content-types">
-  <Default Extension="rels" ContentType="application/vnd.openxmlformats-package.relationships+xml"/>
-  <Default Extension="xml" ContentType="application/xml"/>
-  <Override PartName="/word/document.xml" ContentType="application/vnd.openxmlformats-officedocument.wordprocessingml.document.main+xml"/>
-  <Override PartName="/word/styles.xml" ContentType="application/vnd.openxmlformats-officedocument.wordprocessingml.styles+xml"/>
-</Types>`;
-
-  const rels = `<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<Relationships xmlns="http://schemas.openxmlformats.org/package/2006/relationships">
-  <Relationship Id="rId1" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/officeDocument" Target="word/document.xml"/>
-</Relationships>`;
-
-  const wordRels = `<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<Relationships xmlns="http://schemas.openxmlformats.org/package/2006/relationships">
-  <Relationship Id="rId1" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/styles" Target="styles.xml"/>
-</Relationships>`;
-
-  const styles = `<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<w:styles xmlns:w="http://schemas.openxmlformats.org/wordprocessingml/2006/main">
-  <w:style w:type="paragraph" w:default="1" w:styleId="Normal">
-    <w:name w:val="Normal"/>
-    <w:rPr><w:sz w:val="20"/></w:rPr>
-  </w:style>
-</w:styles>`;
-
-  // Use JSZip if available (XLSX bundles it), otherwise build raw
-  // XLSX exposes JSZip as XLSX.utils... let's try a different approach
-  // We'll build the zip manually using the Uint8Array approach
-  return buildZipBytes({
-    '[Content_Types].xml': ct,
-    '_rels/.rels': rels,
-    'word/_rels/document.xml.rels': wordRels,
-    'word/styles.xml': styles,
-    'word/document.xml': docXml
-  });
-}
-
-// Minimal ZIP builder (stored, no compression for simplicity)
-function buildZipBytes(files) {
-  const enc = new TextEncoder();
-  const localHeaders = [];
-  const centralDirs = [];
-  let offset = 0;
-
-  for (const [name, content] of Object.entries(files)) {
-    const nameBytes = enc.encode(name);
-    const dataBytes = enc.encode(content);
-    const crc = crc32(dataBytes);
-
-    // Local file header
-    const lh = new Uint8Array(30 + nameBytes.length);
-    const lhView = new DataView(lh.buffer);
-    lhView.setUint32(0, 0x04034b50, true); // signature
-    lhView.setUint16(4, 20, true);  // version needed
-    lhView.setUint16(6, 0, true);   // flags
-    lhView.setUint16(8, 0, true);   // compression (stored)
-    lhView.setUint16(10, 0, true);  // mod time
-    lhView.setUint16(12, 0, true);  // mod date
-    lhView.setUint32(14, crc, true);
-    lhView.setUint32(18, dataBytes.length, true);
-    lhView.setUint32(22, dataBytes.length, true);
-    lhView.setUint16(26, nameBytes.length, true);
-    lhView.setUint16(28, 0, true);  // extra field length
-    lh.set(nameBytes, 30);
-
-    // Central directory
-    const cd = new Uint8Array(46 + nameBytes.length);
-    const cdView = new DataView(cd.buffer);
-    cdView.setUint32(0, 0x02014b50, true);
-    cdView.setUint16(4, 20, true);
-    cdView.setUint16(6, 20, true);
-    cdView.setUint16(8, 0, true);
-    cdView.setUint16(10, 0, true);
-    cdView.setUint16(12, 0, true);
-    cdView.setUint16(14, 0, true);
-    cdView.setUint32(16, crc, true);
-    cdView.setUint32(20, dataBytes.length, true);
-    cdView.setUint32(24, dataBytes.length, true);
-    cdView.setUint16(28, nameBytes.length, true);
-    cdView.setUint16(30, 0, true);
-    cdView.setUint16(32, 0, true);
-    cdView.setUint16(34, 0, true);
-    cdView.setUint16(36, 0, true);
-    cdView.setUint32(38, 0, true);
-    cdView.setUint32(42, offset, true);
-    cd.set(nameBytes, 46);
-
-    localHeaders.push(lh, dataBytes);
-    centralDirs.push(cd);
-    offset += lh.length + dataBytes.length;
-  }
-
-  const cdStart = offset;
-  const cdSize = centralDirs.reduce((s, b) => s + b.length, 0);
-
-  // End of central directory
-  const eocd = new Uint8Array(22);
-  const eocdView = new DataView(eocd.buffer);
-  eocdView.setUint32(0, 0x06054b50, true);
-  eocdView.setUint16(4, 0, true);
-  eocdView.setUint16(6, 0, true);
-  eocdView.setUint16(8, centralDirs.length, true);
-  eocdView.setUint16(10, centralDirs.length, true);
-  eocdView.setUint32(12, cdSize, true);
-  eocdView.setUint32(16, cdStart, true);
-  eocdView.setUint16(20, 0, true);
-
-  const all = [...localHeaders, ...centralDirs, eocd];
-  const total = all.reduce((s, b) => s + b.length, 0);
-  const out = new Uint8Array(total);
-  let pos = 0;
-  for (const b of all) { out.set(b, pos); pos += b.length; }
-  return out;
-}
-
-function crc32(data) {
-  let crc = -1;
-  const table = crc32.table || (crc32.table = (() => {
-    const t = new Int32Array(256);
-    for (let i = 0; i < 256; i++) {
-      let c = i;
-      for (let j = 0; j < 8; j++) c = (c & 1) ? (0xEDB88320 ^ (c >>> 1)) : (c >>> 1);
-      t[i] = c;
-    }
-    return t;
-  })());
-  for (let i = 0; i < data.length; i++) crc = table[(crc ^ data[i]) & 0xff] ^ (crc >>> 8);
-  return (crc ^ -1) >>> 0;
-}
-
-// ═══════════════════════════════════════════════════════
-// XML HELPERS
-// ═══════════════════════════════════════════════════════
-function esc(s) {
-  if (!s) return '';
-  return String(s)
-    .replace(/&/g, '&amp;')
-    .replace(/</g, '&lt;')
-    .replace(/>/g, '&gt;')
-    .replace(/"/g, '&quot;')
-    .replace(/'/g, '&apos;');
-}
-
-function para(text, opts = {}) {
-  const sz = opts.sz || 18;  // 9pt default
-  const bold = opts.bold ? '<w:b/>' : '';
-  const center = opts.center ? '<w:jc w:val="center"/>' : '';
-  const spacing = opts.spacing ? `<w:spacing w:before="${opts.spacing.before || 0}" w:after="${opts.spacing.after || 0}"/>` : '';
-  return `<w:p><w:pPr>${center}${spacing}</w:pPr><w:r><w:rPr>${bold}<w:sz w:val="${sz}"/><w:szCs w:val="${sz}"/></w:rPr><w:t xml:space="preserve">${esc(text)}</w:t></w:r></w:p>`;
-}
-
-function cell(text, opts = {}) {
-  const sz = opts.sz || 16;
-  const bold = opts.bold ? '<w:b/>' : '';
-  const center = opts.center ? '<w:jc w:val="center"/>' : '';
-  const shade = opts.shade ? `<w:shd w:val="clear" w:color="auto" w:fill="${opts.shade}"/>` : '';
-  const vAlign = opts.vAlign ? `<w:vAlign w:val="${opts.vAlign}"/>` : '<w:vAlign w:val="center"/>';
-  const colspan = opts.colspan ? `<w:gridSpan w:val="${opts.colspan}"/>` : '';
-  const width = opts.width ? `<w:tcW w:w="${opts.width}" w:type="dxa"/>` : '';
-  const borders = `<w:tcBorders>
-    <w:top w:val="single" w:sz="4" w:space="0" w:color="000000"/>
-    <w:left w:val="single" w:sz="4" w:space="0" w:color="000000"/>
-    <w:bottom w:val="single" w:sz="4" w:space="0" w:color="000000"/>
-    <w:right w:val="single" w:sz="4" w:space="0" w:color="000000"/>
-  </w:tcBorders>`;
-  return `<w:tc><w:tcPr>${width}${colspan}${borders}${shade}${vAlign}</w:tcPr>
+function mkCell(text, opts={}) {
+  const sz=opts.sz||16;
+  const border=`<w:tcBorders><w:top w:val="single" w:sz="4" w:space="0" w:color="000000"/><w:left w:val="single" w:sz="4" w:space="0" w:color="000000"/><w:bottom w:val="single" w:sz="4" w:space="0" w:color="000000"/><w:right w:val="single" w:sz="4" w:space="0" w:color="000000"/></w:tcBorders>`;
+  const shade=opts.shade?`<w:shd w:val="clear" w:color="auto" w:fill="${opts.shade}"/>`:'';
+  const w=opts.width?`<w:tcW w:w="${opts.width}" w:type="dxa"/>`:'';
+  const span=opts.colspan?`<w:gridSpan w:val="${opts.colspan}"/>`:'';
+  const color=opts.color?`<w:color w:val="${opts.color}"/>`:'';
+  const bold2=opts.bold?'<w:b/>':'';
+  const center=opts.center?'<w:jc w:val="center"/>':'';
+  return `<w:tc><w:tcPr>${w}${span}${border}${shade}<w:vAlign w:val="center"/></w:tcPr>
     <w:p><w:pPr><w:spacing w:before="40" w:after="40"/>${center}</w:pPr>
-    <w:r><w:rPr>${bold}<w:sz w:val="${sz}"/><w:szCs w:val="${sz}"/></w:rPr>
-    <w:t xml:space="preserve">${esc(String(text || ''))}</w:t></w:r></w:p></w:tc>`;
+    <w:r><w:rPr>${bold2}${color}<w:sz w:val="${sz}"/><w:szCs w:val="${sz}"/></w:rPr>
+    <w:t xml:space="preserve">${esc(String(text||''))}</w:t></w:r></w:p></w:tc>`;
 }
 
-function row(...cells) {
-  return `<w:tr>${cells.join('')}</w:tr>`;
+function hdrCell(text, w) {
+  return mkCell(text, { width:w, center:true, bold:true, shade:'1F3864', color:'FFFFFF', sz:16 });
 }
 
-function docHeader() {
+function mkRow(...cells) { return `<w:tr>${cells.join('')}</w:tr>`; }
+
+function tblOpen(totalW, colWidths) {
+  return `<w:tbl><w:tblPr><w:tblW w:w="${totalW}" w:type="dxa"/><w:tblLayout w:type="fixed"/>
+    <w:tblBorders><w:insideH w:val="single" w:sz="4" w:color="000000"/><w:insideV w:val="single" w:sz="4" w:color="000000"/></w:tblBorders>
+  </w:tblPr><w:tblGrid>${colWidths.map(cw=>`<w:gridCol w:w="${cw}"/>`).join('')}</w:tblGrid>`;
+}
+
+function breakRow(label, timeW, minsW, dayW, shadeColor) {
+  const spanW = dayW*5;
+  const spanCell = `<w:tc><w:tcPr><w:tcW w:w="${spanW}" w:type="dxa"/><w:gridSpan w:val="5"/>
+    <w:tcBorders><w:top w:val="single" w:sz="4" w:space="0" w:color="000000"/><w:left w:val="single" w:sz="4" w:space="0" w:color="000000"/><w:bottom w:val="single" w:sz="4" w:space="0" w:color="000000"/><w:right w:val="single" w:sz="4" w:space="0" w:color="000000"/></w:tcBorders>
+    <w:shd w:val="clear" w:color="auto" w:fill="${shadeColor}"/><w:vAlign w:val="center"/>
+  </w:tcPr><w:p><w:pPr><w:jc w:val="center"/><w:spacing w:before="40" w:after="40"/></w:pPr>
+  <w:r><w:rPr><w:b/><w:sz w:val="16"/><w:szCs w:val="16"/></w:rPr><w:t>${esc(label)}</w:t></w:r></w:p></w:tc>`;
+  return `<w:tr>${mkCell('',{width:timeW,shade:shadeColor,center:true,sz:14})}${mkCell('',{width:minsW,shade:shadeColor,center:true,sz:14})}${spanCell}</w:tr>`;
+}
+
+function docXmlWrap(bodyContent) {
   return `<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<w:document xmlns:wpc="http://schemas.microsoft.com/office/word/2010/wordprocessingCanvas"
-  xmlns:w="http://schemas.openxmlformats.org/wordprocessingml/2006/main"
-  xmlns:r="http://schemas.openxmlformats.org/officeDocument/2006/relationships">
-<w:body>
-<w:sectPr>
-  <w:pgSz w:w="15840" w:h="12240" w:orient="landscape"/>
-  <w:pgMar w:top="720" w:right="720" w:bottom="720" w:left="720" w:header="0" w:footer="0" w:gutter="0"/>
-</w:sectPr>`;
-  // Note: sectPr will be moved to end below
+<w:document xmlns:w="http://schemas.openxmlformats.org/wordprocessingml/2006/main">
+<w:body>${bodyContent}
+<w:sectPr><w:pgSz w:w="15840" w:h="12240" w:orient="landscape"/>
+<w:pgMar w:top="720" w:right="720" w:bottom="720" w:left="720" w:header="0" w:footer="0" w:gutter="0"/>
+</w:sectPr></w:body></w:document>`;
 }
 
-// ═══════════════════════════════════════════════════════
-// BUILD TEACHER'S PROGRAM DOCX
-// ═══════════════════════════════════════════════════════
+function matchesTeacher(cellTeacher, teacherName) {
+  if (!cellTeacher || !teacherName) return false;
+  const ct = cellTeacher.trim().toLowerCase().replace(/\s+/g,' ');
+  const tn = teacherName.trim().toLowerCase().replace(/\s+/g,' ');
+  if (tn.includes(ct) || ct.includes(tn)) return true;
+  const ctP = ct.split(/[\s,./]+/).filter(p=>p.length>2);
+  const tnP = tn.split(/[\s,./]+/).filter(p=>p.length>2);
+  return ctP.some(cp=>tnP.some(tp=>tp.startsWith(cp)||cp.startsWith(tp)));
+}
+
+function cleanSubj(s) { return (s||'').replace(/\n/g,' ').replace(/\s+/g,' ').trim(); }
+function cleanTchr(s) { return (s||'').replace(/\.$/, '').replace(/\s+/g,' ').trim(); }
+
+// ═══════════════════════════════════════════
+// TEACHER PROGRAM XML
+// ═══════════════════════════════════════════
 function buildTeacherProgramXML(teacherName) {
-  const teacher = scheduleData.teachers[teacherName];
-  const jhs = scheduleData.jhs;
-  const shs = scheduleData.shs;
+  const jhs = scheduleData.jhs, shs = scheduleData.shs;
+  const useSlots = (jhs && jhs.slots.length) ? jhs.slots : (shs ? shs.slots : []);
+  const timeW=1300, minsW=700, dayW=Math.floor((14400-timeW-minsW)/5);
 
-  // Collect all time slots from JHS (primary structure)
-  // For SHS teachers only, use SHS slots
-  const allSlots = jhs ? jhs.slots : (shs ? buildSHSSlots() : []);
-
-  const DAYS = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday'];
-
-  // Build a map: time -> { day -> label }
-  function getTeacherEntry(slotTime, day) {
-    // Check JHS
+  function getEntry(slotTime, day) {
     if (jhs) {
-      const slot = jhs.slots.find(s => s.time === slotTime);
-      if (slot && !slot.isBreak) {
-        for (const secName of jhs.sections) {
-          const entry = slot.sections[secName];
-          if (!entry || !entry.teacher) continue;
-          if (matchesTeacher(entry.teacher, teacherName)) {
-            const days = entry.days === 'F' ? ['Friday'] : entry.days === 'M' ? ['Monday'] : DAYS;
-            if (days.includes(day)) {
-              return `${cleanSubject(entry.subject)} ${secName}`;
-            }
+      const slot = jhs.slots.find(s=>s.time===slotTime);
+      if (slot&&!slot.isBreak) {
+        for (const sec of jhs.sections) {
+          const e = slot.sections[sec];
+          if (!e||!e.teacher) continue;
+          if (matchesTeacher(e.teacher, teacherName)) {
+            const days = e.days==='F'?['Friday']:e.days==='M'?['Monday']:DAYS;
+            if (days.includes(day)) return `${cleanSubj(e.subject)} ${sec}`;
           }
         }
       }
     }
-    // Check SHS
     if (shs) {
-      const slot = shs.slots.find(s => s.time === slotTime);
-      if (slot && !slot.isBreak) {
-        for (const secName of shs.sections) {
-          const secSlot = slot.sections[secName];
-          if (!secSlot || !secSlot.dayMap) continue;
-          const entry = secSlot.dayMap[day];
-          if (!entry || !entry.teacher) continue;
-          if (matchesTeacher(entry.teacher, teacherName)) {
-            return `${cleanSubject(entry.subject)} ${secName}`;
-          }
+      const slot = shs.slots.find(s=>s.time===slotTime);
+      if (slot&&!slot.isBreak) {
+        for (const sec of shs.sections) {
+          const ss = slot.sections[sec];
+          if (!ss||!ss.dayMap) continue;
+          const e = ss.dayMap[day];
+          if (!e||!e.teacher) continue;
+          if (matchesTeacher(e.teacher, teacherName)) return `${cleanSubj(e.subject)} ${sec}`;
         }
       }
     }
     return '';
   }
 
-  // Build combined unique time slots
-  const jhsSlots = jhs ? jhs.slots : [];
-  const shsSlots = shs ? [] : []; // SHS times already covered by cross-reference above
-  const useSlots = jhsSlots.length > 0 ? jhsSlots : (shs ? shs.slots : []);
+  let body = '';
+  body += mkPara('Republic of the Philippines',{center:true,sz:16});
+  body += mkPara('Department of Education',{center:true,sz:16});
+  body += mkPara(SCHOOL.region,{center:true,sz:16});
+  body += mkPara(SCHOOL.division,{center:true,sz:16});
+  body += mkPara('',{sz:12});
+  body += mkPara(`DISTRICT: ${SCHOOL.district}                    SCHOOL: ${SCHOOL.school}`,{sz:16});
+  body += mkPara('',{sz:10});
+  body += mkPara("TEACHER'S PROGRAM",{center:true,sz:24,bold:true});
+  body += mkPara(teacherName,{center:true,sz:20,bold:true});
+  body += mkPara(`SY: ${SCHOOL.sy}`,{center:true,sz:18});
+  body += mkPara('',{sz:10});
 
-  // Header
-  let xml = `<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<w:document xmlns:w="http://schemas.openxmlformats.org/wordprocessingml/2006/main">
-<w:body>`;
-
-  // School header paragraphs
-  xml += para('Republic of the Philippines', { center: true, sz: 16 });
-  xml += para('Department of Education', { center: true, sz: 16 });
-  xml += para(SCHOOL.region, { center: true, sz: 16 });
-  xml += para(SCHOOL.division, { center: true, sz: 16 });
-  xml += para('', { sz: 14 });
-  xml += para(`DISTRICT: ${SCHOOL.district}                    SCHOOL: ${SCHOOL.school}`, { sz: 16 });
-  xml += para('', { sz: 12 });
-  xml += para("TEACHER'S PROGRAM", { center: true, sz: 24, bold: true });
-  xml += para(teacherName, { center: true, sz: 20, bold: true });
-  xml += para(`SY: ${SCHOOL.sy}`, { center: true, sz: 18 });
-  xml += para('', { sz: 10 });
-
-  // Schedule table
-  // Columns: Time | Mins | Mon | Tue | Wed | Thu | Fri
-  // Width: landscape letter = 15840 - 1440 margins = 14400 dxa
-  const timeW = 1300, minsW = 700, dayW = Math.floor((14400 - timeW - minsW) / 5);
-
-  xml += `<w:tbl><w:tblPr>
-    <w:tblW w:w="14400" w:type="dxa"/>
-    <w:tblBorders>
-      <w:insideH w:val="single" w:sz="4" w:color="000000"/>
-      <w:insideV w:val="single" w:sz="4" w:color="000000"/>
-    </w:tblBorders>
-    <w:tblLayout w:type="fixed"/>
-  </w:tblPr>
-  <w:tblGrid>
-    <w:gridCol w:w="${timeW}"/>
-    <w:gridCol w:w="${minsW}"/>
-    ${DAYS.map(() => `<w:gridCol w:w="${dayW}"/>`).join('')}
-  </w:tblGrid>`;
-
-  // Header row
-  xml += row(
-    cell('Time', { bold: true, center: true, shade: '1F3864', width: timeW }).replace('color="auto"', 'color="FFFFFF"').replace('<w:sz w:val="16"/><w:szCs w:val="16"/>', '<w:b/><w:color w:val="FFFFFF"/><w:sz w:val="16"/><w:szCs w:val="16"/>'),
-    cell('No. of Mins.', { bold: true, center: true, shade: '1F3864', width: minsW }).replace('<w:sz w:val="16"/><w:szCs w:val="16"/>', '<w:b/><w:color w:val="FFFFFF"/><w:sz w:val="16"/><w:szCs w:val="16"/>'),
-    ...DAYS.map(d => cell(d.toUpperCase(), { bold: true, center: true, shade: '1F3864', width: dayW }).replace('<w:sz w:val="16"/><w:szCs w:val="16"/>', '<w:b/><w:color w:val="FFFFFF"/><w:sz w:val="16"/><w:szCs w:val="16"/>'))
-  );
-
-  // Data rows
-  const shadeBreak = 'D9E1F2';
-  const shadeTeach = 'FFFFFF';
+  body += tblOpen(14400,[timeW,minsW,...DAYS.map(()=>dayW)]);
+  body += mkRow(hdrCell('Time',timeW), hdrCell('No. of Mins.',minsW), ...DAYS.map(d=>hdrCell(d.toUpperCase(),dayW)));
 
   for (const slot of useSlots) {
-    if (slot.isBreak) {
-      // Span all day columns
-      const spanCell = `<w:tc><w:tcPr>
-        <w:tcW w:w="${dayW * 5}" w:type="dxa"/>
-        <w:gridSpan w:val="5"/>
-        <w:tcBorders>
-          <w:top w:val="single" w:sz="4" w:space="0" w:color="000000"/>
-          <w:left w:val="single" w:sz="4" w:space="0" w:color="000000"/>
-          <w:bottom w:val="single" w:sz="4" w:space="0" w:color="000000"/>
-          <w:right w:val="single" w:sz="4" w:space="0" w:color="000000"/>
-        </w:tcBorders>
-        <w:shd w:val="clear" w:color="auto" w:fill="${shadeBreak}"/>
-        <w:vAlign w:val="center"/>
-      </w:tcPr>
-      <w:p><w:pPr><w:jc w:val="center"/><w:spacing w:before="40" w:after="40"/></w:pPr>
-      <w:r><w:rPr><w:b/><w:sz w:val="16"/><w:szCs w:val="16"/></w:rPr>
-      <w:t>${esc(slot.breakLabel || slot.time)}</w:t></w:r></w:p></w:tc>`;
-
-      xml += `<w:tr>
-        ${cell(slot.time, { width: timeW, shade: shadeBreak, center: true, sz: 14 })}
-        ${cell(slot.mins || '', { width: minsW, shade: shadeBreak, center: true, sz: 14 })}
-        ${spanCell}
-      </w:tr>`;
-      continue;
-    }
-
-    const dayCells = DAYS.map(day => {
-      const label = getTeacherEntry(slot.time, day);
-      return cell(label, { width: dayW, center: true, sz: 14 });
-    });
-
-    xml += row(
-      cell(slot.time, { width: timeW, center: true, sz: 14 }),
-      cell(slot.mins || '', { width: minsW, center: true, sz: 14 }),
-      ...dayCells
+    if (slot.isBreak) { body += breakRow(slot.breakLabel||slot.time, timeW, minsW, dayW, 'D9E1F2'); continue; }
+    body += mkRow(
+      mkCell(slot.time,{width:timeW,center:true,sz:14}),
+      mkCell(slot.mins||'',{width:minsW,center:true,sz:14}),
+      ...DAYS.map(day=>mkCell(getEntry(slot.time,day),{width:dayW,center:true,sz:14}))
     );
   }
-
-  xml += `</w:tbl>`;
-  xml += para('', { sz: 12 });
-
-  // Signatures
-  xml += para(`Prepared by: ${teacherName}                    Noted by: ${SCHOOL.prepared_by_note}    ${SCHOOL.prepared_by_title}    Checked and Verified by: ${SCHOOL.verified_by}    ${SCHOOL.verified_title}`, { sz: 14 });
-  xml += para('', { sz: 12 });
-  xml += para(`Approved: ${SCHOOL.approved_by}    ${SCHOOL.approved_title}`, { sz: 14 });
-
-  xml += `<w:sectPr>
-    <w:pgSz w:w="15840" w:h="12240" w:orient="landscape"/>
-    <w:pgMar w:top="720" w:right="720" w:bottom="720" w:left="720" w:header="0" w:footer="0" w:gutter="0"/>
-  </w:sectPr>
-</w:body></w:document>`;
-
-  return xml;
+  body += '</w:tbl>';
+  body += mkPara('',{sz:12});
+  body += mkPara(`Prepared by: ${teacherName}`,{sz:14});
+  body += mkPara(`Noted by: ${SCHOOL.prepared_by_note} · ${SCHOOL.prepared_by_title}`,{sz:14});
+  body += mkPara(`Checked and Verified by: ${SCHOOL.verified_by} · ${SCHOOL.verified_title}`,{sz:14});
+  body += mkPara(`Approved: ${SCHOOL.approved_by} · ${SCHOOL.approved_title}`,{sz:14});
+  return docXmlWrap(body);
 }
 
-// ═══════════════════════════════════════════════════════
-// BUILD CLASS PROGRAM DOCX
-// ═══════════════════════════════════════════════════════
+// ═══════════════════════════════════════════
+// CLASS PROGRAM XML
+// ═══════════════════════════════════════════
 function buildClassProgramXML(teacherName, section) {
-  const jhs = scheduleData.jhs;
-  const shs = scheduleData.shs;
-  const DAYS = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday'];
-
-  // Determine if this is JHS or SHS section
+  const jhs = scheduleData.jhs, shs = scheduleData.shs;
   const isJHS = jhs && jhs.sections.includes(section);
   const isSHS = shs && shs.sections.includes(section);
-
-  let xml = `<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<w:document xmlns:w="http://schemas.openxmlformats.org/wordprocessingml/2006/main">
-<w:body>`;
-
-  xml += para('Republic of the Philippines', { center: true, sz: 16 });
-  xml += para('Department of Education', { center: true, sz: 16 });
-  xml += para(SCHOOL.region, { center: true, sz: 16 });
-  xml += para(SCHOOL.division, { center: true, sz: 16 });
-  xml += para('', { sz: 14 });
-  xml += para(`DISTRICT: ${SCHOOL.district}                    SCHOOL: ${SCHOOL.school}`, { sz: 16 });
-  xml += para('', { sz: 12 });
-  xml += para('CLASS PROGRAM', { center: true, sz: 24, bold: true });
-  xml += para(section, { center: true, sz: 20, bold: true });
-  xml += para(`SY: ${SCHOOL.sy}`, { center: true, sz: 18 });
-  xml += para('', { sz: 10 });
-
-  const timeW = 1400, minsW = 800, dayW = Math.floor((14400 - timeW - minsW) / 5);
-
-  xml += `<w:tbl><w:tblPr>
-    <w:tblW w:w="14400" w:type="dxa"/>
-    <w:tblBorders>
-      <w:insideH w:val="single" w:sz="4" w:color="000000"/>
-      <w:insideV w:val="single" w:sz="4" w:color="000000"/>
-    </w:tblBorders>
-    <w:tblLayout w:type="fixed"/>
-  </w:tblPr>
-  <w:tblGrid>
-    <w:gridCol w:w="${timeW}"/>
-    <w:gridCol w:w="${minsW}"/>
-    ${DAYS.map(() => `<w:gridCol w:w="${dayW}"/>`).join('')}
-  </w:tblGrid>`;
-
-  // Header
-  xml += row(
-    cell('Time', { bold: true, center: true, shade: '1F3864', width: timeW }).replace('<w:sz w:val="16"/><w:szCs w:val="16"/>', '<w:b/><w:color w:val="FFFFFF"/><w:sz w:val="16"/><w:szCs w:val="16"/>'),
-    cell('No. of Mins.', { bold: true, center: true, shade: '1F3864', width: minsW }).replace('<w:sz w:val="16"/><w:szCs w:val="16"/>', '<w:b/><w:color w:val="FFFFFF"/><w:sz w:val="16"/><w:szCs w:val="16"/>'),
-    ...DAYS.map(d => cell(d.toUpperCase(), { bold: true, center: true, shade: '1F3864', width: dayW }).replace('<w:sz w:val="16"/><w:szCs w:val="16"/>', '<w:b/><w:color w:val="FFFFFF"/><w:sz w:val="16"/><w:szCs w:val="16"/>'))
-  );
-
   const useSlots = isJHS ? jhs.slots : (isSHS ? shs.slots : []);
-  const shadeBreak = 'D9E1F2';
+  const timeW=1400, minsW=800, dayW=Math.floor((14400-timeW-minsW)/5);
+
+  let body = '';
+  body += mkPara('Republic of the Philippines',{center:true,sz:16});
+  body += mkPara('Department of Education',{center:true,sz:16});
+  body += mkPara(SCHOOL.region,{center:true,sz:16});
+  body += mkPara(SCHOOL.division,{center:true,sz:16});
+  body += mkPara('',{sz:12});
+  body += mkPara(`DISTRICT: ${SCHOOL.district}                    SCHOOL: ${SCHOOL.school}`,{sz:16});
+  body += mkPara('',{sz:10});
+  body += mkPara('CLASS PROGRAM',{center:true,sz:24,bold:true});
+  body += mkPara(section,{center:true,sz:20,bold:true});
+  body += mkPara(`SY: ${SCHOOL.sy}`,{center:true,sz:18});
+  body += mkPara('',{sz:10});
+
+  body += tblOpen(14400,[timeW,minsW,...DAYS.map(()=>dayW)]);
+  body += mkRow(hdrCell('Time',timeW), hdrCell('No. of Mins.',minsW), ...DAYS.map(d=>hdrCell(d.toUpperCase(),dayW)));
 
   for (const slot of useSlots) {
-    if (slot.isBreak) {
-      const spanCell = `<w:tc><w:tcPr>
-        <w:tcW w:w="${dayW * 5}" w:type="dxa"/>
-        <w:gridSpan w:val="5"/>
-        <w:tcBorders>
-          <w:top w:val="single" w:sz="4" w:space="0" w:color="000000"/>
-          <w:left w:val="single" w:sz="4" w:space="0" w:color="000000"/>
-          <w:bottom w:val="single" w:sz="4" w:space="0" w:color="000000"/>
-          <w:right w:val="single" w:sz="4" w:space="0" w:color="000000"/>
-        </w:tcBorders>
-        <w:shd w:val="clear" w:color="auto" w:fill="${shadeBreak}"/>
-        <w:vAlign w:val="center"/>
-      </w:tcPr>
-      <w:p><w:pPr><w:jc w:val="center"/><w:spacing w:before="40" w:after="40"/></w:pPr>
-      <w:r><w:rPr><w:b/><w:sz w:val="16"/><w:szCs w:val="16"/></w:rPr>
-      <w:t>${esc(slot.breakLabel || slot.time)}</w:t></w:r></w:p></w:tc>`;
-
-      xml += `<w:tr>
-        ${cell(slot.time, { width: timeW, shade: shadeBreak, center: true, sz: 14 })}
-        ${cell(slot.mins || '', { width: minsW, shade: shadeBreak, center: true, sz: 14 })}
-        ${spanCell}
-      </w:tr>`;
-      continue;
-    }
-
+    if (slot.isBreak) { body += breakRow(slot.breakLabel||slot.time, timeW, minsW, dayW, 'D9E1F2'); continue; }
     if (isJHS) {
       const dayCells = DAYS.map(day => {
-        const entry = slot.sections[section];
-        if (!entry) return cell('', { width: dayW, center: true, sz: 14 });
-        const days = entry.days === 'F' ? ['Friday'] : entry.days === 'M' ? ['Monday'] : DAYS;
-        if (!days.includes(day)) return cell('', { width: dayW, center: true, sz: 14 });
-        const label = entry.subject ? `${cleanSubject(entry.subject)}\n(${cleanTeacher(entry.teacher)})` : '';
-        // Split into two lines
-        if (label) {
-          return `<w:tc><w:tcPr>
-            <w:tcW w:w="${dayW}" w:type="dxa"/>
-            <w:tcBorders>
-              <w:top w:val="single" w:sz="4" w:space="0" w:color="000000"/>
-              <w:left w:val="single" w:sz="4" w:space="0" w:color="000000"/>
-              <w:bottom w:val="single" w:sz="4" w:space="0" w:color="000000"/>
-              <w:right w:val="single" w:sz="4" w:space="0" w:color="000000"/>
-            </w:tcBorders>
-            <w:vAlign w:val="center"/>
-          </w:tcPr>
-          <w:p><w:pPr><w:jc w:val="center"/><w:spacing w:before="30" w:after="0"/></w:pPr>
-          <w:r><w:rPr><w:b/><w:sz w:val="14"/><w:szCs w:val="14"/></w:rPr>
-          <w:t>${esc(cleanSubject(entry.subject))}</w:t></w:r></w:p>
-          <w:p><w:pPr><w:jc w:val="center"/><w:spacing w:before="0" w:after="30"/></w:pPr>
-          <w:r><w:rPr><w:sz w:val="13"/><w:szCs w:val="13"/></w:rPr>
-          <w:t>(${esc(cleanTeacher(entry.teacher))})</w:t></w:r></w:p></w:tc>`;
-        }
-        return cell('', { width: dayW, center: true, sz: 14 });
-      });
-
-      xml += row(
-        cell(slot.time, { width: timeW, center: true, sz: 14 }),
-        cell(slot.mins || '', { width: minsW, center: true, sz: 14 }),
-        ...dayCells
-      );
-    } else if (isSHS) {
-      const secSlot = slot.sections[section];
-      const dayCells = DAYS.map(day => {
-        if (!secSlot || !secSlot.dayMap || !secSlot.dayMap[day]) return cell('', { width: dayW, center: true, sz: 14 });
-        const entry = secSlot.dayMap[day];
-        return `<w:tc><w:tcPr>
-          <w:tcW w:w="${dayW}" w:type="dxa"/>
-          <w:tcBorders>
-            <w:top w:val="single" w:sz="4" w:space="0" w:color="000000"/>
-            <w:left w:val="single" w:sz="4" w:space="0" w:color="000000"/>
-            <w:bottom w:val="single" w:sz="4" w:space="0" w:color="000000"/>
-            <w:right w:val="single" w:sz="4" w:space="0" w:color="000000"/>
-          </w:tcBorders>
+        const e = slot.sections[section];
+        if (!e) return mkCell('',{width:dayW,center:true,sz:14});
+        const days = e.days==='F'?['Friday']:e.days==='M'?['Monday']:DAYS;
+        if (!days.includes(day)) return mkCell('',{width:dayW,center:true,sz:14});
+        if (!e.subject) return mkCell('',{width:dayW,center:true,sz:14});
+        return `<w:tc><w:tcPr><w:tcW w:w="${dayW}" w:type="dxa"/>
+          <w:tcBorders><w:top w:val="single" w:sz="4" w:space="0" w:color="000000"/><w:left w:val="single" w:sz="4" w:space="0" w:color="000000"/><w:bottom w:val="single" w:sz="4" w:space="0" w:color="000000"/><w:right w:val="single" w:sz="4" w:space="0" w:color="000000"/></w:tcBorders>
           <w:vAlign w:val="center"/>
         </w:tcPr>
         <w:p><w:pPr><w:jc w:val="center"/><w:spacing w:before="30" w:after="0"/></w:pPr>
-        <w:r><w:rPr><w:b/><w:sz w:val="14"/><w:szCs w:val="14"/></w:rPr>
-        <w:t>${esc(cleanSubject(entry.subject))}</w:t></w:r></w:p>
+        <w:r><w:rPr><w:b/><w:sz w:val="14"/><w:szCs w:val="14"/></w:rPr><w:t>${esc(cleanSubj(e.subject))}</w:t></w:r></w:p>
         <w:p><w:pPr><w:jc w:val="center"/><w:spacing w:before="0" w:after="30"/></w:pPr>
-        <w:r><w:rPr><w:sz w:val="13"/><w:szCs w:val="13"/></w:rPr>
-        <w:t>(${esc(entry.teacher)})</w:t></w:r></w:p></w:tc>`;
+        <w:r><w:rPr><w:sz w:val="13"/><w:szCs w:val="13"/></w:rPr><w:t>(${esc(cleanTchr(e.teacher))})</w:t></w:r></w:p></w:tc>`;
       });
-
-      xml += row(
-        cell(slot.time, { width: timeW, center: true, sz: 14 }),
-        cell('60', { width: minsW, center: true, sz: 14 }),
-        ...dayCells
-      );
+      body += mkRow(mkCell(slot.time,{width:timeW,center:true,sz:14}), mkCell(slot.mins||'',{width:minsW,center:true,sz:14}), ...dayCells);
+    } else if (isSHS) {
+      const ss = slot.sections[section];
+      const dayCells = DAYS.map(day => {
+        if (!ss||!ss.dayMap||!ss.dayMap[day]) return mkCell('',{width:dayW,center:true,sz:14});
+        const e = ss.dayMap[day];
+        return `<w:tc><w:tcPr><w:tcW w:w="${dayW}" w:type="dxa"/>
+          <w:tcBorders><w:top w:val="single" w:sz="4" w:space="0" w:color="000000"/><w:left w:val="single" w:sz="4" w:space="0" w:color="000000"/><w:bottom w:val="single" w:sz="4" w:space="0" w:color="000000"/><w:right w:val="single" w:sz="4" w:space="0" w:color="000000"/></w:tcBorders>
+          <w:vAlign w:val="center"/>
+        </w:tcPr>
+        <w:p><w:pPr><w:jc w:val="center"/><w:spacing w:before="30" w:after="0"/></w:pPr>
+        <w:r><w:rPr><w:b/><w:sz w:val="14"/><w:szCs w:val="14"/></w:rPr><w:t>${esc(cleanSubj(e.subject))}</w:t></w:r></w:p>
+        <w:p><w:pPr><w:jc w:val="center"/><w:spacing w:before="0" w:after="30"/></w:pPr>
+        <w:r><w:rPr><w:sz w:val="13"/><w:szCs w:val="13"/></w:rPr><w:t>(${esc(e.teacher)})</w:t></w:r></w:p></w:tc>`;
+      });
+      body += mkRow(mkCell(slot.time,{width:timeW,center:true,sz:14}), mkCell('60',{width:minsW,center:true,sz:14}), ...dayCells);
     }
   }
-
-  xml += `</w:tbl>`;
-  xml += para('', { sz: 12 });
-  xml += para(`Prepared by: ${teacherName}    Teacher I/Adviser`, { sz: 14 });
-  xml += para('', { sz: 12 });
-  xml += para(`Noted by: ${SCHOOL.prepared_by_note}    ${SCHOOL.prepared_by_title}`, { sz: 14 });
-  xml += para('', { sz: 12 });
-  xml += para(`Checked and Verified: ${SCHOOL.verified_by}    ${SCHOOL.verified_title}`, { sz: 14 });
-  xml += para('', { sz: 12 });
-  xml += para(`Approved: ${SCHOOL.approved_by}    ${SCHOOL.approved_title}`, { sz: 14 });
-
-  xml += `<w:sectPr>
-    <w:pgSz w:w="15840" w:h="12240" w:orient="landscape"/>
-    <w:pgMar w:top="720" w:right="720" w:bottom="720" w:left="720" w:header="0" w:footer="0" w:gutter="0"/>
-  </w:sectPr>
-</w:body></w:document>`;
-
-  return xml;
+  body += '</w:tbl>';
+  body += mkPara('',{sz:12});
+  body += mkPara(`Prepared by: ${teacherName} · Teacher I/Adviser`,{sz:14});
+  body += mkPara(`Noted by: ${SCHOOL.prepared_by_note} · ${SCHOOL.prepared_by_title}`,{sz:14});
+  body += mkPara(`Checked and Verified by: ${SCHOOL.verified_by} · ${SCHOOL.verified_title}`,{sz:14});
+  body += mkPara(`Approved: ${SCHOOL.approved_by} · ${SCHOOL.approved_title}`,{sz:14});
+  return docXmlWrap(body);
 }
 
-// ═══════════════════════════════════════════════════════
-// HELPERS
-// ═══════════════════════════════════════════════════════
-function matchesTeacher(cellTeacher, teacherName) {
-  if (!cellTeacher || !teacherName) return false;
-  const ct = cellTeacher.trim().toLowerCase().replace(/\s+/g, ' ');
-  const tn = teacherName.trim().toLowerCase().replace(/\s+/g, ' ');
-
-  // Direct contains
-  if (tn.includes(ct) || ct.includes(tn)) return true;
-
-  // Match any significant word
-  const ctParts = ct.split(/[\s,./]+/).filter(p => p.length > 2);
-  const tnParts = tn.split(/[\s,./]+/).filter(p => p.length > 2);
-  return ctParts.some(cp => tnParts.some(tp => tp.startsWith(cp) || cp.startsWith(tp)));
+// ═══════════════════════════════════════════
+// ZIP / DOCX BUILDER
+// ═══════════════════════════════════════════
+function crc32(data) {
+  if (!crc32._t) {
+    crc32._t = new Int32Array(256);
+    for (let i=0;i<256;i++) { let c=i; for (let j=0;j<8;j++) c=(c&1)?(0xEDB88320^(c>>>1)):(c>>>1); crc32._t[i]=c; }
+  }
+  let crc=-1;
+  for (let i=0;i<data.length;i++) crc=crc32._t[(crc^data[i])&0xff]^(crc>>>8);
+  return (crc^-1)>>>0;
 }
 
-function cleanSubject(s) {
-  if (!s) return '';
-  return s.replace(/\n/g, ' ').replace(/\s+/g, ' ').trim();
+function buildZipBytes(files) {
+  const enc=new TextEncoder(), lhs=[], cds=[];
+  let offset=0;
+  for (const [name,content] of Object.entries(files)) {
+    const nb=enc.encode(name), db=enc.encode(content), crc=crc32(db);
+    const lh=new Uint8Array(30+nb.length), lv=new DataView(lh.buffer);
+    lv.setUint32(0,0x04034b50,true); lv.setUint16(4,20,true); lv.setUint16(6,0,true); lv.setUint16(8,0,true);
+    lv.setUint16(10,0,true); lv.setUint16(12,0,true); lv.setUint32(14,crc,true);
+    lv.setUint32(18,db.length,true); lv.setUint32(22,db.length,true);
+    lv.setUint16(26,nb.length,true); lv.setUint16(28,0,true); lh.set(nb,30);
+    const cd=new Uint8Array(46+nb.length), cv=new DataView(cd.buffer);
+    cv.setUint32(0,0x02014b50,true); cv.setUint16(4,20,true); cv.setUint16(6,20,true);
+    cv.setUint16(8,0,true); cv.setUint16(10,0,true); cv.setUint16(12,0,true); cv.setUint16(14,0,true);
+    cv.setUint32(16,crc,true); cv.setUint32(20,db.length,true); cv.setUint32(24,db.length,true);
+    cv.setUint16(28,nb.length,true); cv.setUint16(30,0,true); cv.setUint16(32,0,true);
+    cv.setUint16(34,0,true); cv.setUint16(36,0,true); cv.setUint32(38,0,true); cv.setUint32(42,offset,true); cd.set(nb,46);
+    lhs.push(lh,db); cds.push(cd); offset+=lh.length+db.length;
+  }
+  const cdStart=offset, cdSize=cds.reduce((s,b)=>s+b.length,0);
+  const eocd=new Uint8Array(22), ev=new DataView(eocd.buffer);
+  ev.setUint32(0,0x06054b50,true); ev.setUint16(4,0,true); ev.setUint16(6,0,true);
+  ev.setUint16(8,cds.length,true); ev.setUint16(10,cds.length,true);
+  ev.setUint32(12,cdSize,true); ev.setUint32(16,cdStart,true); ev.setUint16(20,0,true);
+  const all=[...lhs,...cds,eocd], total=all.reduce((s,b)=>s+b.length,0);
+  const out=new Uint8Array(total); let pos=0;
+  for (const b of all) { out.set(b,pos); pos+=b.length; }
+  return out;
 }
 
-function cleanTeacher(s) {
-  if (!s) return '';
-  return s.replace(/\.$/, '').replace(/\s+/g, ' ').trim();
+async function buildDocxBlob(docXml, filename) {
+  const ct=`<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<Types xmlns="http://schemas.openxmlformats.org/package/2006/content-types">
+  <Default Extension="rels" ContentType="application/vnd.openxmlformats-package.relationships+xml"/>
+  <Default Extension="xml" ContentType="application/xml"/>
+  <Override PartName="/word/document.xml" ContentType="application/vnd.openxmlformats-officedocument.wordprocessingml.document.main+xml"/>
+  <Override PartName="/word/styles.xml" ContentType="application/vnd.openxmlformats-officedocument.wordprocessingml.styles+xml"/>
+</Types>`;
+  const rels=`<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<Relationships xmlns="http://schemas.openxmlformats.org/package/2006/relationships">
+  <Relationship Id="rId1" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/officeDocument" Target="word/document.xml"/>
+</Relationships>`;
+  const wRels=`<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<Relationships xmlns="http://schemas.openxmlformats.org/package/2006/relationships">
+  <Relationship Id="rId1" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/styles" Target="styles.xml"/>
+</Relationships>`;
+  const styles=`<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<w:styles xmlns:w="http://schemas.openxmlformats.org/wordprocessingml/2006/main">
+  <w:style w:type="paragraph" w:default="1" w:styleId="Normal">
+    <w:name w:val="Normal"/><w:rPr><w:sz w:val="20"/></w:rPr>
+  </w:style>
+</w:styles>`;
+  const zip = buildZipBytes({
+    '[Content_Types].xml':ct, '_rels/.rels':rels,
+    'word/_rels/document.xml.rels':wRels, 'word/styles.xml':styles, 'word/document.xml':docXml
+  });
+  const blob=new Blob([zip],{type:'application/vnd.openxmlformats-officedocument.wordprocessingml.document'});
+  saveAs(blob,filename);
 }
 
-// ═══════════════════════════════════════════════════════
+// ═══════════════════════════════════════════
 // DOWNLOAD ACTIONS
-// ═══════════════════════════════════════════════════════
-async function downloadTeachersProgram(teacherName) {
+// ═══════════════════════════════════════════
+async function downloadTeachersProgram(name) {
   try {
-    showToast('⏳ Generating Teacher's Program...', '');
-    const xml = buildTeacherProgramXML(teacherName);
-    await buildDocxBlob(xml, `Teachers_Program_${teacherName.replace(/\s/g,'_')}.docx`);
-    showToast('✓ Downloaded: Teacher's Program', 'success');
-  } catch(e) {
-    showToast('Error generating document: ' + e.message, 'error');
-    console.error(e);
-  }
+    showToast('⏳ Generating Teacher's Program...','info');
+    await buildDocxBlob(buildTeacherProgramXML(name), `Teachers_Program_${name.replace(/\s/g,'_')}.docx`);
+    showToast('✓ Downloaded: Teacher's Program','success');
+  } catch(e) { showToast('Error: '+e.message,'error'); console.error(e); }
 }
 
-async function downloadClassProgram(teacherName, section) {
+async function downloadClassProgram(name, section) {
   try {
-    showToast('⏳ Generating Class Program...', '');
-    const xml = buildClassProgramXML(teacherName, section);
-    await buildDocxBlob(xml, `Class_Program_${section.replace(/\s/g,'_')}.docx`);
-    showToast('✓ Downloaded: Class Program — ' + section, 'success');
-  } catch(e) {
-    showToast('Error generating document: ' + e.message, 'error');
-    console.error(e);
-  }
+    showToast('⏳ Generating Class Program...','info');
+    await buildDocxBlob(buildClassProgramXML(name,section), `Class_Program_${section.replace(/\s/g,'_')}.docx`);
+    showToast('✓ Downloaded: Class Program — '+section,'success');
+  } catch(e) { showToast('Error: '+e.message,'error'); console.error(e); }
 }
 
-// ═══════════════════════════════════════════════════════
+// ═══════════════════════════════════════════
 // TOAST
-// ═══════════════════════════════════════════════════════
-let toastTimeout;
-function showToast(msg, type = '') {
-  const existing = document.querySelector('.toast');
-  if (existing) existing.remove();
-  clearTimeout(toastTimeout);
-  const t = document.createElement('div');
-  t.className = `toast${type ? ' ' + type : ''}`;
-  t.textContent = msg;
+// ═══════════════════════════════════════════
+let _tt;
+function showToast(msg,type='') {
+  document.querySelector('.toast')?.remove();
+  clearTimeout(_tt);
+  const t=document.createElement('div');
+  t.className=`toast${type?' '+type:''}`;
+  t.textContent=msg;
   document.body.appendChild(t);
-  toastTimeout = setTimeout(() => t.remove(), 3500);
+  _tt=setTimeout(()=>t.remove(),3500);
 }
 
-// ═══════════════════════════════════════════════════════
+// ═══════════════════════════════════════════
 // DRAG & DROP
-// ═══════════════════════════════════════════════════════
-['jhs', 'shs'].forEach(type => {
-  const card = document.getElementById(`${type}-upload-card`);
-  card.addEventListener('dragover', e => { e.preventDefault(); card.classList.add('drag-over'); });
-  card.addEventListener('dragleave', () => card.classList.remove('drag-over'));
-  card.addEventListener('drop', e => {
-    e.preventDefault();
-    card.classList.remove('drag-over');
-    const file = e.dataTransfer.files[0];
+// ═══════════════════════════════════════════
+['jhs','shs'].forEach(type => {
+  const card=document.getElementById(`${type}-upload-card`);
+  card.addEventListener('dragover',e=>{e.preventDefault();card.classList.add('drag-over');});
+  card.addEventListener('dragleave',()=>card.classList.remove('drag-over'));
+  card.addEventListener('drop',e=>{
+    e.preventDefault(); card.classList.remove('drag-over');
+    const file=e.dataTransfer.files[0];
     if (!file) return;
-    const fakeInput = { files: [file] };
-    handleFileUpload(type, fakeInput);
+    handleFileUpload(type,{files:[file]});
   });
 });
 </script>
