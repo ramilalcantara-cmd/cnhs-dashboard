@@ -152,7 +152,7 @@
 <body>
 
 <!-- LOADING OVERLAY -->
-<div class="loading-overlay" id="loading-overlay">
+<div class="loading-overlay hidden" id="loading-overlay">
   <div class="loading-box">
     <div class="big-spinner"></div>
     <h3>Loading Saved Schedule</h3>
@@ -293,12 +293,36 @@ let scheduleData = { jhs: null, shs: null, teachers: {} };
 // ═══════════════════════════════════════════
 // STARTUP — load from localStorage
 // ═══════════════════════════════════════════
-window.addEventListener('DOMContentLoaded', async () => {
+function dismissOverlay() {
+  document.getElementById('loading-overlay').classList.add('hidden');
+}
+
+// Safety net: always dismiss after 3 seconds no matter what
+setTimeout(dismissOverlay, 3000);
+
+window.addEventListener('DOMContentLoaded', () => {
   const overlay = document.getElementById('loading-overlay');
+
+  // Check if localStorage is available at all (some browsers block it)
+  let storageOk = false;
+  try { localStorage.setItem('_test','1'); localStorage.removeItem('_test'); storageOk = true; }
+  catch(e) { storageOk = false; }
+
+  if (!storageOk) {
+    showNoScheduleBanner(true);
+    dismissOverlay();
+    return;
+  }
+
   try {
     const jhsRaw  = localStorage.getItem(STORAGE_KEY_JHS);
     const shsRaw  = localStorage.getItem(STORAGE_KEY_SHS);
     const metaRaw = localStorage.getItem(STORAGE_KEY_META);
+
+    // Only show the spinner if there's actually something to restore
+    if (jhsRaw || shsRaw) {
+      overlay.classList.remove('hidden');
+    }
 
     if (jhsRaw)  scheduleData.jhs = JSON.parse(jhsRaw);
     if (shsRaw)  scheduleData.shs = JSON.parse(shsRaw);
@@ -325,9 +349,9 @@ window.addEventListener('DOMContentLoaded', async () => {
   } catch(e) {
     console.warn('Could not load saved data:', e);
     showNoScheduleBanner(true);
-  } finally {
-    overlay.classList.add('hidden');
   }
+
+  dismissOverlay();
 });
 
 // ═══════════════════════════════════════════
