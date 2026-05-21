@@ -874,10 +874,10 @@ async function buildDocxBlob(docXml, filename) {
 // ═══════════════════════════════════════════
 async function downloadTeachersProgram(name) {
   try {
-    showToast('⏳ Generating Teacher's Program...','info');
+    showToast('⏳ Generating Teacher\'s Program...','info');
     await LIBS_READY;
     await buildDocxBlob(buildTeacherProgramXML(name), `Teachers_Program_${name.replace(/\s/g,'_')}.docx`);
-    showToast('✓ Downloaded: Teacher's Program','success');
+    showToast('✓ Downloaded: Teacher\'s Program','success');
   } catch(e) { showToast('Error: '+e.message,'error'); console.error(e); }
 }
 
