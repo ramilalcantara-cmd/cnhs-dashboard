@@ -8,17 +8,9 @@
 <link href="https://fonts.googleapis.com/css2?family=Crimson+Pro:wght@400;600;700&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
 <title>CNHS Schedule Dashboard</title>
 <style>
-:root {
-  --navy:#0B1F4B; --gold:#C8960C; --cream:#FAF8F2; --white:#fff;
-  --gray-100:#F1EFE9; --gray-200:#E2DED4; --gray-500:#8A8070; --gray-700:#4A4438;
-  --green:#1E7E34; --red:#C0392B;
-  --shadow-sm:0 2px 8px rgba(11,31,75,.08); --shadow-md:0 4px 20px rgba(11,31,75,.12);
-  --r:10px; --rl:16px;
-}
+:root{--navy:#0B1F4B;--gold:#C8960C;--cream:#FAF8F2;--white:#fff;--gray-100:#F1EFE9;--gray-200:#E2DED4;--gray-500:#8A8070;--gray-700:#4A4438;--green:#1E7E34;--red:#C0392B;--shadow-sm:0 2px 8px rgba(11,31,75,.08);--shadow-md:0 4px 20px rgba(11,31,75,.12);--r:10px;--rl:16px}
 *{box-sizing:border-box;margin:0;padding:0}
 body{font-family:'DM Sans',sans-serif;background:var(--cream);color:var(--navy);min-height:100vh}
-
-/* HEADER */
 .hdr{background:var(--navy);position:sticky;top:0;z-index:100;box-shadow:0 2px 20px rgba(0,0,0,.3)}
 .hdr-in{max-width:1100px;margin:0 auto;display:flex;align-items:center;gap:16px;padding:12px 24px}
 .hdr-logos{display:flex;align-items:center;gap:10px;flex-shrink:0}
@@ -27,26 +19,18 @@ body{font-family:'DM Sans',sans-serif;background:var(--cream);color:var(--navy);
 .hdr-text h1{font-family:'Crimson Pro',serif;font-size:1.2rem;font-weight:700;color:#fff;line-height:1.2}
 .hdr-text p{font-size:.7rem;color:rgba(255,255,255,.6);letter-spacing:.04em;text-transform:uppercase;margin-top:2px}
 .hdr-badge{background:var(--gold);color:var(--navy);font-size:.65rem;font-weight:700;letter-spacing:.06em;text-transform:uppercase;padding:4px 12px;border-radius:20px;white-space:nowrap}
-
-/* STATUS BAR */
 .status-bar{background:var(--white);border-bottom:1px solid var(--gray-200);padding:10px 24px;text-align:center;font-size:.8rem}
 .status-bar.loading{color:var(--gray-500)}
 .status-bar.ok{color:var(--green)}
 .status-bar.err{color:var(--red)}
-
-/* MAIN */
 .main{max-width:860px;margin:0 auto;padding:40px 24px}
 .page-title{font-family:'Crimson Pro',serif;font-size:1.9rem;font-weight:700;margin-bottom:4px}
 .page-sub{color:var(--gray-500);font-size:.875rem;margin-bottom:32px}
-
-/* SELECTOR */
 .selector-card{background:var(--white);border:1px solid var(--gray-200);border-radius:var(--rl);padding:28px 32px;box-shadow:var(--shadow-sm);margin-bottom:28px}
 .selector-card label{display:block;font-size:.75rem;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:var(--gray-500);margin-bottom:10px}
 .selector-card select{width:100%;padding:12px 42px 12px 16px;font-family:'DM Sans',sans-serif;font-size:1rem;color:var(--navy);background:var(--cream);border:1.5px solid var(--gray-200);border-radius:var(--r);cursor:pointer;outline:none;appearance:none;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%230B1F4B' stroke-width='2'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 14px center;transition:border-color .2s}
 .selector-card select:focus{border-color:var(--gold)}
 .selector-card select:disabled{opacity:.5;cursor:not-allowed}
-
-/* RESULT */
 .result{animation:fadeUp .3s ease}
 @keyframes fadeUp{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:translateY(0)}}
 .name-bar{background:linear-gradient(135deg,var(--navy) 0%,#1a3a7a 100%);border-radius:var(--rl) var(--rl) 0 0;padding:22px 28px;display:flex;align-items:center;justify-content:space-between}
@@ -56,7 +40,6 @@ body{font-family:'DM Sans',sans-serif;background:var(--cream);color:var(--navy);
 .badge-jhs{background:#2980B9;color:#fff}
 .badge-shs{background:#8E44AD;color:#fff}
 .badge-both{background:var(--gold);color:var(--navy)}
-
 .dl-wrap{background:var(--white);border:1px solid var(--gray-200);border-top:none;border-radius:0 0 var(--rl) var(--rl);padding:24px;box-shadow:var(--shadow-sm)}
 .dl-label{font-size:.72rem;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:var(--gray-500);margin-bottom:14px}
 .dl-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}
@@ -69,21 +52,15 @@ body{font-family:'DM Sans',sans-serif;background:var(--cream);color:var(--navy);
 .dl-card p{font-size:.75rem;color:var(--gray-500)}
 .dl-arrow{margin-left:auto;color:var(--gray-500);transition:all .2s}
 .dl-card:hover .dl-arrow{transform:translateX(4px);color:var(--gold)}
-
-/* EMPTY / ERROR STATES */
 .empty{text-align:center;padding:60px 20px;color:var(--gray-500)}
 .empty .ico{font-size:3rem;margin-bottom:12px}
 .err-card{background:#FDF2F2;border:1.5px solid #F5C6C6;border-radius:var(--rl);padding:20px 24px;display:flex;gap:14px;align-items:flex-start;margin-bottom:24px}
 .err-card .ico{font-size:1.4rem;flex-shrink:0}
 .err-card p{font-size:.85rem;color:#7B1F1F}
 .err-card strong{display:block;margin-bottom:4px;color:var(--red)}
-
-/* REFRESH BTN */
 .refresh-btn{display:inline-flex;align-items:center;gap:8px;margin-top:16px;background:var(--navy);color:#fff;border:none;border-radius:var(--r);padding:10px 20px;font-family:'DM Sans',sans-serif;font-size:.85rem;font-weight:600;cursor:pointer;transition:opacity .2s}
 .refresh-btn:hover{opacity:.85}
 .refresh-btn:disabled{opacity:.5;cursor:not-allowed}
-
-/* TOAST */
 .toast{position:fixed;bottom:24px;right:24px;background:var(--navy);color:#fff;padding:12px 20px;border-radius:var(--r);font-size:.875rem;font-weight:500;box-shadow:var(--shadow-md);z-index:9999;animation:slideIn .3s ease;max-width:320px}
 .toast.ok{background:var(--green)}.toast.err{background:var(--red)}.toast.info{background:#1A5276}
 @keyframes slideIn{from{transform:translateY(20px);opacity:0}to{transform:translateY(0);opacity:1}}
@@ -92,7 +69,6 @@ body{font-family:'DM Sans',sans-serif;background:var(--cream);color:var(--navy);
 </style>
 </head>
 <body>
-
 <header class="hdr">
   <div class="hdr-in">
     <div class="hdr-logos">
@@ -106,521 +82,627 @@ body{font-family:'DM Sans',sans-serif;background:var(--cream);color:var(--navy);
     <div class="hdr-badge">SY 2026–2027</div>
   </div>
 </header>
-
-<div id="status-bar" class="status-bar loading">
-  <span class="spin"></span> Loading schedule from Google Sheets...
-</div>
-
+<div id="status-bar" class="status-bar loading"><span class="spin"></span> Loading schedule from Google Sheets...</div>
 <div class="main">
   <div class="page-title">Download Your Program</div>
   <div class="page-sub">Select your name to generate and download your Teacher's Program and Class Program documents.</div>
-
   <div id="err-area"></div>
-
   <div class="selector-card">
     <label>Select Teacher Name</label>
     <select id="teacher-select" onchange="onSelect()" disabled>
       <option value="">— Loading schedule... —</option>
     </select>
   </div>
-
   <div id="result">
     <div class="empty"><div class="ico">👆</div><p>Select your name above to see your files.</p></div>
   </div>
-
   <div style="text-align:center;margin-top:32px">
     <button class="refresh-btn" onclick="loadSchedules()" id="refresh-btn">🔄 Refresh from Google Sheets</button>
   </div>
 </div>
-
 <script src="https://cdnjs.cloudflare.com/ajax/libs/FileSaver.js/2.0.5/FileSaver.min.js"></script>
 <script>
-// ═══════════════════════════════════
-// CONFIG
-// ═══════════════════════════════════
-const JHS_CSV_URL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vR3IwAY9w7VTU05JUbhhedtTsd_Qkcs0HD33ngeLOc_FLQZIezVumVe-QkwyVpAVwbYANhsj70xxRi7/pub?gid=1070961151&single=true&output=csv";
-const SHS_CSV_URL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vRYr4d7n9g7ihD9swa37RUQ1fnO6AGxu2PxQijnvtgrpFtXMfW8tTZ69dT3Q-5tijpyMaK4g8vwlTph/pub?gid=129618773&single=true&output=csv";
-
+// ═══════════ CONFIG ═══════════
+const JHS_CSV = "https://docs.google.com/spreadsheets/d/e/2PACX-1vR3IwAY9w7VTU05JUbhhedtTsd_Qkcs0HD33ngeLOc_FLQZIezVumVe-QkwyVpAVwbYANhsj70xxRi7/pub?gid=1070961151&single=true&output=csv";
+const SHS_CSV = "https://docs.google.com/spreadsheets/d/e/2PACX-1vRYr4d7n9g7ihD9swa37RUQ1fnO6AGxu2PxQijnvtgrpFtXMfW8tTZ69dT3Q-5tijpyMaK4g8vwlTph/pub?gid=129618773&single=true&output=csv";
 const SCHOOL = {
-  district:"HILONGOS EAST", school:"CONCEPCION NATIONAL HIGH SCHOOL",
-  region:"REGION VIII", division:"SCHOOLS DIVISION OF LEYTE", sy:"2026 – 2027",
-  noted_by:"TEOFILA S. RAMACULA", noted_title:"Head Teacher II",
-  verified_by:"RUTH U. RETULLA, EdD.", verified_title:"Public Schools District Supervisor",
-  approved_by:"MARIZA S. MAGAN EdD, CESO V", approved_title:"Schools Division Superintendent"
+  name:"CONCEPCION NATIONAL HIGH SCHOOL",
+  district:"HILONGOS EAST",
+  region:"REGION VIII",
+  division:"SCHOOLS DIVISION OF LEYTE",
+  sy:"2026 – 2027",
+  noted_by:"TEOFILA S. RAMACULA",
+  noted_title:"Head Teacher II",
+  checked_by:"RUTH U. RETULLA, EdD.",
+  checked_title:"Public Schools District Supervisor",
+  approved_by:"MARIZA S. MAGAN EdD, CESO V",
+  approved_title:"Schools Division Superintendent"
 };
-
 const DAYS = ["Monday","Tuesday","Wednesday","Thursday","Friday"];
-let scheduleData = {jhs:null, shs:null, teachers:{}};
+const DAY_LABELS = ["MONDAY","TUESDAY","WEDNESDAY","THURSDAY","FRIDAY"];
+let DB = {jhs:null, shs:null, teachers:{}};
 
-// ═══════════════════════════════════
-// CSV PARSER
-// ═══════════════════════════════════
-function parseCSV(text) {
-  const lines = text.split(/\r?\n/);
-  return lines.map(line => {
-    const cols = [];
-    let cur = "", inQ = false;
-    for (let i = 0; i < line.length; i++) {
-      const ch = line[i];
-      if (ch === '"' && !inQ) { inQ = true; }
-      else if (ch === '"' && inQ) {
-        if (line[i+1] === '"') { cur += '"'; i++; }
-        else inQ = false;
-      } else if (ch === "," && !inQ) { cols.push(cur.trim()); cur = ""; }
-      else cur += ch;
+// ═══════════ CSV PARSER ═══════════
+function parseCSV(text){
+  return text.split(/
+?
+/).map(line=>{
+    const cols=[]; let cur="",inQ=false;
+    for(let i=0;i<line.length;i++){
+      const ch=line[i];
+      if(ch==='"' && !inQ){inQ=true;}
+      else if(ch==='"' && inQ){if(line[i+1]==='"'){cur+='"';i++;}else inQ=false;}
+      else if(ch==="," && !inQ){cols.push(cur.trim());cur="";}
+      else cur+=ch;
     }
     cols.push(cur.trim());
     return cols;
   });
 }
 
-// ═══════════════════════════════════
-// JHS PARSER
-// ═══════════════════════════════════
-function parseJHS(rows) {
-  let sectionRowIdx = -1;
-  let sections = [];
-  for (let r = 0; r < rows.length; r++) {
-    const row = rows[r];
-    if (row.some(c => c.trim() === "ARIES")) {
-      sectionRowIdx = r;
-      for (let c = 2; c < row.length; c++) {
-        if (row[c] && row[c].trim()) sections.push({name: row[c].trim(), col: c});
+// ═══════════ JHS PARSER ═══════════
+function parseJHS(rows){
+  let secRowIdx=-1, sections=[];
+  for(let r=0;r<rows.length;r++){
+    if(rows[r].some(c=>c.trim()==="ARIES")){
+      secRowIdx=r;
+      for(let c=2;c<rows[r].length;c++){
+        if(rows[r][c]&&rows[r][c].trim()) sections.push({name:rows[r][c].trim(),col:c});
       }
       break;
     }
   }
-  if (sectionRowIdx === -1) throw new Error("JHS: Cannot find section header row. Check that the sheet is published correctly.");
-
-  const SKIP = ["FLAG","RECESS","LUNCH","ARAL READING","CULMINATING","HEALTH","DISMISSAL"];
-  const slots = [];
-  for (let r = sectionRowIdx + 1; r < rows.length; r++) {
-    const row = rows[r];
-    if (!row[0] || !row[0].trim()) continue;
-    const timeStr = row[0].trim();
-    if (!timeStr.match(/\d+:\d+/)) continue;
-    const mins = row[1] ? row[1].trim() : "";
-    const firstData = row[2] ? row[2].trim().toUpperCase() : "";
-    if (SKIP.some(k => firstData.startsWith(k))) {
-      slots.push({time:timeStr, mins, isBreak:true, breakLabel:row[2]?row[2].trim():timeStr, sections:{}});
+  if(secRowIdx===-1) throw new Error("JHS: Cannot find section header row.");
+  const SKIP=["FLAG","RECESS","LUNCH","ARAL READING","CULMINATING","HEALTH","DISMISSAL"];
+  const slots=[];
+  for(let r=secRowIdx+1;r<rows.length;r++){
+    const row=rows[r];
+    if(!row[0]||!row[0].trim()) continue;
+    const t=row[0].trim();
+    if(!t.match(/\d+:\d+/)) continue;
+    const mins=row[1]?row[1].trim():"";
+    const fd=row[2]?row[2].trim().toUpperCase():"";
+    if(SKIP.some(k=>fd.startsWith(k))){
+      slots.push({time:t,mins,isBreak:true,breakLabel:row[2]?row[2].trim():t,sections:{}});
       continue;
     }
-    const slot = {time:timeStr, mins, isBreak:false, sections:{}};
-    for (const sec of sections) {
-      const val = row[sec.col] ? row[sec.col].trim() : "";
-      if (val) slot.sections[sec.name] = parseJHSCell(val);
+    const slot={time:t,mins,isBreak:false,sections:{}};
+    for(const sec of sections){
+      const v=row[sec.col]?row[sec.col].trim():"";
+      if(v) slot.sections[sec.name]=parseJHSCell(v);
     }
     slots.push(slot);
   }
-  return {sections: sections.map(s=>s.name), slots, level:"JHS"};
+  return{sections:sections.map(s=>s.name),slots,level:"JHS"};
+}
+function parseJHSCell(cell){
+  const m=cell.match(/^(.+?)\s*\((M-F|F|M)\)\s*(.*)$/);
+  if(m) return{subject:m[1].trim().replace(/\.+$/,""),days:m[2].trim(),teacher:m[3].trim().replace(/\.$/,"")};
+  return{subject:cell,days:"M-F",teacher:""};
 }
 
-function parseJHSCell(cell) {
-  const m = cell.match(/^(.+?)\s*\((M-F|F|M)\)\s*(.*)$/);
-  if (m) return {subject:m[1].trim().replace(/\.+$/,""), days:m[2].trim(), teacher:m[3].trim().replace(/\.$/,"")};
-  return {subject:cell, days:"M-F", teacher:""};
-}
-
-// ═══════════════════════════════════
-// SHS PARSER
-// ═══════════════════════════════════
-function parseSHS(rows) {
-  const headerRow = rows[0] || [];
-  const sections = [];
-  for (let c = 1; c < headerRow.length; c++) {
-    if (headerRow[c] && headerRow[c].trim()) sections.push({name:headerRow[c].trim(), startCol:c});
+// ═══════════ SHS PARSER ═══════════
+function parseSHS(rows){
+  const hdr=rows[0]||[];
+  const sections=[];
+  for(let c=1;c<hdr.length;c++){
+    if(hdr[c]&&hdr[c].trim()) sections.push({name:hdr[c].trim(),startCol:c});
   }
-  const SKIP = ["flag","health","lunch","aral","dismissal"];
-  const slots = [];
-  for (let r = 2; r < rows.length; r++) {
-    const row = rows[r];
-    if (!row[0] || !row[0].trim()) continue;
-    const timeStr = row[0].trim();
-    const lc = timeStr.toLowerCase();
-    if (SKIP.some(k => lc.includes(k))) {
-      slots.push({time:timeStr, isBreak:true, breakLabel:timeStr, sections:{}});
+  const SKIP=["flag","health","lunch","aral","dismissal"];
+  const slots=[];
+  for(let r=2;r<rows.length;r++){
+    const row=rows[r];
+    if(!row[0]||!row[0].trim()) continue;
+    const t=row[0].trim();
+    const lc=t.toLowerCase();
+    if(SKIP.some(k=>lc.includes(k))){
+      slots.push({time:t,isBreak:true,breakLabel:t,sections:{}});
       continue;
     }
-    if (!timeStr.match(/\d+:\d+/)) continue;
-    const slot = {time:timeStr, isBreak:false, sections:{}};
-    const teacherRow = rows[r+1] || [];
-    for (const sec of sections) {
-      const dayMap = {};
-      for (let d = 0; d < 5; d++) {
-        const subj = row[sec.startCol + d] ? row[sec.startCol + d].trim() : "";
-        const tchr = teacherRow[sec.startCol + d] ? teacherRow[sec.startCol + d].trim() : "";
-        if (subj) dayMap[DAYS[d]] = {subject:subj, teacher:tchr};
+    if(!t.match(/\d+:\d+/)) continue;
+    const tRow=rows[r+1]||[];
+    const slot={time:t,isBreak:false,sections:{}};
+    for(const sec of sections){
+      const dayMap={};
+      for(let d=0;d<5;d++){
+        const subj=row[sec.startCol+d]?row[sec.startCol+d].trim():"";
+        const tchr=tRow[sec.startCol+d]?tRow[sec.startCol+d].trim():"";
+        if(subj) dayMap[DAYS[d]]={subject:subj,teacher:tchr};
       }
-      slot.sections[sec.name] = {dayMap};
+      slot.sections[sec.name]={dayMap};
     }
     slots.push(slot);
   }
-  return {sections:sections.map(s=>s.name), slots, level:"SHS"};
+  return{sections:sections.map(s=>s.name),slots,level:"SHS"};
 }
 
-// ═══════════════════════════════════
-// TEACHER MAP
-// ═══════════════════════════════════
-function buildTeacherMap() {
-  const teachers = {};
-  const norm = s => s ? s.trim().replace(/\s+/g," ") : null;
-
-  if (scheduleData.jhs) {
-    for (const slot of scheduleData.jhs.slots) {
-      if (slot.isBreak) continue;
-      for (const sec of scheduleData.jhs.sections) {
-        const e = slot.sections[sec];
-        if (!e || !e.teacher) continue;
-        const tn = norm(e.teacher); if (!tn) continue;
-        if (!teachers[tn]) teachers[tn] = {name:tn, jhs:[], shs:[]};
-        if (!teachers[tn].jhs.some(x => x.time===slot.time && x.section===sec))
-          teachers[tn].jhs.push({time:slot.time, mins:slot.mins, section:sec, subject:e.subject, days:e.days});
-      }
-    }
+// ═══════════ NAME MATCHING ═══════════
+// JHS uses last name only; SHS uses full name.
+// Match strategy: extract last name from SHS full name, compare to JHS last name.
+// Handle "Jr." suffix: "Dumalag Jr." != "Dumalag"
+function extractLastName(fullName){
+  // e.g. "DIANNE L. DEMAFELIS" -> "DEMAFELIS"
+  // e.g. "Demafelis" -> "DEMAFELIS"
+  // e.g. "Dumalag Jr." -> "DUMALAG JR."
+  const n = fullName.trim().toUpperCase();
+  // If comma-separated: "DEMAFELIS, DIANNE L." -> last name is before comma
+  if(n.includes(",")){
+    return n.split(",")[0].trim();
   }
+  // Otherwise last word (or last two words if "JR." or "SR.")
+  const parts = n.split(/\s+/);
+  const last = parts[parts.length-1];
+  if(last==="JR."||last==="JR"||last==="SR."||last==="SR"||last==="III"||last==="II"){
+    return parts.slice(-2).join(" ");
+  }
+  return last;
+}
 
-  if (scheduleData.shs) {
-    for (const slot of scheduleData.shs.slots) {
-      if (slot.isBreak) continue;
-      for (const sec of scheduleData.shs.sections) {
-        const ss = slot.sections[sec];
-        if (!ss || !ss.dayMap) continue;
-        for (const day of DAYS) {
-          const e = ss.dayMap[day];
-          if (!e || !e.teacher) continue;
-          const tn = norm(e.teacher); if (!tn) continue;
-          if (!teachers[tn]) teachers[tn] = {name:tn, jhs:[], shs:[]};
-          if (!teachers[tn].shs.some(x => x.time===slot.time && x.section===sec && x.day===day))
-            teachers[tn].shs.push({time:slot.time, section:sec, subject:e.subject, teacher:e.teacher, day});
+function jhsLastName(rawName){
+  // JHS stores last name only, possibly with suffix
+  return rawName.trim().toUpperCase();
+}
+
+// ═══════════ TEACHER MAP ═══════════
+function buildTeacherMap(){
+  // Step 1: collect all SHS teachers by their FULL name (canonical key)
+  // Step 2: collect JHS teachers by LAST NAME
+  // Step 3: merge: if JHS last name matches SHS teacher last name -> merge under SHS full name
+  // If no SHS match -> JHS last name becomes the key
+
+  const byLastName = {}; // lastNameKey -> {canonical, jhs:[], shs:[]}
+
+  // Process SHS first to get full names as canonical
+  if(DB.shs){
+    for(const slot of DB.shs.slots){
+      if(slot.isBreak) continue;
+      for(const sec of DB.shs.sections){
+        const ss=slot.sections[sec];
+        if(!ss||!ss.dayMap) continue;
+        for(const day of DAYS){
+          const e=ss.dayMap[day];
+          if(!e||!e.teacher||!e.teacher.trim()) continue;
+          const fullName=e.teacher.trim();
+          const ln=extractLastName(fullName);
+          if(!byLastName[ln]) byLastName[ln]={canonical:fullName,jhs:[],shs:[]};
+          // Update canonical to longest/most complete name
+          if(fullName.length>byLastName[ln].canonical.length) byLastName[ln].canonical=fullName;
+          const key=`${slot.time}|${sec}|${day}`;
+          if(!byLastName[ln].shs.some(x=>x.key===key))
+            byLastName[ln].shs.push({key,time:slot.time,section:sec,subject:e.subject,teacher:fullName,day});
         }
       }
     }
   }
-  scheduleData.teachers = teachers;
+
+  // Process JHS
+  if(DB.jhs){
+    for(const slot of DB.jhs.slots){
+      if(slot.isBreak) continue;
+      for(const sec of DB.jhs.sections){
+        const e=slot.sections[sec];
+        if(!e||!e.teacher||!e.teacher.trim()) continue;
+        const rawLN=e.teacher.trim();
+        const ln=jhsLastName(rawLN);
+        if(!byLastName[ln]) byLastName[ln]={canonical:rawLN,jhs:[],shs:[]};
+        const key=`${slot.time}|${sec}`;
+        if(!byLastName[ln].jhs.some(x=>x.key===key))
+          byLastName[ln].jhs.push({key,time:slot.time,mins:slot.mins,section:sec,subject:e.subject,days:e.days});
+      }
+    }
+  }
+
+  // Build final teacher map keyed by canonical name
+  const teachers={};
+  for(const [ln,data] of Object.entries(byLastName)){
+    const name=data.canonical;
+    teachers[name]={name,lastNameKey:ln,jhs:data.jhs,shs:data.shs};
+  }
+  DB.teachers=teachers;
 }
 
-// ═══════════════════════════════════
-// LOAD FROM GOOGLE SHEETS
-// ═══════════════════════════════════
-async function loadSchedules() {
-  setStatus("loading", "Loading schedule from Google Sheets...");
-  document.getElementById("refresh-btn").disabled = true;
-  document.getElementById("teacher-select").disabled = true;
-  document.getElementById("teacher-select").innerHTML = "<option>— Loading... —</option>";
-  document.getElementById("err-area").innerHTML = "";
+// ═══════════ TIME UTILITIES ═══════════
+function parseTime(str){
+  // "7:30", "10:05", "1:00 PM" -> minutes from midnight
+  const s=str.trim().replace(/\s*(–|-)\s*/,"-");
+  const m=s.match(/(\d+):(\d+)\s*(AM|PM)?/i);
+  if(!m) return 0;
+  let h=parseInt(m[1]), min=parseInt(m[2]);
+  const ampm=(m[3]||"").toUpperCase();
+  if(ampm==="PM"&&h<12) h+=12;
+  if(ampm==="AM"&&h===12) h=0;
+  return h*60+min;
+}
 
-  let jhsOk = false, shsOk = false, errors = [];
+function slotStart(timeStr){
+  // "7:30 – 8:15" or "7:30 - 8:15" -> parse start
+  const parts=timeStr.split(/\s*[–-]\s*/);
+  return parseTime(parts[0]);
+}
+function slotEnd(timeStr){
+  const parts=timeStr.split(/\s*[–-]\s*/);
+  return parts.length>1?parseTime(parts[1]):slotStart(timeStr)+45;
+}
 
-  // Fetch JHS
-  try {
-    const res = await fetch(JHS_CSV_URL);
-    if (!res.ok) throw new Error("HTTP " + res.status);
-    const text = await res.text();
-    const rows = parseCSV(text);
-    scheduleData.jhs = parseJHS(rows);
-    jhsOk = true;
-  } catch(e) {
-    errors.push("JHS: " + e.message);
-    console.error("JHS load error:", e);
+// ═══════════ LOAD SCHEDULES ═══════════
+async function loadSchedules(){
+  setStatus("loading","Loading schedule from Google Sheets...");
+  document.getElementById("refresh-btn").disabled=true;
+  document.getElementById("teacher-select").disabled=true;
+  document.getElementById("teacher-select").innerHTML="<option>— Loading... —</option>";
+  document.getElementById("err-area").innerHTML="";
+  let errors=[];
+  try{
+    const r=await fetch(JHS_CSV);
+    if(!r.ok) throw new Error("HTTP "+r.status);
+    DB.jhs=parseJHS(parseCSV(await r.text()));
+  }catch(e){errors.push("JHS: "+e.message);console.error(e);}
+  try{
+    const r=await fetch(SHS_CSV);
+    if(!r.ok) throw new Error("HTTP "+r.status);
+    DB.shs=parseSHS(parseCSV(await r.text()));
+  }catch(e){errors.push("SHS: "+e.message);console.error(e);}
+  if(errors.length){
+    document.getElementById("err-area").innerHTML=`<div class="err-card"><div class="ico">⚠️</div><div><strong>Could not load schedule</strong><p>${errors.join("<br>")}</p></div></div>`;
   }
-
-  // Fetch SHS
-  try {
-    const res = await fetch(SHS_CSV_URL);
-    if (!res.ok) throw new Error("HTTP " + res.status);
-    const text = await res.text();
-    const rows = parseCSV(text);
-    scheduleData.shs = parseSHS(rows);
-    shsOk = true;
-  } catch(e) {
-    errors.push("SHS: " + e.message);
-    console.error("SHS load error:", e);
-  }
-
-  if (errors.length > 0) {
-    document.getElementById("err-area").innerHTML = `
-      <div class="err-card">
-        <div class="ico">⚠️</div>
-        <div>
-          <strong>Could not load schedule data</strong>
-          <p>${errors.join("<br>")}</p>
-          <p style="margin-top:8px">Make sure your Google Sheets are published to the web as CSV. Go to <b>File → Share → Publish to web</b> in each sheet.</p>
-        </div>
-      </div>`;
-  }
-
-  if (!jhsOk && !shsOk) {
-    setStatus("err", "⚠ Failed to load schedule. Check your Google Sheets publishing settings.");
-    document.getElementById("refresh-btn").disabled = false;
-    return;
-  }
-
+  if(!DB.jhs&&!DB.shs){setStatus("err","⚠ Failed to load. Check Google Sheets publishing.");document.getElementById("refresh-btn").disabled=false;return;}
   buildTeacherMap();
   refreshDropdown();
-
-  const parts = [];
-  if (jhsOk) parts.push("JHS (" + scheduleData.jhs.sections.length + " sections)");
-  if (shsOk) parts.push("SHS (" + scheduleData.shs.sections.length + " sections)");
-  setStatus("ok", "✓ Schedule loaded — " + parts.join(" · ") + " · " + Object.keys(scheduleData.teachers).length + " teachers");
-  document.getElementById("refresh-btn").disabled = false;
+  const parts=[];
+  if(DB.jhs) parts.push("JHS ("+DB.jhs.sections.length+" sections)");
+  if(DB.shs) parts.push("SHS ("+DB.shs.sections.length+" sections)");
+  setStatus("ok","✓ Loaded — "+parts.join(" · ")+" · "+Object.keys(DB.teachers).length+" teachers");
+  document.getElementById("refresh-btn").disabled=false;
+}
+function setStatus(type,msg){
+  const b=document.getElementById("status-bar");
+  b.className="status-bar "+type;
+  b.innerHTML=type==="loading"?`<span class="spin"></span> ${msg}`:msg;
 }
 
-function setStatus(type, msg) {
-  const bar = document.getElementById("status-bar");
-  bar.className = "status-bar " + type;
-  bar.innerHTML = type === "loading" ? `<span class="spin"></span> ${msg}` : msg;
+// ═══════════ UI ═══════════
+function refreshDropdown(){
+  const sel=document.getElementById("teacher-select");
+  const names=Object.keys(DB.teachers).sort();
+  sel.innerHTML="<option value=''>— Choose your name —</option>";
+  names.forEach(n=>{const o=document.createElement("option");o.value=o.textContent=n;sel.appendChild(o);});
+  sel.disabled=names.length===0;
+  document.getElementById("result").innerHTML=`<div class="empty"><div class="ico">👆</div><p>Select your name above.</p></div>`;
 }
 
-// ═══════════════════════════════════
-// DROPDOWN
-// ═══════════════════════════════════
-function refreshDropdown() {
-  const sel = document.getElementById("teacher-select");
-  const names = Object.keys(scheduleData.teachers).sort();
-  sel.innerHTML = "<option value=''>— Choose your name —</option>";
-  names.forEach(n => {
-    const o = document.createElement("option");
-    o.value = o.textContent = n;
-    sel.appendChild(o);
-  });
-  sel.disabled = names.length === 0;
-  document.getElementById("result").innerHTML =
-    `<div class="empty"><div class="ico">👆</div><p>Select your name above to see your files.</p></div>`;
-}
-
-function onSelect() {
-  const name = document.getElementById("teacher-select").value;
-  const resultEl = document.getElementById("result");
-  if (!name) {
-    resultEl.innerHTML = `<div class="empty"><div class="ico">👆</div><p>Select your name above.</p></div>`;
-    return;
-  }
-  const t = scheduleData.teachers[name];
-  if (!t) return;
-
-  const hasJHS = t.jhs.length > 0, hasSHS = t.shs.length > 0;
-  const badge = (hasJHS && hasSHS)
-    ? `<span class="badge badge-both">JHS + SHS</span>`
-    : hasJHS ? `<span class="badge badge-jhs">JHS</span>`
-    : `<span class="badge badge-shs">SHS</span>`;
-
-  const jhsSecs = [...new Set(t.jhs.map(e=>e.section))];
-  const shsSecs = [...new Set(t.shs.map(e=>e.section))];
-  const allSecs = [...jhsSecs, ...shsSecs];
-
-  resultEl.innerHTML = `
-    <div class="result">
-      <div class="name-bar">
-        <div>
-          <h2>${name}</h2>
-          <div class="meta">${allSecs.length} section${allSecs.length!==1?"s":""}&nbsp;·&nbsp;${[hasJHS&&"JHS",hasSHS&&"SHS"].filter(Boolean).join(" + ")}</div>
+function onSelect(){
+  const name=document.getElementById("teacher-select").value;
+  const el=document.getElementById("result");
+  if(!name){el.innerHTML=`<div class="empty"><div class="ico">👆</div><p>Select your name above.</p></div>`;return;}
+  const t=DB.teachers[name];
+  if(!t) return;
+  const hasJHS=t.jhs.length>0, hasSHS=t.shs.length>0;
+  const badge=(hasJHS&&hasSHS)?`<span class="badge badge-both">JHS + SHS</span>`:hasJHS?`<span class="badge badge-jhs">JHS</span>`:`<span class="badge badge-shs">SHS</span>`;
+  const jhsSecs=[...new Set(t.jhs.map(e=>e.section))];
+  const shsSecs=[...new Set(t.shs.map(e=>e.section))];
+  const allSecs=[...jhsSecs,...shsSecs];
+  const safeName=name.replace(/'/g,"\\'");
+  el.innerHTML=`<div class="result">
+    <div class="name-bar">
+      <div><h2>${name}</h2><div class="meta">${allSecs.length} section${allSecs.length!==1?"s":""} · ${[hasJHS&&"JHS",hasSHS&&"SHS"].filter(Boolean).join(" + ")}</div></div>
+      ${badge}
+    </div>
+    <div class="dl-wrap">
+      <div class="dl-label">Your Documents</div>
+      <div class="dl-grid">
+        <div class="dl-card" onclick="dlTeacherProgram('${safeName}')">
+          <div class="dl-icon ic-t">📋</div>
+          <div><h3>Teacher's Program</h3><p>Your combined weekly schedule</p></div>
+          <span class="dl-arrow">→</span>
         </div>
-        ${badge}
+        ${allSecs.map(sec=>`
+        <div class="dl-card" onclick="dlClassProgram('${safeName}','${sec.replace(/'/g,"\\'")}')">
+          <div class="dl-icon ic-c">🏫</div>
+          <div><h3>Class Program</h3><p>${sec}</p></div>
+          <span class="dl-arrow">→</span>
+        </div>`).join("")}
       </div>
-      <div class="dl-wrap">
-        <div class="dl-label">Your Documents</div>
-        <div class="dl-grid">
-          <div class="dl-card" onclick="dlTeacherProgram('${name}')">
-            <div class="dl-icon ic-t">📋</div>
-            <div><h3>Teacher's Program</h3><p>Full weekly schedule</p></div>
-            <span class="dl-arrow">→</span>
-          </div>
-          ${allSecs.map(sec=>`
-          <div class="dl-card" onclick="dlClassProgram('${name}','${sec}')">
-            <div class="dl-icon ic-c">🏫</div>
-            <div><h3>Class Program</h3><p>${sec}</p></div>
-            <span class="dl-arrow">→</span>
-          </div>`).join("")}
-        </div>
-      </div>
-    </div>`;
+    </div>
+  </div>`;
 }
 
-// ═══════════════════════════════════
-// DOCX XML HELPERS
-// ═══════════════════════════════════
-function esc(s){return String(s||"").replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/"/g,"&quot;")}
-
-function mkPara(text,opts={}) {
-  const sz=opts.sz||18, b=opts.bold?"<w:b/>":"", c=opts.center?"<w:jc w:val=\"center\"/ >":"";
-  return `<w:p><w:pPr>${c}<w:spacing w:before="0" w:after="0"/></w:pPr><w:r><w:rPr>${b}<w:sz w:val="${sz}"/><w:szCs w:val="${sz}"/></w:rPr><w:t xml:space="preserve">${esc(text)}</w:t></w:r></w:p>`;
-}
-
-function mkCell(text,opts={}) {
-  const sz=opts.sz||15, b=opts.bold?"<w:b/>":"", c=opts.center?"<w:jc w:val=\"center\"/ >":"";
-  const shade=opts.shade?`<w:shd w:val="clear" w:color="auto" w:fill="${opts.shade}"/>`:"";
+// ═══════════ DOCX HELPERS ═══════════
+const BKM="Bookman Old Style";
+function esc(s){return String(s||"").replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/"/g,"&quot;");}
+function rpr(opts={}){
+  const b=opts.bold?"<w:b/>":"";
+  const sz=opts.sz?`<w:sz w:val="${opts.sz}"/><w:szCs w:val="${opts.sz}"/>`:""
+  const u=opts.underline?`<w:u w:val="single"/>`:"";
   const col=opts.color?`<w:color w:val="${opts.color}"/>`:"";
+  return `<w:rPr><w:rFonts w:ascii="${BKM}" w:hAnsi="${BKM}"/>${b}${sz}${u}${col}</w:rPr>`;
+}
+function para(runs,opts={}){
+  const jc=opts.center?`<w:jc w:val="center"/>`:"";
+  const sp=opts.spacing?`<w:spacing w:before="${opts.spacing[0]||0}" w:after="${opts.spacing[1]||0}"/>`:`<w:spacing w:before="0" w:after="0"/>`;
+  const ppr=`<w:pPr><w:pStyle w:val="NoSpacing"/>${jc}${sp}</w:pPr>`;
+  if(typeof runs==="string") runs=[{text:runs}];
+  const rns=runs.map(r=>`<w:r>${rpr(r)}<w:t xml:space="preserve">${esc(r.text)}</w:t></w:r>`).join("");
+  return `<w:p>${ppr}${rns}</w:p>`;
+}
+function emptyPara(){return `<w:p><w:pPr><w:pStyle w:val="NoSpacing"/><w:spacing w:before="0" w:after="0"/></w:pPr></w:p>`;}
+
+// Table cell
+function tc(content,opts={}){
   const w=opts.w?`<w:tcW w:w="${opts.w}" w:type="dxa"/>`:"";
   const span=opts.span?`<w:gridSpan w:val="${opts.span}"/>`:"";
+  const shade=opts.shade?`<w:shd w:val="clear" w:color="auto" w:fill="${opts.shade}"/>`:"";
+  const vAlign=`<w:vAlign w:val="center"/>`;
   const bdr=`<w:tcBorders><w:top w:val="single" w:sz="4" w:space="0" w:color="000000"/><w:left w:val="single" w:sz="4" w:space="0" w:color="000000"/><w:bottom w:val="single" w:sz="4" w:space="0" w:color="000000"/><w:right w:val="single" w:sz="4" w:space="0" w:color="000000"/></w:tcBorders>`;
-  return `<w:tc><w:tcPr>${w}${span}${bdr}${shade}<w:vAlign w:val="center"/></w:tcPr><w:p><w:pPr>${c}<w:spacing w:before="40" w:after="40"/></w:pPr><w:r><w:rPr>${b}${col}<w:sz w:val="${sz}"/><w:szCs w:val="${sz}"/></w:rPr><w:t xml:space="preserve">${esc(String(text||""))}</w:t></w:r></w:p></w:tc>`;
+  return `<w:tc><w:tcPr>${w}${span}${bdr}${shade}${vAlign}</w:tcPr>${content}</w:tc>`;
+}
+function tcPara(text,opts={}){
+  // opts: bold, sz, center, shade (for cell), w, span, color
+  const jc=opts.center?`<w:jc w:val="center"/>`:"";
+  const sp=`<w:spacing w:before="60" w:after="60"/>`;
+  const b=opts.bold?"<w:b/>":"";
+  const sz=opts.sz?`<w:sz w:val="${opts.sz}"/><w:szCs w:val="${opts.sz}"/>`:""
+  const col=opts.color?`<w:color w:val="${opts.color}"/>`:"";
+  const p=`<w:p><w:pPr><w:pStyle w:val="NoSpacing"/>${jc}${sp}</w:pPr><w:r><w:rPr><w:rFonts w:ascii="${BKM}" w:hAnsi="${BKM}"/>${b}${sz}${col}</w:rPr><w:t xml:space="preserve">${esc(String(text||""))}</w:t></w:r></w:p>`;
+  return tc(p,opts);
+}
+function hdrCell(text,w){return tcPara(text,{w,bold:true,center:true,shade:"1F3864",color:"FFFFFF",sz:20});}
+function tr(...cells){return `<w:tr>${cells.join("")}</w:tr>`;}
+function tbl(totalW,colWidths,rows){
+  const grid=colWidths.map(c=>`<w:gridCol w:w="${c}"/>`).join("");
+  return `<w:tbl><w:tblPr><w:tblW w:w="${totalW}" w:type="dxa"/><w:tblLayout w:type="fixed"/><w:tblBorders><w:top w:val="single" w:sz="4" w:color="auto"/><w:left w:val="single" w:sz="4" w:color="auto"/><w:bottom w:val="single" w:sz="4" w:color="auto"/><w:right w:val="single" w:sz="4" w:color="auto"/><w:insideH w:val="single" w:sz="4" w:color="000000"/><w:insideV w:val="single" w:sz="4" w:color="000000"/></w:tblBorders><w:tblStyle w:val="TableGrid"/></w:tblPr><w:tblGrid>${grid}</w:tblGrid>${rows.join("")}</w:tbl>`;
 }
 
-function hCell(text,w){return mkCell(text,{w,bold:true,center:true,shade:"1F3864",color:"FFFFFF",sz:15})}
-function mkRow(...cells){return `<w:tr>${cells.join("")}</w:tr>`}
-
-function tblStart(totalW,cols) {
-  return `<w:tbl><w:tblPr><w:tblW w:w="${totalW}" w:type="dxa"/><w:tblLayout w:type="fixed"/><w:tblBorders><w:insideH w:val="single" w:sz="4" w:color="000000"/><w:insideV w:val="single" w:sz="4" w:color="000000"/></w:tblBorders></w:tblPr><w:tblGrid>${cols.map(c=>`<w:gridCol w:w="${c}"/>`).join("")}</w:tblGrid>`;
+// Break row spanning all day columns
+function breakRow(label,tw,mw,colWidths){
+  const daySpanW=colWidths.slice(2).reduce((a,b)=>a+b,0);
+  const spanContent=`<w:p><w:pPr><w:pStyle w:val="NoSpacing"/><w:jc w:val="center"/><w:spacing w:before="60" w:after="60"/></w:pPr><w:r><w:rPr><w:rFonts w:ascii="${BKM}" w:hAnsi="${BKM}"/><w:b/><w:sz w:val="20"/><w:szCs w:val="20"/></w:rPr><w:t>${esc(label)}</w:t></w:r></w:p>`;
+  return tr(
+    tcPara("",{w:tw,center:true,sz:18,shade:"DEEAF1"}),
+    tcPara("",{w:mw,center:true,sz:18,shade:"DEEAF1"}),
+    tc(spanContent,{w:daySpanW,span:5,shade:"DEEAF1"})
+  );
 }
 
-function breakSpanRow(label,tw,mw,dw) {
-  const sw=dw*5;
-  return `<w:tr>${mkCell("",{w:tw,shade:"D9E1F2",center:true,sz:14})}${mkCell("",{w:mw,shade:"D9E1F2",center:true,sz:14})}<w:tc><w:tcPr><w:tcW w:w="${sw}" w:type="dxa"/><w:gridSpan w:val="5"/><w:tcBorders><w:top w:val="single" w:sz="4" w:space="0" w:color="000000"/><w:left w:val="single" w:sz="4" w:space="0" w:color="000000"/><w:bottom w:val="single" w:sz="4" w:space="0" w:color="000000"/><w:right w:val="single" w:sz="4" w:space="0" w:color="000000"/></w:tcBorders><w:shd w:val="clear" w:color="auto" w:fill="D9E1F2"/><w:vAlign w:val="center"/></w:tcPr><w:p><w:pPr><w:jc w:val="center"/><w:spacing w:before="40" w:after="40"/></w:pPr><w:r><w:rPr><w:b/><w:sz w:val="15"/><w:szCs w:val="15"/></w:rPr><w:t>${esc(label)}</w:t></w:r></w:p></w:tc></w:tr>`;
+// Two-line cell: subject bold on top, teacher italic smaller below
+function twoLineTC(subj,tchr,w){
+  const p1=`<w:p><w:pPr><w:pStyle w:val="NoSpacing"/><w:jc w:val="center"/><w:spacing w:before="40" w:after="0"/></w:pPr><w:r><w:rPr><w:rFonts w:ascii="${BKM}" w:hAnsi="${BKM}"/><w:b/><w:sz w:val="18"/><w:szCs w:val="18"/></w:rPr><w:t xml:space="preserve">${esc(subj)}</w:t></w:r></w:p>`;
+  const p2=`<w:p><w:pPr><w:pStyle w:val="NoSpacing"/><w:jc w:val="center"/><w:spacing w:before="0" w:after="40"/></w:pPr><w:r><w:rPr><w:rFonts w:ascii="${BKM}" w:hAnsi="${BKM}"/><w:sz w:val="16"/><w:szCs w:val="16"/></w:rPr><w:t xml:space="preserve">(${esc(tchr)})</w:t></w:r></w:p>`;
+  return tc(p1+p2,{w});
 }
 
-function twoLineCell(subj,tchr,w) {
-  return `<w:tc><w:tcPr><w:tcW w:w="${w}" w:type="dxa"/><w:tcBorders><w:top w:val="single" w:sz="4" w:space="0" w:color="000000"/><w:left w:val="single" w:sz="4" w:space="0" w:color="000000"/><w:bottom w:val="single" w:sz="4" w:space="0" w:color="000000"/><w:right w:val="single" w:sz="4" w:space="0" w:color="000000"/></w:tcBorders><w:vAlign w:val="center"/></w:tcPr><w:p><w:pPr><w:jc w:val="center"/><w:spacing w:before="30" w:after="0"/></w:pPr><w:r><w:rPr><w:b/><w:sz w:val="14"/><w:szCs w:val="14"/></w:rPr><w:t>${esc(subj)}</w:t></w:r></w:p><w:p><w:pPr><w:jc w:val="center"/><w:spacing w:before="0" w:after="30"/></w:pPr><w:r><w:rPr><w:sz w:val="13"/><w:szCs w:val="13"/></w:rPr><w:t>(${esc(tchr)})</w:t></w:r></w:p></w:tc>`;
+function docWrap(body,isLandscape){
+  // A4 Portrait: 11907 x 16839, margins from template
+  const pgSz=isLandscape
+    ? `<w:pgSz w:w="16839" w:h="11907" w:orient="landscape"/>`
+    : `<w:pgSz w:w="11907" w:h="16839"/>`;
+  const pgMar=`<w:pgMar w:top="1134" w:right="747" w:bottom="1440" w:left="709" w:header="432" w:footer="864" w:gutter="0"/>`;
+  return `<?xml version="1.0" encoding="UTF-8" standalone="yes"?><w:document xmlns:w="http://schemas.openxmlformats.org/wordprocessingml/2006/main"><w:body>${body}<w:sectPr>${pgSz}${pgMar}</w:sectPr></w:body></w:document>`;
 }
 
-function docWrap(body) {
-  return `<?xml version="1.0" encoding="UTF-8" standalone="yes"?><w:document xmlns:w="http://schemas.openxmlformats.org/wordprocessingml/2006/main"><w:body>${body}<w:sectPr><w:pgSz w:w="15840" w:h="12240" w:orient="landscape"/><w:pgMar w:top="720" w:right="720" w:bottom="720" w:left="720" w:header="0" w:footer="0" w:gutter="0"/></w:sectPr></w:body></w:document>`;
-}
-
-function schoolHeader(title, subtitle) {
-  let b = "";
-  b += mkPara("Republic of the Philippines",{center:true,sz:16});
-  b += mkPara("Department of Education",{center:true,sz:16});
-  b += mkPara(SCHOOL.region,{center:true,sz:16});
-  b += mkPara(SCHOOL.division,{center:true,sz:16});
-  b += mkPara("",{sz:10});
-  b += mkPara(`DISTRICT: ${SCHOOL.district}          SCHOOL: ${SCHOOL.school}`,{sz:16});
-  b += mkPara("",{sz:8});
-  b += mkPara(title,{center:true,sz:24,bold:true});
-  b += mkPara(subtitle,{center:true,sz:20,bold:true});
-  b += mkPara(`SY: ${SCHOOL.sy}`,{center:true,sz:18});
-  b += mkPara("",{sz:8});
+// School header block
+function schoolHeader(docTitle, subTitle){
+  let b="";
+  b+=para([{text:"Republic of the Philippines",bold:true,sz:20}],{center:true});
+  b+=para([{text:"Department of Education",bold:true,sz:20}],{center:true});
+  b+=para([{text:SCHOOL.region,bold:true,sz:20}],{center:true});
+  b+=para([{text:SCHOOL.division,bold:true,sz:20}],{center:true});
+  b+=emptyPara();
+  b+=para([{text:"DISTRICT: ",bold:true,sz:18},{text:SCHOOL.district,bold:true,sz:18,underline:true},{text:"                    SCHOOL: ",bold:true,sz:18},{text:SCHOOL.name,bold:true,sz:18,underline:true}],{});
+  b+=emptyPara();
+  b+=para([{text:docTitle,bold:true,sz:28}],{center:true});
+  b+=para([{text:subTitle,bold:true,sz:24}],{center:true});
+  b+=para([{text:`SY: ${SCHOOL.sy}`,sz:22}],{center:true});
+  b+=emptyPara();
   return b;
 }
 
-function signatories(preparedBy) {
-  let b = mkPara("",{sz:10});
-  b += mkPara(`Prepared by: ${preparedBy}`,{sz:14});
-  b += mkPara(`Noted by: ${SCHOOL.noted_by}     ${SCHOOL.noted_title}`,{sz:14});
-  b += mkPara(`Checked and Verified by: ${SCHOOL.verified_by}     ${SCHOOL.verified_title}`,{sz:14});
-  b += mkPara(`Approved: ${SCHOOL.approved_by}     ${SCHOOL.approved_title}`,{sz:14});
+// Signatory block for Teacher's Program (simple paragraphs)
+function tpSignatories(teacherName, teacherTitle){
+  let b=emptyPara();
+  // Left: Prepared by / Right: Noted by — use a 2-col table
+  const colW=Math.floor(11052/2);
+  const leftContent=`<w:p><w:pPr><w:pStyle w:val="NoSpacing"/><w:spacing w:before="0" w:after="0"/></w:pPr><w:r><w:rPr><w:rFonts w:ascii="${BKM}" w:hAnsi="${BKM}"/><w:sz w:val="18"/><w:szCs w:val="18"/></w:rPr><w:t>Prepared by:</w:t></w:r></w:p>
+<w:p><w:pPr><w:pStyle w:val="NoSpacing"/><w:spacing w:before="120" w:after="0"/></w:pPr><w:r><w:rPr><w:rFonts w:ascii="${BKM}" w:hAnsi="${BKM}"/><w:b/><w:sz w:val="20"/><w:szCs w:val="20"/></w:rPr><w:t>${esc(teacherName)}</w:t></w:r></w:p>
+<w:p><w:pPr><w:pStyle w:val="NoSpacing"/><w:spacing w:before="0" w:after="0"/></w:pPr><w:r><w:rPr><w:rFonts w:ascii="${BKM}" w:hAnsi="${BKM}"/><w:sz w:val="18"/><w:szCs w:val="18"/></w:rPr><w:t>${esc(teacherTitle)}</w:t></w:r></w:p>`;
+  const rightContent=`<w:p><w:pPr><w:pStyle w:val="NoSpacing"/><w:spacing w:before="0" w:after="0"/></w:pPr><w:r><w:rPr><w:rFonts w:ascii="${BKM}" w:hAnsi="${BKM}"/><w:sz w:val="18"/><w:szCs w:val="18"/></w:rPr><w:t>Noted by:</w:t></w:r></w:p>
+<w:p><w:pPr><w:pStyle w:val="NoSpacing"/><w:spacing w:before="120" w:after="0"/></w:pPr><w:r><w:rPr><w:rFonts w:ascii="${BKM}" w:hAnsi="${BKM}"/><w:b/><w:sz w:val="20"/><w:szCs w:val="20"/></w:rPr><w:t>${esc(SCHOOL.noted_by)}</w:t></w:r></w:p>
+<w:p><w:pPr><w:pStyle w:val="NoSpacing"/><w:spacing w:before="0" w:after="0"/></w:pPr><w:r><w:rPr><w:rFonts w:ascii="${BKM}" w:hAnsi="${BKM}"/><w:sz w:val="18"/><w:szCs w:val="18"/></w:rPr><w:t>${esc(SCHOOL.noted_title)}</w:t></w:r></w:p>`;
+  // No borders on this table
+  b+=`<w:tbl><w:tblPr><w:tblW w:w="11052" w:type="dxa"/><w:tblBorders><w:top w:val="none" w:sz="0" w:color="auto"/><w:left w:val="none" w:sz="0" w:color="auto"/><w:bottom w:val="none" w:sz="0" w:color="auto"/><w:right w:val="none" w:sz="0" w:color="auto"/><w:insideH w:val="none" w:sz="0" w:color="auto"/><w:insideV w:val="none" w:sz="0" w:color="auto"/></w:tblBorders><w:tblLayout w:type="fixed"/></w:tblPr><w:tblGrid><w:gridCol w:w="${colW}"/><w:gridCol w:w="${colW}"/></w:tblGrid><w:tr><w:tc><w:tcPr><w:tcW w:w="${colW}" w:type="dxa"/><w:tcBorders><w:top w:val="none" w:sz="0" w:color="auto"/><w:left w:val="none" w:sz="0" w:color="auto"/><w:bottom w:val="none" w:sz="0" w:color="auto"/><w:right w:val="none" w:sz="0" w:color="auto"/></w:tcBorders></w:tcPr>${leftContent}</w:tc><w:tc><w:tcPr><w:tcW w:w="${colW}" w:type="dxa"/><w:tcBorders><w:top w:val="none" w:sz="0" w:color="auto"/><w:left w:val="none" w:sz="0" w:color="auto"/><w:bottom w:val="none" w:sz="0" w:color="auto"/><w:right w:val="none" w:sz="0" w:color="auto"/></w:tcBorders></w:tcPr>${rightContent}</w:tc></w:tr></w:tbl>`;
+  b+=emptyPara();
+  b+=para([{text:"Checked and verified by:",sz:18}],{});
+  b+=para([{text:SCHOOL.checked_by,bold:true,sz:20}],{});
+  b+=para([{text:SCHOOL.checked_title,sz:18}],{});
+  b+=emptyPara();
+  b+=para([{text:"APPROVED:",sz:18}],{});
+  b+=para([{text:SCHOOL.approved_by,bold:true,sz:20}],{center:true});
+  b+=para([{text:SCHOOL.approved_title,sz:18}],{center:true});
   return b;
 }
 
-// ═══════════════════════════════════
-// TEACHER PROGRAM BUILDER
-// ═══════════════════════════════════
-function matchTeacher(cellName, teacherName) {
-  if (!cellName || !teacherName) return false;
-  const a = cellName.trim().toLowerCase().replace(/\s+/g," ");
-  const b = teacherName.trim().toLowerCase().replace(/\s+/g," ");
-  if (a===b || b.includes(a) || a.includes(b)) return true;
-  const ap = a.split(/[\s,./]+/).filter(p=>p.length>2);
-  const bp = b.split(/[\s,./]+/).filter(p=>p.length>2);
-  return ap.some(x=>bp.some(y=>x.startsWith(y)||y.startsWith(x)));
+function cpSignatories(teacherName, teacherTitle){
+  let b=emptyPara();
+  const colW=Math.floor(11052/2);
+  // Class Program: Noted by on left, Prepared by on right
+  const leftContent=`<w:p><w:pPr><w:pStyle w:val="NoSpacing"/><w:spacing w:before="0" w:after="0"/></w:pPr><w:r><w:rPr><w:rFonts w:ascii="${BKM}" w:hAnsi="${BKM}"/><w:sz w:val="18"/><w:szCs w:val="18"/></w:rPr><w:t>Noted by:</w:t></w:r></w:p>
+<w:p><w:pPr><w:pStyle w:val="NoSpacing"/><w:spacing w:before="120" w:after="0"/></w:pPr><w:r><w:rPr><w:rFonts w:ascii="${BKM}" w:hAnsi="${BKM}"/><w:b/><w:sz w:val="20"/><w:szCs w:val="20"/></w:rPr><w:t>${esc(SCHOOL.noted_by)}</w:t></w:r></w:p>
+<w:p><w:pPr><w:pStyle w:val="NoSpacing"/><w:spacing w:before="0" w:after="0"/></w:pPr><w:r><w:rPr><w:rFonts w:ascii="${BKM}" w:hAnsi="${BKM}"/><w:sz w:val="18"/><w:szCs w:val="18"/></w:rPr><w:t>${esc(SCHOOL.noted_title)}</w:t></w:r></w:p>`;
+  const rightContent=`<w:p><w:pPr><w:pStyle w:val="NoSpacing"/><w:spacing w:before="0" w:after="0"/></w:pPr><w:r><w:rPr><w:rFonts w:ascii="${BKM}" w:hAnsi="${BKM}"/><w:sz w:val="18"/><w:szCs w:val="18"/></w:rPr><w:t>Prepared by:</w:t></w:r></w:p>
+<w:p><w:pPr><w:pStyle w:val="NoSpacing"/><w:spacing w:before="120" w:after="0"/></w:pPr><w:r><w:rPr><w:rFonts w:ascii="${BKM}" w:hAnsi="${BKM}"/><w:b/><w:sz w:val="20"/><w:szCs w:val="20"/></w:rPr><w:t>${esc(teacherName)}</w:t></w:r></w:p>
+<w:p><w:pPr><w:pStyle w:val="NoSpacing"/><w:spacing w:before="0" w:after="0"/></w:pPr><w:r><w:rPr><w:rFonts w:ascii="${BKM}" w:hAnsi="${BKM}"/><w:sz w:val="18"/><w:szCs w:val="18"/></w:rPr><w:t>${esc(teacherTitle)}</w:t></w:r></w:p>`;
+  b+=`<w:tbl><w:tblPr><w:tblW w:w="11052" w:type="dxa"/><w:tblBorders><w:top w:val="none" w:sz="0" w:color="auto"/><w:left w:val="none" w:sz="0" w:color="auto"/><w:bottom w:val="none" w:sz="0" w:color="auto"/><w:right w:val="none" w:sz="0" w:color="auto"/><w:insideH w:val="none" w:sz="0" w:color="auto"/><w:insideV w:val="none" w:sz="0" w:color="auto"/></w:tblBorders><w:tblLayout w:type="fixed"/></w:tblPr><w:tblGrid><w:gridCol w:w="${colW}"/><w:gridCol w:w="${colW}"/></w:tblGrid><w:tr><w:tc><w:tcPr><w:tcW w:w="${colW}" w:type="dxa"/><w:tcBorders><w:top w:val="none" w:sz="0" w:color="auto"/><w:left w:val="none" w:sz="0" w:color="auto"/><w:bottom w:val="none" w:sz="0" w:color="auto"/><w:right w:val="none" w:sz="0" w:color="auto"/></w:tcBorders></w:tcPr>${leftContent}</w:tc><w:tc><w:tcPr><w:tcW w:w="${colW}" w:type="dxa"/><w:tcBorders><w:top w:val="none" w:sz="0" w:color="auto"/><w:left w:val="none" w:sz="0" w:color="auto"/><w:bottom w:val="none" w:sz="0" w:color="auto"/><w:right w:val="none" w:sz="0" w:color="auto"/></w:tcBorders></w:tcPr>${rightContent}</w:tc></w:tr></w:tbl>`;
+  b+=emptyPara();
+  b+=para([{text:"Checked and verified by:",sz:18}],{});
+  b+=para([{text:SCHOOL.checked_by,bold:true,sz:20}],{});
+  b+=para([{text:SCHOOL.checked_title,sz:18}],{});
+  b+=emptyPara();
+  b+=para([{text:"APPROVED:",sz:18}],{});
+  b+=para([{text:SCHOOL.approved_by,bold:true,sz:20}],{center:true});
+  b+=para([{text:SCHOOL.approved_title,sz:18}],{center:true});
+  return b;
 }
 
-function buildTeacherProgramXML(name) {
-  const jhs = scheduleData.jhs, shs = scheduleData.shs;
-  const slots = (jhs&&jhs.slots.length) ? jhs.slots : (shs?shs.slots:[]);
-  const tw=1300, mw=700, dw=Math.floor((14400-tw-mw)/5);
+// Summary table for Teacher's Program
+function summaryTable(){
+  const TW=5400, c1=3800, c2=1600;
+  const rows=[
+    tr(
+      tcPara("Total No. of teaching hours (per week) inclusive of class advisory (excluding HRP)",{w:c1,sz:18}),
+      tcPara("1,800 mins. per week (30 hrs./wk.)",{w:c2,sz:18})
+    ),
+    tr(
+      tcPara("Status of Teaching Load",{w:c1,sz:18}),
+      tcPara("Full Load",{w:c2,sz:18})
+    ),
+    tr(
+      tcPara("Other teaching-related assignments (SO No. __________ s. 2026) approved as of ________________________",{w:c1,sz:18}),
+      tcPara("None",{w:c2,sz:18})
+    )
+  ];
+  const grid=`<w:tblGrid><w:gridCol w:w="${c1}"/><w:gridCol w:w="${c2}"/></w:tblGrid>`;
+  return `<w:tbl><w:tblPr><w:tblW w:w="${TW}" w:type="dxa"/><w:tblLayout w:type="fixed"/><w:tblBorders><w:top w:val="single" w:sz="4" w:color="auto"/><w:left w:val="single" w:sz="4" w:color="auto"/><w:bottom w:val="single" w:sz="4" w:color="auto"/><w:right w:val="single" w:sz="4" w:color="auto"/><w:insideH w:val="single" w:sz="4" w:color="000000"/><w:insideV w:val="single" w:sz="4" w:color="000000"/></w:tblBorders><w:tblStyle w:val="TableGrid"/></w:tblPr>${grid}${rows.join("")}</w:tbl>`;
+}
 
-  function getEntry(time, day) {
-    if (jhs) {
-      const slot = jhs.slots.find(s=>s.time===time);
-      if (slot&&!slot.isBreak) {
-        for (const sec of jhs.sections) {
-          const e = slot.sections[sec];
-          if (!e||!e.teacher) continue;
-          if (matchTeacher(e.teacher,name)) {
-            const days = e.days==="F"?["Friday"]:e.days==="M"?["Monday"]:DAYS;
-            if (days.includes(day)) return `${e.subject.replace(/\.+$/,"")} ${sec}`;
+// ═══════════ TEACHER PROGRAM BUILDER ═══════════
+function buildTeacherProgramXML(teacherName){
+  const t=DB.teachers[teacherName];
+  // Column widths from template: 1530, 651, 1699, 1699, 1704, 1643, 2126 (but SHS uses slightly diff)
+  // Use A4 portrait content width: 11907 - 709 - 747 = 10451... but template uses 11052
+  const TW=11052;
+  const tw=1530, mw=651;
+  const dw=[1699,1699,1704,1643,2126];
+
+  // Collect all unique time slots from both JHS and SHS, sorted by start time
+  const allSlots=[];
+  const seenTimes=new Set();
+
+  // Get JHS slots
+  if(DB.jhs){
+    for(const s of DB.jhs.slots){
+      if(!seenTimes.has(s.time)){seenTimes.add(s.time);allSlots.push({...s,source:"jhs"});}
+    }
+  }
+  // Get SHS slots, interleave by start time
+  if(DB.shs){
+    for(const s of DB.shs.slots){
+      if(!seenTimes.has(s.time)){seenTimes.add(s.time);allSlots.push({...s,source:"shs"});}
+    }
+  }
+  // Sort all slots by start time
+  allSlots.sort((a,b)=>slotStart(a.time)-slotStart(b.time));
+
+  // For each slot, find what this teacher is doing
+  function getEntry(slotTime, day){
+    // Check JHS
+    if(DB.jhs){
+      const slot=DB.jhs.slots.find(s=>s.time===slotTime);
+      if(slot&&!slot.isBreak){
+        for(const sec of DB.jhs.sections){
+          const e=slot.sections[sec];
+          if(!e||!e.teacher) continue;
+          if(e.teacher.trim().toUpperCase()===t.lastNameKey){
+            const days=e.days==="F"?["Friday"]:e.days==="M"?["Monday"]:DAYS;
+            if(days.includes(day)) return `${e.subject.replace(/\.+$/,"")} ${sec}`;
           }
         }
       }
     }
-    if (shs) {
-      const slot = shs.slots.find(s=>s.time===time);
-      if (slot&&!slot.isBreak) {
-        for (const sec of shs.sections) {
-          const ss = slot.sections[sec];
-          if (!ss||!ss.dayMap) continue;
-          const e = ss.dayMap[day];
-          if (!e||!e.teacher) continue;
-          if (matchTeacher(e.teacher,name)) return `${e.subject} ${sec}`;
+    // Check SHS
+    if(DB.shs){
+      const slot=DB.shs.slots.find(s=>s.time===slotTime);
+      if(slot&&!slot.isBreak){
+        for(const sec of DB.shs.sections){
+          const ss=slot.sections[sec];
+          if(!ss||!ss.dayMap) continue;
+          const e=ss.dayMap[day];
+          if(!e||!e.teacher) continue;
+          if(extractLastName(e.teacher)===t.lastNameKey)
+            return `${e.subject} ${sec}`;
         }
       }
     }
     return "";
   }
 
-  let body = schoolHeader("TEACHER'S PROGRAM", name);
-  body += tblStart(14400,[tw,mw,...DAYS.map(()=>dw)]);
-  body += mkRow(hCell("Time",tw), hCell("No. of Mins.",mw), ...DAYS.map(d=>hCell(d.toUpperCase(),dw)));
+  let body=schoolHeader("TEACHER'S PROGRAM", teacherName);
 
-  for (const slot of slots) {
-    if (slot.isBreak) { body += breakSpanRow(slot.breakLabel||slot.time,tw,mw,dw); continue; }
-    body += mkRow(
-      mkCell(slot.time,{w:tw,center:true,sz:14}),
-      mkCell(slot.mins||"",{w:mw,center:true,sz:14}),
-      ...DAYS.map(day=>mkCell(getEntry(slot.time,day),{w:dw,center:true,sz:13}))
-    );
+  const colWidths=[tw,mw,...dw];
+  const rows=[tr(hdrCell("Time",tw),hdrCell("No. of Mins.",mw),...DAYS.map((d,i)=>hdrCell(DAY_LABELS[i],dw[i])))];
+
+  for(const slot of allSlots){
+    if(slot.isBreak){
+      rows.push(breakRow(slot.breakLabel||slot.time,tw,mw,colWidths));
+      continue;
+    }
+    // Check if this teacher teaches at this time on any day
+    const entries=DAYS.map(day=>getEntry(slot.time,day));
+    rows.push(tr(
+      tcPara(slot.time,{w:tw,center:true,sz:18}),
+      tcPara(slot.mins||"",{w:mw,center:true,sz:18}),
+      ...entries.map((e,i)=>tcPara(e,{w:dw[i],center:true,sz:18}))
+    ));
   }
-  body += "</w:tbl>";
-  body += signatories(name);
-  return docWrap(body);
+
+  body+=tbl(TW,colWidths,rows);
+  body+=emptyPara();
+  body+=tpSignatories(teacherName,"Teacher");
+  body+=emptyPara();
+  body+=summaryTable();
+  return docWrap(body,false);
 }
 
-// ═══════════════════════════════════
-// CLASS PROGRAM BUILDER
-// ═══════════════════════════════════
-function buildClassProgramXML(name, section) {
-  const jhs = scheduleData.jhs, shs = scheduleData.shs;
-  const isJHS = jhs && jhs.sections.includes(section);
-  const isSHS = shs && shs.sections.includes(section);
-  const slots = isJHS ? jhs.slots : (isSHS ? shs.slots : []);
-  const tw=1400, mw=800, dw=Math.floor((14400-tw-mw)/5);
+// ═══════════ CLASS PROGRAM BUILDER ═══════════
+function buildClassProgramXML(teacherName, section){
+  const isJHS=DB.jhs&&DB.jhs.sections.includes(section);
+  const isSHS=DB.shs&&DB.shs.sections.includes(section);
+  const sourceSlots=isJHS?DB.jhs.slots:(isSHS?DB.shs.slots:[]);
 
-  let body = schoolHeader("CLASS PROGRAM", section);
-  body += tblStart(14400,[tw,mw,...DAYS.map(()=>dw)]);
-  body += mkRow(hCell("Time",tw), hCell("No. of Mins.",mw), ...DAYS.map(d=>hCell(d.toUpperCase(),dw)));
+  const TW=11052;
+  const tw=1530, mw=651;
+  const dw=[1699,1699,1704,1643,2126];
+  const colWidths=[tw,mw,...dw];
 
-  for (const slot of slots) {
-    if (slot.isBreak) { body += breakSpanRow(slot.breakLabel||slot.time,tw,mw,dw); continue; }
-    if (isJHS) {
-      const e = slot.sections[section];
-      const dayCells = DAYS.map(day => {
-        if (!e||!e.subject) return mkCell("",{w:dw,center:true,sz:13});
-        const days = e.days==="F"?["Friday"]:e.days==="M"?["Monday"]:DAYS;
-        if (!days.includes(day)) return mkCell("",{w:dw,center:true,sz:13});
-        return twoLineCell(e.subject.replace(/\.+$/,""), e.teacher, dw);
+  let body=schoolHeader("CLASS PROGRAM", section);
+  const rows=[tr(hdrCell("Time",tw),hdrCell("No. of Mins.",mw),...DAYS.map((d,i)=>hdrCell(DAY_LABELS[i],dw[i])))];
+
+  for(const slot of sourceSlots){
+    if(slot.isBreak){
+      rows.push(breakRow(slot.breakLabel||slot.time,tw,mw,colWidths));
+      continue;
+    }
+    if(isJHS){
+      const e=slot.sections[section];
+      const dayCells=DAYS.map((day,i)=>{
+        if(!e||!e.subject) return tcPara("",{w:dw[i],center:true,sz:18});
+        const days=e.days==="F"?["Friday"]:e.days==="M"?["Monday"]:DAYS;
+        if(!days.includes(day)) return tcPara("",{w:dw[i],center:true,sz:18});
+        return twoLineTC(e.subject.replace(/\.+$/,""),e.teacher,dw[i]);
       });
-      body += mkRow(mkCell(slot.time,{w:tw,center:true,sz:14}), mkCell(slot.mins||"",{w:mw,center:true,sz:14}), ...dayCells);
-    } else if (isSHS) {
-      const ss = slot.sections[section];
-      const dayCells = DAYS.map(day => {
-        if (!ss||!ss.dayMap||!ss.dayMap[day]) return mkCell("",{w:dw,center:true,sz:13});
-        const e = ss.dayMap[day];
-        return twoLineCell(e.subject, e.teacher, dw);
+      rows.push(tr(tcPara(slot.time,{w:tw,center:true,sz:18}),tcPara(slot.mins||"",{w:mw,center:true,sz:18}),...dayCells));
+    } else if(isSHS){
+      const ss=slot.sections[section];
+      const dayCells=DAYS.map((day,i)=>{
+        if(!ss||!ss.dayMap||!ss.dayMap[day]) return tcPara("",{w:dw[i],center:true,sz:18});
+        const e=ss.dayMap[day];
+        return twoLineTC(e.subject,e.teacher,dw[i]);
       });
-      body += mkRow(mkCell(slot.time,{w:tw,center:true,sz:14}), mkCell("60",{w:mw,center:true,sz:14}), ...dayCells);
+      rows.push(tr(tcPara(slot.time,{w:tw,center:true,sz:18}),tcPara("60",{w:mw,center:true,sz:18}),...dayCells));
     }
   }
-  body += "</w:tbl>";
-  body += signatories(`${name}     Teacher I/Adviser`);
-  return docWrap(body);
+
+  body+=tbl(TW,colWidths,rows);
+  body+=cpSignatories(teacherName,"Teacher/Adviser");
+  return docWrap(body,false);
 }
 
-// ═══════════════════════════════════
-// ZIP / DOCX
-// ═══════════════════════════════════
-function crc32(data) {
-  if (!crc32._t) {
-    crc32._t=new Int32Array(256);
-    for(let i=0;i<256;i++){let c=i;for(let j=0;j<8;j++)c=(c&1)?(0xEDB88320^(c>>>1)):(c>>>1);crc32._t[i]=c;}
-  }
-  let crc=-1;
-  for(let i=0;i<data.length;i++)crc=crc32._t[(crc^data[i])&0xff]^(crc>>>8);
+// ═══════════ ZIP/DOCX ═══════════
+function crc32(data){
+  if(!crc32._t){crc32._t=new Int32Array(256);for(let i=0;i<256;i++){let c=i;for(let j=0;j<8;j++)c=(c&1)?(0xEDB88320^(c>>>1)):(c>>>1);crc32._t[i]=c;}}
+  let crc=-1;for(let i=0;i<data.length;i++)crc=crc32._t[(crc^data[i])&0xff]^(crc>>>8);
   return(crc^-1)>>>0;
 }
-
-function buildZip(files) {
-  const enc=new TextEncoder(),lhs=[],cds=[];
-  let off=0;
+function buildZip(files){
+  const enc=new TextEncoder(),lhs=[],cds=[];let off=0;
   for(const [name,content] of Object.entries(files)){
     const nb=enc.encode(name),db=enc.encode(content),crc=crc32(db);
     const lh=new Uint8Array(30+nb.length),lv=new DataView(lh.buffer);
@@ -636,62 +718,50 @@ function buildZip(files) {
     cv.setUint16(34,0,true);cv.setUint16(36,0,true);cv.setUint32(38,0,true);cv.setUint32(42,off,true);cd.set(nb,46);
     lhs.push(lh,db);cds.push(cd);off+=lh.length+db.length;
   }
-  const cdStart=off,cdSize=cds.reduce((s,b)=>s+b.length,0);
+  const cdS=off,cdSz=cds.reduce((s,b)=>s+b.length,0);
   const eocd=new Uint8Array(22),ev=new DataView(eocd.buffer);
   ev.setUint32(0,0x06054b50,true);ev.setUint16(4,0,true);ev.setUint16(6,0,true);
   ev.setUint16(8,cds.length,true);ev.setUint16(10,cds.length,true);
-  ev.setUint32(12,cdSize,true);ev.setUint32(16,cdStart,true);ev.setUint16(20,0,true);
+  ev.setUint32(12,cdSz,true);ev.setUint32(16,cdS,true);ev.setUint16(20,0,true);
   const all=[...lhs,...cds,eocd],total=all.reduce((s,b)=>s+b.length,0);
   const out=new Uint8Array(total);let pos=0;
   for(const b of all){out.set(b,pos);pos+=b.length;}
   return out;
 }
-
-async function saveDocx(xml, filename) {
+function saveDocx(xml,filename){
   const ct=`<?xml version="1.0" encoding="UTF-8" standalone="yes"?><Types xmlns="http://schemas.openxmlformats.org/package/2006/content-types"><Default Extension="rels" ContentType="application/vnd.openxmlformats-package.relationships+xml"/><Default Extension="xml" ContentType="application/xml"/><Override PartName="/word/document.xml" ContentType="application/vnd.openxmlformats-officedocument.wordprocessingml.document.main+xml"/><Override PartName="/word/styles.xml" ContentType="application/vnd.openxmlformats-officedocument.wordprocessingml.styles+xml"/></Types>`;
   const rels=`<?xml version="1.0" encoding="UTF-8" standalone="yes"?><Relationships xmlns="http://schemas.openxmlformats.org/package/2006/relationships"><Relationship Id="rId1" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/officeDocument" Target="word/document.xml"/></Relationships>`;
   const wrels=`<?xml version="1.0" encoding="UTF-8" standalone="yes"?><Relationships xmlns="http://schemas.openxmlformats.org/package/2006/relationships"><Relationship Id="rId1" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/styles" Target="styles.xml"/></Relationships>`;
-  const styles=`<?xml version="1.0" encoding="UTF-8" standalone="yes"?><w:styles xmlns:w="http://schemas.openxmlformats.org/wordprocessingml/2006/main"><w:style w:type="paragraph" w:default="1" w:styleId="Normal"><w:name w:val="Normal"/><w:rPr><w:sz w:val="20"/></w:rPr></w:style></w:styles>`;
+  const styles=`<?xml version="1.0" encoding="UTF-8" standalone="yes"?><w:styles xmlns:w="http://schemas.openxmlformats.org/wordprocessingml/2006/main"><w:style w:type="paragraph" w:default="1" w:styleId="Normal"><w:name w:val="Normal"/><w:rPr><w:rFonts w:ascii="${BKM}" w:hAnsi="${BKM}"/><w:sz w:val="20"/></w:rPr></w:style><w:style w:type="paragraph" w:styleId="NoSpacing"><w:name w:val="No Spacing"/><w:basedOn w:val="Normal"/><w:pPr><w:spacing w:before="0" w:after="0"/></w:pPr></w:style></w:styles>`;
   const zip=buildZip({"[Content_Types].xml":ct,"_rels/.rels":rels,"word/_rels/document.xml.rels":wrels,"word/styles.xml":styles,"word/document.xml":xml});
   saveAs(new Blob([zip],{type:"application/vnd.openxmlformats-officedocument.wordprocessingml.document"}),filename);
 }
 
-// ═══════════════════════════════════
-// DOWNLOAD ACTIONS
-// ═══════════════════════════════════
-async function dlTeacherProgram(name) {
-  try {
+// ═══════════ DOWNLOADS ═══════════
+function dlTeacherProgram(name){
+  try{
     showToast("Generating Teacher's Program...","info");
-    await saveDocx(buildTeacherProgramXML(name), `Teachers_Program_${name.replace(/\s/g,"_")}.docx`);
+    saveDocx(buildTeacherProgramXML(name),`Teachers_Program_${name.replace(/[^a-zA-Z0-9]/g,"_")}.docx`);
     showToast("Downloaded: Teacher's Program","ok");
-  } catch(e) { showToast("Error: "+e.message,"err"); console.error(e); }
+  }catch(e){showToast("Error: "+e.message,"err");console.error(e);}
 }
-
-async function dlClassProgram(name, section) {
-  try {
+function dlClassProgram(name,section){
+  try{
     showToast("Generating Class Program...","info");
-    await saveDocx(buildClassProgramXML(name,section), `Class_Program_${section.replace(/\s/g,"_")}.docx`);
+    saveDocx(buildClassProgramXML(name,section),`Class_Program_${section.replace(/[^a-zA-Z0-9]/g,"_")}.docx`);
     showToast("Downloaded: Class Program — "+section,"ok");
-  } catch(e) { showToast("Error: "+e.message,"err"); console.error(e); }
+  }catch(e){showToast("Error: "+e.message,"err");console.error(e);}
 }
 
-// ═══════════════════════════════════
-// TOAST
-// ═══════════════════════════════════
+// ═══════════ TOAST ═══════════
 let _tt;
-function showToast(msg,type="") {
-  document.querySelector(".toast")?.remove();
-  clearTimeout(_tt);
-  const t=document.createElement("div");
-  t.className=`toast${type?" "+type:""}`;
-  t.textContent=msg;
-  document.body.appendChild(t);
-  _tt=setTimeout(()=>t.remove(),3500);
+function showToast(msg,type=""){
+  document.querySelector(".toast")?.remove();clearTimeout(_tt);
+  const t=document.createElement("div");t.className=`toast${type?" "+type:""}`;t.textContent=msg;
+  document.body.appendChild(t);_tt=setTimeout(()=>t.remove(),3500);
 }
 
-// ═══════════════════════════════════
-// START
-// ═══════════════════════════════════
+// ═══════════ START ═══════════
 loadSchedules();
 </script>
 </body>
