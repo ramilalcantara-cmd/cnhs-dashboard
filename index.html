@@ -96,8 +96,8 @@ body{font-family:'DM Sans',sans-serif;background:var(--cream);color:var(--navy);
 <script src="https://cdnjs.cloudflare.com/ajax/libs/FileSaver.js/2.0.5/FileSaver.min.js"></script>
 <script>
 // ═══════════ CONFIG ═══════════
-const JHS_CSV = "https://docs.google.com/spreadsheets/d/e/2PACX-1vRYr4d7n9g7ihD9swa37RUQ1fnO6AGxu2PxQijnvtgrpFtXMfW8tTZ69dT3Q-5tijpyMaK4g8vwlTph/pub?gid=129618773&single=true&output=csv";
-const SHS_CSV = "https://docs.google.com/spreadsheets/d/e/2PACX-1vR3IwAY9w7VTU05JUbhhedtTsd_Qkcs0HD33ngeLOc_FLQZIezVumVe-QkwyVpAVwbYANhsj70xxRi7/pub?gid=1070961151&single=true&output=csv";
+const JHS_CSV = "https://docs.google.com/spreadsheets/d/e/2PACX-1vR3IwAY9w7VTU05JUbhhedtTsd_Qkcs0HD33ngeLOc_FLQZIezVumVe-QkwyVpAVwbYANhsj70xxRi7/pub?gid=1070961151&single=true&output=csv";
+const SHS_CSV = "https://docs.google.com/spreadsheets/d/e/2PACX-1vRYr4d7n9g7ihD9swa37RUQ1fnO6AGxu2PxQijnvtgrpFtXMfW8tTZ69dT3Q-5tijpyMaK4g8vwlTph/pub?gid=129618773&single=true&output=csv";
 const SCHOOL = {
   name:"CONCEPCION NATIONAL HIGH SCHOOL",
   district:"HILONGOS EAST",
@@ -377,8 +377,11 @@ async function loadSchedules(){
     if(!r.ok) throw new Error("HTTP "+r.status);
     var text=await r.text();
     var rows=parseCSV(text);
+    console.log("JHS CSV first 5 rows:");
+    rows.slice(0,5).forEach(function(row,i){console.log("  R"+i+": "+row.slice(0,6).join(" | "));});
     DB.jhs=parseJHS(rows);
     console.log("JHS OK: "+DB.jhs.sections.length+" sections, "+DB.jhs.slots.length+" slots");
+    console.log("JHS sections: "+DB.jhs.sections.join(", "));
   }catch(e){ errors.push("JHS: "+e.message); console.error("JHS error:",e); }
 
   try{
@@ -386,8 +389,11 @@ async function loadSchedules(){
     if(!r2.ok) throw new Error("HTTP "+r2.status);
     var text2=await r2.text();
     var rows2=parseCSV(text2);
+    console.log("SHS CSV first 5 rows:");
+    rows2.slice(0,5).forEach(function(row,i){console.log("  R"+i+": "+row.slice(0,6).join(" | "));});
     DB.shs=parseSHS(rows2);
     console.log("SHS OK: "+DB.shs.sections.length+" sections, "+DB.shs.slots.length+" slots");
+    console.log("SHS sections: "+DB.shs.sections.join(", "));
   }catch(e){ errors.push("SHS: "+e.message); console.error("SHS error:",e); }
 
   if(errors.length){
