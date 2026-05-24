@@ -7,8 +7,7 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Crimson+Pro:wght@400;600;700&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
 <title>CNHS Schedule Dashboard</title>
-<style>
-:root{--navy:#0B1F4B;--gold:#C8960C;--cream:#FAF8F2;--white:#fff;--gray-100:#F1EFE9;--gray-200:#E2DED4;--gray-500:#8A8070;--gray-700:#4A4438;--green:#1E7E34;--red:#C0392B;--shadow-sm:0 2px 8px rgba(11,31,75,.08);--shadow-md:0 4px 20px rgba(11,31,75,.12);--r:10px;--rl:16px}
+<style>:root{--navy:#0B1F4B;--gold:#C8960C;--cream:#FAF8F2;--white:#fff;--gray-100:#F1EFE9;--gray-200:#E2DED4;--gray-500:#8A8070;--gray-700:#4A4438;--green:#1E7E34;--red:#C0392B;--shadow-sm:0 2px 8px rgba(11,31,75,.08);--shadow-md:0 4px 20px rgba(11,31,75,.12);--r:10px;--rl:16px}
 *{box-sizing:border-box;margin:0;padding:0}
 body{font-family:'DM Sans',sans-serif;background:var(--cream);color:var(--navy);min-height:100vh}
 .hdr{background:var(--navy);position:sticky;top:0;z-index:100;box-shadow:0 2px 20px rgba(0,0,0,.3)}
@@ -60,8 +59,7 @@ body{font-family:'DM Sans',sans-serif;background:var(--cream);color:var(--navy);
 .toast.ok{background:var(--green)}.toast.err{background:var(--red)}.toast.info{background:#1A5276}
 @keyframes slideIn{from{transform:translateY(20px);opacity:0}to{transform:translateY(0);opacity:1}}
 @keyframes spin{to{transform:rotate(360deg)}}
-.spin{display:inline-block;width:12px;height:12px;border:2px solid rgba(255,255,255,.4);border-top-color:#fff;border-radius:50%;animation:spin .6s linear infinite;vertical-align:middle;margin-right:4px}
-</style>
+.spin{display:inline-block;width:12px;height:12px;border:2px solid rgba(255,255,255,.4);border-top-color:#fff;border-radius:50%;animation:spin .6s linear infinite;vertical-align:middle;margin-right:4px}</style>
 </head>
 <body>
 <header class="hdr">
@@ -80,7 +78,7 @@ body{font-family:'DM Sans',sans-serif;background:var(--cream);color:var(--navy);
 <div id="status-bar" class="status-bar loading"><span class="spin"></span> Loading schedule from Google Sheets...</div>
 <div class="main">
   <div class="page-title">Download Your Program</div>
-  <div class="page-sub">Select your name to generate and download your Teacher&#39;s Program and Class Program documents.</div>
+  <div class="page-sub">Select your name to generate and download your Teacher's Program and Class Program documents.</div>
   <div id="err-area"></div>
   <div class="selector-card">
     <label>Select Teacher Name</label>
@@ -115,18 +113,27 @@ const SCHOOL = {
 };
 const DAYS = ["Monday","Tuesday","Wednesday","Thursday","Friday"];
 const DAY_LABELS = ["MONDAY","TUESDAY","WEDNESDAY","THURSDAY","FRIDAY"];
+
+// Known JHS section names — used to robustly find the section header row
+const JHS_SECTIONS = ["ARIES","VIRGO","AURIGA","CAPRICORN","CEPHEUS","CENTAURUS",
+  "CASSIOPEIA","ANDROMEDA","LIBRA","ORION","AQUARIUS","LEO","GEMINI","PISCES",
+  "SAGITTARIUS","PERSEUS"];
+
 let DB = {jhs:null, shs:null, teachers:{}};
 
 // ═══════════ CSV PARSER ═══════════
 function parseCSV(text){
-  return text.split("\n").map(line=>{
+  return text.split("\n").map(function(line){
     line = line.replace(/\r$/,"");
-    const cols=[]; let cur="",inQ=false;
-    for(let i=0;i<line.length;i++){
-      const ch=line[i];
-      if(ch==='"' && !inQ){inQ=true;}
-      else if(ch==='"' && inQ){if(line[i+1]==='"'){cur+='"';i++;}else inQ=false;}
-      else if(ch==="," && !inQ){cols.push(cur.trim());cur="";}
+    var cols=[], cur="", inQ=false;
+    for(var i=0;i<line.length;i++){
+      var ch=line[i];
+      if(ch==='"' && !inQ){ inQ=true; }
+      else if(ch==='"' && inQ){
+        if(line[i+1]==='"'){ cur+='"'; i++; }
+        else inQ=false;
+      }
+      else if(ch==="," && !inQ){ cols.push(cur.trim()); cur=""; }
       else cur+=ch;
     }
     cols.push(cur.trim());
@@ -136,145 +143,220 @@ function parseCSV(text){
 
 // ═══════════ JHS PARSER ═══════════
 function parseJHS(rows){
-  let secRowIdx=-1, sections=[];
-  for(let r=0;r<rows.length;r++){
-    if(rows[r].some(c=>c.trim()==="ARIES")){
+  // Find the section header row: look for any row that contains a known section name
+  var secRowIdx=-1, sections=[];
+  for(var r=0;r<rows.length;r++){
+    var row=rows[r];
+    var hasSec=false;
+    for(var c=0;c<row.length;c++){
+      if(row[c] && JHS_SECTIONS.indexOf(row[c].trim().toUpperCase())>=0){
+        hasSec=true; break;
+      }
+    }
+    if(hasSec){
       secRowIdx=r;
-      for(let c=2;c<rows[r].length;c++){
-        if(rows[r][c]&&rows[r][c].trim()) sections.push({name:rows[r][c].trim(),col:c});
+      // Collect all section names from this row (col 2 onward)
+      for(var c2=2;c2<row.length;c2++){
+        if(row[c2] && row[c2].trim() && JHS_SECTIONS.indexOf(row[c2].trim().toUpperCase())>=0){
+          sections.push({name:row[c2].trim().toUpperCase(), col:c2});
+        }
       }
       break;
     }
   }
-  if(secRowIdx===-1) throw new Error("JHS: Cannot find section header row.");
-  const SKIP=["FLAG","RECESS","LUNCH","ARAL READING","CULMINATING","HEALTH","DISMISSAL"];
-  const slots=[];
-  for(let r=secRowIdx+1;r<rows.length;r++){
-    const row=rows[r];
-    if(!row[0]||!row[0].trim()) continue;
-    const t=row[0].trim();
+
+  if(secRowIdx===-1){
+    // Fallback: look for a row where col[0] is empty and col[2] is non-empty uppercase
+    for(var r2=0;r2<rows.length;r2++){
+      var row2=rows[r2];
+      if(!row2[0] && !row2[1] && row2[2] && row2[2].trim()){
+        var allUpper=true;
+        var filled=0;
+        for(var c3=2;c3<row2.length;c3++){
+          if(row2[c3] && row2[c3].trim()){
+            filled++;
+            if(row2[c3].trim() !== row2[c3].trim().toUpperCase()) allUpper=false;
+          }
+        }
+        if(filled>=4 && allUpper){
+          secRowIdx=r2;
+          for(var c4=2;c4<row2.length;c4++){
+            if(row2[c4] && row2[c4].trim())
+              sections.push({name:row2[c4].trim(), col:c4});
+          }
+          break;
+        }
+      }
+    }
+  }
+
+  if(secRowIdx===-1 || sections.length===0){
+    throw new Error("JHS: Cannot find section header row. Rows scanned: "+rows.length+
+      ". First 3 rows: "+rows.slice(0,3).map(function(r){return r.slice(0,4).join('|');}).join(' // '));
+  }
+
+  var SKIP=["FLAG","RECESS","LUNCH","ARAL READING","ARAL READING","CULMINATING","HEALTH","DISMISSAL"];
+  var slots=[];
+  for(var r3=secRowIdx+1;r3<rows.length;r3++){
+    var row3=rows[r3];
+    if(!row3[0]||!row3[0].trim()) continue;
+    var t=row3[0].trim();
     if(!t.match(/\d+:\d+/)) continue;
-    const mins=row[1]?row[1].trim():"";
-    const fd=row[2]?row[2].trim().toUpperCase():"";
-    if(SKIP.some(k=>fd.startsWith(k))){
-      slots.push({time:t,mins,isBreak:true,breakLabel:row[2]?row[2].trim():t,sections:{}});
+    var mins=row3[1]?row3[1].trim():"";
+    var fd=row3[2]?row3[2].trim().toUpperCase():"";
+    if(SKIP.some(function(k){return fd.indexOf(k)===0;})){
+      slots.push({time:t,mins:mins,isBreak:true,breakLabel:row3[2]?row3[2].trim():t,sections:{}});
       continue;
     }
-    const slot={time:t,mins,isBreak:false,sections:{}};
-    for(const sec of sections){
-      const v=row[sec.col]?row[sec.col].trim():"";
+    var slot={time:t,mins:mins,isBreak:false,sections:{}};
+    for(var si=0;si<sections.length;si++){
+      var sec=sections[si];
+      var v=row3[sec.col]?row3[sec.col].trim():"";
       if(v) slot.sections[sec.name]=parseJHSCell(v);
     }
     slots.push(slot);
   }
-  return{sections:sections.map(s=>s.name),slots,level:"JHS"};
+  return{sections:sections.map(function(s){return s.name;}),slots:slots,level:"JHS"};
 }
+
 function parseJHSCell(cell){
-  const m=cell.match(/^(.+?)\s*\((M-F|F|M)\)\s*(.*)$/);
+  var m=cell.match(/^(.+?)\s*\((M-F|F|M)\)\s*(.*)$/);
   if(m) return{subject:m[1].trim().replace(/\.+$/,""),days:m[2].trim(),teacher:m[3].trim().replace(/\.$/,"")};
   return{subject:cell,days:"M-F",teacher:""};
 }
 
 // ═══════════ SHS PARSER ═══════════
+// Structure: Row 1 = section names (starting col 2), Row 2 = day names
+// Data rows come in PAIRS: row N = subjects, row N+1 = teachers
+// Time is in col 1
 function parseSHS(rows){
-  const hdr=rows[0]||[];
-  const sections=[];
-  for(let c=1;c<hdr.length;c++){
-    if(hdr[c]&&hdr[c].trim()) sections.push({name:hdr[c].trim(),startCol:c});
+  // Row 0: "Time Slot", "Grade 11 - Pacioli", (empty x4), "Grade 11 - Keynes"...
+  // Sections span 5 columns each (Mon-Fri)
+  var hdrRow=rows[0]||[];
+  var sections=[];
+  for(var c=1;c<hdrRow.length;c++){
+    if(hdrRow[c]&&hdrRow[c].trim()){
+      sections.push({name:hdrRow[c].trim(), startCol:c});
+    }
   }
-  const SKIP=["flag","health","lunch","aral","dismissal"];
-  const slots=[];
-  for(let r=2;r<rows.length;r++){
-    const row=rows[r];
-    if(!row[0]||!row[0].trim()) continue;
-    const t=row[0].trim();
-    const lc=t.toLowerCase();
-    if(SKIP.some(k=>lc.includes(k))){
+
+  var SKIP=["flag","health","lunch","aral","dismissal","recess"];
+  var slots=[];
+  var r=2; // skip header and day-names rows
+  while(r<rows.length){
+    var row=rows[r];
+    if(!row||!row[0]||!row[0].trim()){r++;continue;}
+    var t=row[0].trim();
+    var lc=t.toLowerCase();
+    if(SKIP.some(function(k){return lc.indexOf(k)>=0;})){
       slots.push({time:t,isBreak:true,breakLabel:t,sections:{}});
+      r++;
       continue;
     }
-    if(!t.match(/\d+:\d+/)) continue;
-    const tRow=rows[r+1]||[];
-    const slot={time:t,isBreak:false,sections:{}};
-    for(const sec of sections){
-      const dayMap={};
-      for(let d=0;d<5;d++){
-        const subj=row[sec.startCol+d]?row[sec.startCol+d].trim():"";
-        const tchr=tRow[sec.startCol+d]?tRow[sec.startCol+d].trim():"";
-        if(subj) dayMap[DAYS[d]]={subject:subj,teacher:tchr};
+    if(!t.match(/\d+:\d+/)){ r++; continue; }
+
+    // Subject row = r, Teacher row = r+1
+    var tRow=rows[r+1]||[];
+    var slot={time:t,isBreak:false,sections:{}};
+    for(var si=0;si<sections.length;si++){
+      var sec=sections[si];
+      var dayMap={};
+      for(var d=0;d<5;d++){
+        var subj=row[sec.startCol+d]?row[sec.startCol+d].trim():"";
+        var tchr=tRow[sec.startCol+d]?tRow[sec.startCol+d].trim():"";
+        // Normalize teacher name: "Last, First M." -> keep as-is, extract for matching later
+        if(subj) dayMap[DAYS[d]]={subject:subj.replace(/\n/g," "),teacher:tchr};
       }
-      slot.sections[sec.name]={dayMap};
+      slot.sections[sec.name]={dayMap:dayMap};
     }
     slots.push(slot);
+    r+=2; // skip the teacher row, it was consumed
   }
-  return{sections:sections.map(s=>s.name),slots,level:"SHS"};
+  return{sections:sections.map(function(s){return s.name;}),slots:slots,level:"SHS"};
 }
 
 // ═══════════ NAME MATCHING ═══════════
-function extractLastName(fullName){
-  const n=fullName.trim().toUpperCase();
-  if(n.includes(",")){return n.split(",")[0].trim();}
-  const parts=n.split(/\s+/);
-  const last=parts[parts.length-1];
+// JHS: stores "Lastname" or "Lastname Jr." in cells
+// SHS: stores "Lastname, Firstname M." in cells
+// We extract the last name from both and match
+
+function extractLastName(name){
+  if(!name) return "";
+  var n=name.trim().toUpperCase();
+  // SHS format: "LAST, FIRST M." — last name is before comma
+  if(n.indexOf(",")>=0) return n.split(",")[0].trim();
+  // JHS format: already just last name, possibly with Jr.
+  // Check for suffix at end
+  var parts=n.split(/\s+/);
+  var last=parts[parts.length-1];
   if(last==="JR."||last==="JR"||last==="SR."||last==="SR"||last==="III"||last==="II"){
     return parts.slice(-2).join(" ");
   }
-  return last;
+  // If only one word, that IS the last name
+  return n;
 }
 
 // ═══════════ TEACHER MAP ═══════════
 function buildTeacherMap(){
-  const byLN={};
+  var byLN={};
+
+  // Process SHS first — full names become canonical
   if(DB.shs){
-    for(const slot of DB.shs.slots){
-      if(slot.isBreak) continue;
-      for(const sec of DB.shs.sections){
-        const ss=slot.sections[sec];
-        if(!ss||!ss.dayMap) continue;
-        for(const day of DAYS){
-          const e=ss.dayMap[day];
-          if(!e||!e.teacher||!e.teacher.trim()) continue;
-          const fullName=e.teacher.trim();
-          const ln=extractLastName(fullName);
+    DB.shs.slots.forEach(function(slot){
+      if(slot.isBreak) return;
+      DB.shs.sections.forEach(function(sec){
+        var ss=slot.sections[sec];
+        if(!ss||!ss.dayMap) return;
+        DAYS.forEach(function(day){
+          var e=ss.dayMap[day];
+          if(!e||!e.teacher||!e.teacher.trim()) return;
+          var fullName=e.teacher.trim();
+          var ln=extractLastName(fullName);
+          if(!ln) return;
           if(!byLN[ln]) byLN[ln]={canonical:fullName,jhs:[],shs:[]};
           if(fullName.length>byLN[ln].canonical.length) byLN[ln].canonical=fullName;
-          const key=slot.time+"|"+sec+"|"+day;
-          if(!byLN[ln].shs.some(x=>x.key===key))
-            byLN[ln].shs.push({key,time:slot.time,section:sec,subject:e.subject,teacher:fullName,day});
-        }
-      }
-    }
+          var key=slot.time+"|"+sec+"|"+day;
+          if(!byLN[ln].shs.some(function(x){return x.key===key;}))
+            byLN[ln].shs.push({key:key,time:slot.time,section:sec,subject:e.subject,teacher:fullName,day:day});
+        });
+      });
+    });
   }
+
+  // Process JHS — last names only
   if(DB.jhs){
-    for(const slot of DB.jhs.slots){
-      if(slot.isBreak) continue;
-      for(const sec of DB.jhs.sections){
-        const e=slot.sections[sec];
-        if(!e||!e.teacher||!e.teacher.trim()) continue;
-        const ln=e.teacher.trim().toUpperCase();
-        if(!byLN[ln]) byLN[ln]={canonical:e.teacher.trim(),jhs:[],shs:[]};
-        const key=slot.time+"|"+sec;
-        if(!byLN[ln].jhs.some(x=>x.key===key))
-          byLN[ln].jhs.push({key,time:slot.time,mins:slot.mins,section:sec,subject:e.subject,days:e.days});
-      }
-    }
+    DB.jhs.slots.forEach(function(slot){
+      if(slot.isBreak) return;
+      DB.jhs.sections.forEach(function(sec){
+        var e=slot.sections[sec];
+        if(!e||!e.teacher||!e.teacher.trim()) return;
+        var rawName=e.teacher.trim();
+        // JHS name is already just last name (possibly "Lastname Jr.")
+        var ln=rawName.toUpperCase().trim();
+        if(!byLN[ln]) byLN[ln]={canonical:rawName,jhs:[],shs:[]};
+        var key=slot.time+"|"+sec;
+        if(!byLN[ln].jhs.some(function(x){return x.key===key;}))
+          byLN[ln].jhs.push({key:key,time:slot.time,mins:slot.mins,section:sec,subject:e.subject,days:e.days});
+      });
+    });
   }
-  const teachers={};
-  for(const [ln,data] of Object.entries(byLN)){
-    const name=data.canonical;
-    teachers[name]={name,lastNameKey:ln,jhs:data.jhs,shs:data.shs};
-  }
-  DB.teachers=teachers;
+
+  // Build final map keyed by canonical display name
+  DB.teachers={};
+  Object.keys(byLN).forEach(function(ln){
+    var data=byLN[ln];
+    DB.teachers[data.canonical]={name:data.canonical,lastNameKey:ln,jhs:data.jhs,shs:data.shs};
+  });
 }
 
 // ═══════════ TIME UTILITIES ═══════════
 function slotStart(timeStr){
-  const parts=timeStr.split(/[\u2013\-]/);
-  const s=parts[0].trim();
-  const m=s.match(/(\d+):(\d+)\s*(AM|PM)?/i);
+  var parts=timeStr.split(/[\u2013\-]/);
+  var s=parts[0].trim();
+  var m=s.match(/(\d+):(\d+)\s*(AM|PM)?/i);
   if(!m) return 0;
-  let h=parseInt(m[1]),min=parseInt(m[2]);
-  const ap=(m[3]||"").toUpperCase();
+  var h=parseInt(m[1]), min=parseInt(m[2]);
+  var ap=(m[3]||"").toUpperCase();
   if(ap==="PM"&&h<12) h+=12;
   if(ap==="AM"&&h===12) h=0;
   return h*60+min;
@@ -287,84 +369,105 @@ async function loadSchedules(){
   document.getElementById("teacher-select").disabled=true;
   document.getElementById("teacher-select").innerHTML="<option>-- Loading... --</option>";
   document.getElementById("err-area").innerHTML="";
-  const errors=[];
+
+  var errors=[];
+
   try{
-    const r=await fetch(JHS_CSV);
+    var r=await fetch(JHS_CSV);
     if(!r.ok) throw new Error("HTTP "+r.status);
-    DB.jhs=parseJHS(parseCSV(await r.text()));
-  }catch(e){errors.push("JHS: "+e.message);console.error(e);}
+    var text=await r.text();
+    var rows=parseCSV(text);
+    DB.jhs=parseJHS(rows);
+    console.log("JHS OK: "+DB.jhs.sections.length+" sections, "+DB.jhs.slots.length+" slots");
+  }catch(e){ errors.push("JHS: "+e.message); console.error("JHS error:",e); }
+
   try{
-    const r=await fetch(SHS_CSV);
-    if(!r.ok) throw new Error("HTTP "+r.status);
-    DB.shs=parseSHS(parseCSV(await r.text()));
-  }catch(e){errors.push("SHS: "+e.message);console.error(e);}
+    var r2=await fetch(SHS_CSV);
+    if(!r2.ok) throw new Error("HTTP "+r2.status);
+    var text2=await r2.text();
+    var rows2=parseCSV(text2);
+    DB.shs=parseSHS(rows2);
+    console.log("SHS OK: "+DB.shs.sections.length+" sections, "+DB.shs.slots.length+" slots");
+  }catch(e){ errors.push("SHS: "+e.message); console.error("SHS error:",e); }
+
   if(errors.length){
-    document.getElementById("err-area").innerHTML='<div class="err-card"><div class="ico">\u26a0\ufe0f</div><div><strong>Could not load schedule</strong><p>'+errors.join("<br>")+'</p></div></div>';
+    document.getElementById("err-area").innerHTML='<div class="err-card"><div class="ico">\u26a0\ufe0f</div><div><strong>Could not load some schedules</strong><p>'+errors.join("<br>")+'</p></div></div>';
   }
   if(!DB.jhs&&!DB.shs){
-    setStatus("err","\u26a0 Failed to load. Check Google Sheets publishing.");
+    setStatus("err","\u26a0 Failed to load. Check your Google Sheets are published as CSV.");
     document.getElementById("refresh-btn").disabled=false;
     return;
   }
   buildTeacherMap();
   refreshDropdown();
-  const parts=[];
+  var parts=[];
   if(DB.jhs) parts.push("JHS ("+DB.jhs.sections.length+" sections)");
   if(DB.shs) parts.push("SHS ("+DB.shs.sections.length+" sections)");
   setStatus("ok","\u2713 Loaded \u2014 "+parts.join(" \u00b7 ")+" \u00b7 "+Object.keys(DB.teachers).length+" teachers");
   document.getElementById("refresh-btn").disabled=false;
 }
+
 function setStatus(type,msg){
-  const b=document.getElementById("status-bar");
+  var b=document.getElementById("status-bar");
   b.className="status-bar "+type;
   b.innerHTML=type==="loading"?'<span class="spin"></span> '+msg:msg;
 }
 
 // ═══════════ UI ═══════════
 function refreshDropdown(){
-  const sel=document.getElementById("teacher-select");
-  const names=Object.keys(DB.teachers).sort();
+  var sel=document.getElementById("teacher-select");
+  var names=Object.keys(DB.teachers).sort();
   sel.innerHTML="<option value=''>-- Choose your name --</option>";
-  names.forEach(n=>{const o=document.createElement("option");o.value=o.textContent=n;sel.appendChild(o);});
+  names.forEach(function(n){
+    var o=document.createElement("option");
+    o.value=n; o.textContent=n;
+    sel.appendChild(o);
+  });
   sel.disabled=names.length===0;
   document.getElementById("result").innerHTML='<div class="empty"><div class="ico">\ud83d\udc46</div><p>Select your name above.</p></div>';
 }
 
 function onSelect(){
-  const name=document.getElementById("teacher-select").value;
-  const el=document.getElementById("result");
-  if(!name){el.innerHTML='<div class="empty"><div class="ico">\ud83d\udc46</div><p>Select your name above.</p></div>';return;}
-  const t=DB.teachers[name];
+  var name=document.getElementById("teacher-select").value;
+  var el=document.getElementById("result");
+  if(!name){
+    el.innerHTML='<div class="empty"><div class="ico">\ud83d\udc46</div><p>Select your name above.</p></div>';
+    return;
+  }
+  var t=DB.teachers[name];
   if(!t) return;
-  const hasJHS=t.jhs.length>0,hasSHS=t.shs.length>0;
-  const badge=(hasJHS&&hasSHS)?'<span class="badge badge-both">JHS + SHS</span>':hasJHS?'<span class="badge badge-jhs">JHS</span>':'<span class="badge badge-shs">SHS</span>';
-  const jhsSecs=[...new Set(t.jhs.map(e=>e.section))];
-  const shsSecs=[...new Set(t.shs.map(e=>e.section))];
-  const allSecs=[...jhsSecs,...shsSecs];
-  const safeName=name.replace(/'/g,"&#39;");
-  const secCards=allSecs.map(sec=>{
-    const safeSec=sec.replace(/'/g,"&#39;");
-    return '<div class="dl-card" onclick="dlClassProgram(\''+safeName+'\',\''+safeSec+'\')">'
+  var hasJHS=t.jhs.length>0, hasSHS=t.shs.length>0;
+  var badge=(hasJHS&&hasSHS)?'<span class="badge badge-both">JHS + SHS</span>':
+    hasJHS?'<span class="badge badge-jhs">JHS</span>':'<span class="badge badge-shs">SHS</span>';
+  var jhsSecs=[]; t.jhs.forEach(function(e){if(jhsSecs.indexOf(e.section)<0) jhsSecs.push(e.section);});
+  var shsSecs=[]; t.shs.forEach(function(e){if(shsSecs.indexOf(e.section)<0) shsSecs.push(e.section);});
+  var allSecs=jhsSecs.concat(shsSecs);
+  var encName=encodeURIComponent(name);
+  var secCards=allSecs.map(function(sec){
+    return '<div class="dl-card" onclick="dlClassProgram(\''+encName+'\',\''+encodeURIComponent(sec)+'\')">'
       +'<div class="dl-icon ic-c">\ud83c\udfe5</div>'
       +'<div><h3>Class Program</h3><p>'+sec+'</p></div>'
       +'<span class="dl-arrow">\u2192</span></div>';
   }).join("");
   el.innerHTML='<div class="result">'
-    +'<div class="name-bar"><div><h2>'+name+'</h2>'
+    +'<div class="name-bar"><div><h2>'+esc(name)+'</h2>'
     +'<div class="meta">'+allSecs.length+' section'+(allSecs.length!==1?'s':'')
-    +' \u00b7 '+[hasJHS&&"JHS",hasSHS&&"SHS"].filter(Boolean).join(" + ")+'</div></div>'+badge+'</div>'
+    +' \u00b7 '+[hasJHS&&"JHS",hasSHS&&"SHS"].filter(Boolean).join(" + ")
+    +'</div></div>'+badge+'</div>'
     +'<div class="dl-wrap"><div class="dl-label">Your Documents</div><div class="dl-grid">'
-    +'<div class="dl-card" onclick="dlTeacherProgram(\''+safeName+'\')">'
+    +'<div class="dl-card" onclick="dlTeacherProgram(\''+encName+'\')">'
     +'<div class="dl-icon ic-t">\ud83d\udccb</div>'
     +'<div><h3>Teacher\'s Program</h3><p>Your combined weekly schedule</p></div>'
     +'<span class="dl-arrow">\u2192</span></div>'
-    +secCards
-    +'</div></div></div>';
+    +secCards+'</div></div></div>';
 }
 
 // ═══════════ DOCX HELPERS ═══════════
-const BKM="Bookman Old Style";
-function esc(s){return String(s||"").replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/"/g,"&quot;");}
+var BKM="Bookman Old Style";
+
+function esc(s){
+  return String(s||"").replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/"/g,"&quot;");
+}
 
 function mkRpr(opts){
   opts=opts||{};
@@ -379,29 +482,20 @@ function mkRpr(opts){
 function mkPara(runs,opts){
   opts=opts||{};
   if(typeof runs==="string") runs=[{text:runs}];
-  const jc=opts.center?'<w:jc w:val="center"/>':(opts.right?'<w:jc w:val="right"/>':'');
-  const sp='<w:spacing w:before="0" w:after="0"/>';
-  const ppr='<w:pPr>'+jc+sp+'</w:pPr>';
-  const rns=runs.map(r=>'<w:r>'+mkRpr(r)+'<w:t xml:space="preserve">'+esc(r.text)+'</w:t></w:r>').join('');
+  var jc=opts.center?'<w:jc w:val="center"/>':'';
+  var ppr='<w:pPr>'+jc+'<w:spacing w:before="0" w:after="0"/></w:pPr>';
+  var rns=runs.map(function(r){
+    return '<w:r>'+mkRpr(r)+'<w:t xml:space="preserve">'+esc(r.text)+'</w:t></w:r>';
+  }).join('');
   return '<w:p>'+ppr+rns+'</w:p>';
 }
 
-function emptyPara(){return '<w:p><w:pPr><w:spacing w:before="0" w:after="0"/></w:pPr></w:p>';}
-
-function noBorderTcPr(w){
-  return '<w:tcPr><w:tcW w:w="'+w+'" w:type="dxa"/>'
-    +'<w:tcBorders>'
-    +'<w:top w:val="none" w:sz="0" w:color="auto"/>'
-    +'<w:left w:val="none" w:sz="0" w:color="auto"/>'
-    +'<w:bottom w:val="none" w:sz="0" w:color="auto"/>'
-    +'<w:right w:val="none" w:sz="0" w:color="auto"/>'
-    +'</w:tcBorders></w:tcPr>';
-}
+function emptyPara(){ return '<w:p><w:pPr><w:spacing w:before="0" w:after="0"/></w:pPr></w:p>'; }
 
 function borderTcPr(w,opts){
   opts=opts||{};
-  const shade=opts.shade?'<w:shd w:val="clear" w:color="auto" w:fill="'+opts.shade+'"/>':'';
-  const span=opts.span?'<w:gridSpan w:val="'+opts.span+'"/>':'';
+  var shade=opts.shade?'<w:shd w:val="clear" w:color="auto" w:fill="'+opts.shade+'"/>':'';
+  var span=opts.span?'<w:gridSpan w:val="'+opts.span+'"/>':'';
   return '<w:tcPr><w:tcW w:w="'+w+'" w:type="dxa"/>'+span
     +'<w:tcBorders>'
     +'<w:top w:val="single" w:sz="4" w:space="0" w:color="000000"/>'
@@ -411,45 +505,47 @@ function borderTcPr(w,opts){
     +'</w:tcBorders>'+shade+'<w:vAlign w:val="center"/></w:tcPr>';
 }
 
-function cellPara(text,opts){
-  opts=opts||{};
-  const jc=opts.center?'<w:jc w:val="center"/>':(opts.right?'<w:jc w:val="right"/>':'');
-  return '<w:p><w:pPr>'+jc+'<w:spacing w:before="60" w:after="60"/></w:pPr>'
-    +'<w:r>'+mkRpr(opts)+'<w:t xml:space="preserve">'+esc(String(text||''))+'</w:t></w:r></w:p>';
+function noBorderTcPr(w){
+  return '<w:tcPr><w:tcW w:w="'+w+'" w:type="dxa"/>'
+    +'<w:tcBorders><w:top w:val="none" w:sz="0" w:color="auto"/>'
+    +'<w:left w:val="none" w:sz="0" w:color="auto"/>'
+    +'<w:bottom w:val="none" w:sz="0" w:color="auto"/>'
+    +'<w:right w:val="none" w:sz="0" w:color="auto"/></w:tcBorders></w:tcPr>';
 }
 
-function hdrCell(text,w){
-  return '<w:tc>'+borderTcPr(w)+''+cellPara(text,{bold:true,center:true,shade:'1F3864',sz:20,color:'FFFFFF'})+'</w:tc>';
-}
-// Wait — shade goes in tcPr not cellPara. Let me fix:
 function hdrTc(text,w){
   return '<w:tc>'+borderTcPr(w,{shade:'1F3864'})
     +'<w:p><w:pPr><w:jc w:val="center"/><w:spacing w:before="60" w:after="60"/></w:pPr>'
-    +'<w:r>'+mkRpr({bold:true,sz:20,color:'FFFFFF'})+'<w:t xml:space="preserve">'+esc(text)+'</w:t></w:r></w:p>'
-    +'</w:tc>';
+    +'<w:r>'+mkRpr({bold:true,sz:20,color:'FFFFFF'})
+    +'<w:t xml:space="preserve">'+esc(text)+'</w:t></w:r></w:p></w:tc>';
 }
+
 function dataTc(text,w,opts){
   opts=opts||{};
+  var jc=opts.center?'<w:jc w:val="center"/>':'';
   return '<w:tc>'+borderTcPr(w)
-    +'<w:p><w:pPr>'+(opts.center?'<w:jc w:val="center"/>':'')+'<w:spacing w:before="60" w:after="60"/></w:pPr>'
-    +'<w:r>'+mkRpr(opts)+'<w:t xml:space="preserve">'+esc(String(text||''))+'</w:t></w:r></w:p>'
-    +'</w:tc>';
+    +'<w:p><w:pPr>'+jc+'<w:spacing w:before="60" w:after="60"/></w:pPr>'
+    +'<w:r>'+mkRpr(opts)
+    +'<w:t xml:space="preserve">'+esc(String(text||''))+'</w:t></w:r></w:p></w:tc>';
 }
+
 function twoLineTc(subj,tchr,w){
   return '<w:tc>'+borderTcPr(w)
     +'<w:p><w:pPr><w:jc w:val="center"/><w:spacing w:before="40" w:after="0"/></w:pPr>'
     +'<w:r>'+mkRpr({bold:true,sz:18})+'<w:t xml:space="preserve">'+esc(subj)+'</w:t></w:r></w:p>'
     +'<w:p><w:pPr><w:jc w:val="center"/><w:spacing w:before="0" w:after="40"/></w:pPr>'
-    +'<w:r>'+mkRpr({sz:16})+'<w:t xml:space="preserve">('+esc(tchr)+')</w:t></w:r></w:p>'
-    +'</w:tc>';
+    +'<w:r>'+mkRpr({sz:16})+'<w:t xml:space="preserve">('+esc(tchr)+')</w:t></w:r></w:p></w:tc>';
 }
-function tr(cells){return '<w:tr>'+cells+'</w:tr>';}
+
+function tr(cells){ return '<w:tr>'+cells+'</w:tr>'; }
 
 function breakTr(label,tw,mw,dw){
-  const spanW=dw.reduce(function(a,b){return a+b;},0);
+  var spanW=dw.reduce(function(a,b){return a+b;},0);
   return '<w:tr>'
-    +'<w:tc>'+borderTcPr(tw,{shade:'DEEAF1'})+cellPara('',{center:true,sz:18})+'</w:tc>'
-    +'<w:tc>'+borderTcPr(mw,{shade:'DEEAF1'})+cellPara('',{center:true,sz:18})+'</w:tc>'
+    +'<w:tc>'+borderTcPr(tw,{shade:'DEEAF1'})
+    +'<w:p><w:pPr><w:spacing w:before="60" w:after="60"/></w:pPr></w:p></w:tc>'
+    +'<w:tc>'+borderTcPr(mw,{shade:'DEEAF1'})
+    +'<w:p><w:pPr><w:spacing w:before="60" w:after="60"/></w:pPr></w:p></w:tc>'
     +'<w:tc>'+borderTcPr(spanW,{shade:'DEEAF1',span:5})
     +'<w:p><w:pPr><w:jc w:val="center"/><w:spacing w:before="60" w:after="60"/></w:pPr>'
     +'<w:r>'+mkRpr({bold:true,sz:20})+'<w:t>'+esc(label)+'</w:t></w:r></w:p></w:tc>'
@@ -457,7 +553,7 @@ function breakTr(label,tw,mw,dw){
 }
 
 function makeTbl(totalW,colWidths,rows){
-  const grid=colWidths.map(function(c){return '<w:gridCol w:w="'+c+'"/>';}).join('');
+  var grid=colWidths.map(function(c){return '<w:gridCol w:w="'+c+'"/>';}).join('');
   return '<w:tbl>'
     +'<w:tblPr><w:tblW w:w="'+totalW+'" w:type="dxa"/><w:tblLayout w:type="fixed"/>'
     +'<w:tblBorders>'
@@ -469,12 +565,11 @@ function makeTbl(totalW,colWidths,rows){
     +'<w:insideV w:val="single" w:sz="4" w:color="000000"/>'
     +'</w:tblBorders></w:tblPr>'
     +'<w:tblGrid>'+grid+'</w:tblGrid>'
-    +rows.join('')
-    +'</w:tbl>';
+    +rows.join('')+'</w:tbl>';
 }
 
 function noborTbl(totalW,colWidths,rows){
-  const grid=colWidths.map(function(c){return '<w:gridCol w:w="'+c+'"/>';}).join('');
+  var grid=colWidths.map(function(c){return '<w:gridCol w:w="'+c+'"/>';}).join('');
   return '<w:tbl>'
     +'<w:tblPr><w:tblW w:w="'+totalW+'" w:type="dxa"/><w:tblLayout w:type="fixed"/>'
     +'<w:tblBorders>'
@@ -483,8 +578,7 @@ function noborTbl(totalW,colWidths,rows){
     +'<w:insideH w:val="none" w:sz="0" w:color="auto"/><w:insideV w:val="none" w:sz="0" w:color="auto"/>'
     +'</w:tblBorders></w:tblPr>'
     +'<w:tblGrid>'+grid+'</w:tblGrid>'
-    +rows.join('')
-    +'</w:tbl>';
+    +rows.join('')+'</w:tbl>';
 }
 
 function docWrap(body){
@@ -494,19 +588,22 @@ function docWrap(body){
     +'<w:sectPr>'
     +'<w:pgSz w:w="11907" w:h="16839"/>'
     +'<w:pgMar w:top="1134" w:right="747" w:bottom="1440" w:left="709" w:header="432" w:footer="864" w:gutter="0"/>'
-    +'</w:sectPr>'
-    +'</w:body></w:document>';
+    +'</w:sectPr></w:body></w:document>';
 }
 
 function schoolHeader(docTitle,subTitle){
-  let b='';
+  var b='';
   b+=mkPara([{text:'Republic of the Philippines',bold:true,sz:20}],{center:true});
   b+=mkPara([{text:'Department of Education',bold:true,sz:20}],{center:true});
   b+=mkPara([{text:SCHOOL.region,bold:true,sz:20}],{center:true});
   b+=mkPara([{text:SCHOOL.division,bold:true,sz:20}],{center:true});
   b+=emptyPara();
-  b+=mkPara([{text:'DISTRICT: ',bold:true,sz:18},{text:SCHOOL.district,bold:true,sz:18,underline:true},
-             {text:'                    SCHOOL: ',bold:true,sz:18},{text:SCHOOL.name,bold:true,sz:18,underline:true}],{});
+  b+=mkPara([
+    {text:'DISTRICT: ',bold:true,sz:18},
+    {text:SCHOOL.district,bold:true,sz:18,underline:true},
+    {text:'                    SCHOOL: ',bold:true,sz:18},
+    {text:SCHOOL.name,bold:true,sz:18,underline:true}
+  ],{});
   b+=emptyPara();
   b+=mkPara([{text:docTitle,bold:true,sz:28}],{center:true});
   b+=mkPara([{text:subTitle,bold:true,sz:24}],{center:true});
@@ -515,16 +612,16 @@ function schoolHeader(docTitle,subTitle){
   return b;
 }
 
-function sigBlock(preparedBy,preparedTitle,notedBy,notedTitle){
-  const TW=11052, half=Math.floor(TW/2);
-  function col(label,name,title){
+function sigBlock(preparedBy,preparedTitle){
+  var TW=11052, half=Math.floor(TW/2);
+  function nameBlock(label,name,title){
     return mkPara([{text:label,sz:18}],{})
       +mkPara([{text:name,bold:true,sz:20}],{})
       +mkPara([{text:title,sz:18}],{});
   }
-  const leftCell='<w:tc>'+noBorderTcPr(half)+col('Prepared by:',preparedBy,preparedTitle)+'</w:tc>';
-  const rightCell='<w:tc>'+noBorderTcPr(half)+col('Noted by:',notedBy,notedTitle)+'</w:tc>';
-  let b=emptyPara();
+  var leftCell='<w:tc>'+noBorderTcPr(half)+nameBlock('Prepared by:',preparedBy,preparedTitle)+'</w:tc>';
+  var rightCell='<w:tc>'+noBorderTcPr(half)+nameBlock('Noted by:',SCHOOL.noted_by,SCHOOL.noted_title)+'</w:tc>';
+  var b=emptyPara();
   b+=noborTbl(TW,[half,half],[tr(leftCell+rightCell)]);
   b+=emptyPara();
   b+=mkPara([{text:'Checked and verified by:',sz:18}],{});
@@ -538,76 +635,89 @@ function sigBlock(preparedBy,preparedTitle,notedBy,notedTitle){
 }
 
 function summaryTable(){
-  const TW=9000, c1=6800, c2=2200;
-  const rows=[
-    tr('<w:tc>'+borderTcPr(c1)+cellPara('Total No. of teaching hours (per week) inclusive of class advisory (excluding HRP)',{sz:18})+'</w:tc>'
-      +'<w:tc>'+borderTcPr(c2)+cellPara('1,800 mins. per week (30 hrs./wk.)',{sz:18,center:true})+'</w:tc>'),
-    tr('<w:tc>'+borderTcPr(c1)+cellPara('Status of Teaching Load',{sz:18})+'</w:tc>'
-      +'<w:tc>'+borderTcPr(c2)+cellPara('Full Load',{sz:18,center:true})+'</w:tc>'),
-    tr('<w:tc>'+borderTcPr(c1)+cellPara('Other teaching-related assignments (SO No. __________ s. 2026) approved as of ________________________',{sz:18})+'</w:tc>'
-      +'<w:tc>'+borderTcPr(c2)+cellPara('None',{sz:18,center:true})+'</w:tc>')
+  var TW=9000, c1=6800, c2=2200;
+  var rows=[
+    tr('<w:tc>'+borderTcPr(c1)+dataTcContent('Total No. of teaching hours (per week) inclusive of class advisory (excluding HRP)',{sz:18})+'</w:tc>'
+      +'<w:tc>'+borderTcPr(c2)+dataTcContent('1,800 mins. per week (30 hrs./wk.)',{sz:18,center:true})+'</w:tc>'),
+    tr('<w:tc>'+borderTcPr(c1)+dataTcContent('Status of Teaching Load',{sz:18})+'</w:tc>'
+      +'<w:tc>'+borderTcPr(c2)+dataTcContent('Full Load',{sz:18,center:true})+'</w:tc>'),
+    tr('<w:tc>'+borderTcPr(c1)+dataTcContent('Other teaching-related assignments (SO No. __________ s. 2026) approved as of ________________________',{sz:18})+'</w:tc>'
+      +'<w:tc>'+borderTcPr(c2)+dataTcContent('None',{sz:18,center:true})+'</w:tc>')
   ];
   return makeTbl(TW,[c1,c2],rows);
 }
 
+function dataTcContent(text,opts){
+  opts=opts||{};
+  var jc=opts.center?'<w:jc w:val="center"/>':'';
+  return '<w:p><w:pPr>'+jc+'<w:spacing w:before="60" w:after="60"/></w:pPr>'
+    +'<w:r>'+mkRpr(opts)+'<w:t xml:space="preserve">'+esc(text)+'</w:t></w:r></w:p>';
+}
+
 // ═══════════ TEACHER PROGRAM ═══════════
 function buildTeacherProgramXML(teacherName){
-  const t=DB.teachers[teacherName];
-  const TW=11052, tw=1530, mw=651;
-  const dw=[1699,1699,1704,1643,2126];
+  var t=DB.teachers[teacherName];
+  var TW=11052, tw=1530, mw=651;
+  var dw=[1699,1699,1704,1643,2126];
 
-  // Merge all slots from JHS and SHS sorted by time
-  const slotMap={};
-  function addSlot(slot){
-    if(!slotMap[slot.time]) slotMap[slot.time]=slot;
-  }
-  if(DB.jhs) DB.jhs.slots.forEach(addSlot);
-  if(DB.shs) DB.shs.slots.forEach(addSlot);
-  const allSlots=Object.values(slotMap).sort(function(a,b){return slotStart(a.time)-slotStart(b.time);});
+  // Merge all slots sorted by start time
+  var slotMap={};
+  if(DB.jhs) DB.jhs.slots.forEach(function(s){if(!slotMap[s.time]) slotMap[s.time]=s;});
+  if(DB.shs) DB.shs.slots.forEach(function(s){if(!slotMap[s.time]) slotMap[s.time]=s;});
+  var allSlots=Object.values(slotMap).sort(function(a,b){return slotStart(a.time)-slotStart(b.time);});
 
   function getEntry(slotTime,day){
+    // Check JHS
     if(DB.jhs){
-      const slot=DB.jhs.slots.find(function(s){return s.time===slotTime;});
+      var slot=DB.jhs.slots.find(function(s){return s.time===slotTime;});
       if(slot&&!slot.isBreak){
-        for(const sec of DB.jhs.sections){
-          const e=slot.sections[sec];
+        for(var i=0;i<DB.jhs.sections.length;i++){
+          var sec=DB.jhs.sections[i];
+          var e=slot.sections[sec];
           if(!e||!e.teacher) continue;
           if(e.teacher.trim().toUpperCase()===t.lastNameKey){
-            const days=e.days==="F"?["Friday"]:e.days==="M"?["Monday"]:DAYS;
+            var days=e.days==="F"?["Friday"]:e.days==="M"?["Monday"]:DAYS;
             if(days.indexOf(day)>=0) return e.subject.replace(/\.+$/,"")+" "+sec;
           }
         }
       }
     }
+    // Check SHS
     if(DB.shs){
-      const slot=DB.shs.slots.find(function(s){return s.time===slotTime;});
-      if(slot&&!slot.isBreak){
-        for(const sec of DB.shs.sections){
-          const ss=slot.sections[sec];
+      var slot2=DB.shs.slots.find(function(s){return s.time===slotTime;});
+      if(slot2&&!slot2.isBreak){
+        for(var j=0;j<DB.shs.sections.length;j++){
+          var sec2=DB.shs.sections[j];
+          var ss=slot2.sections[sec2];
           if(!ss||!ss.dayMap) continue;
-          const e=ss.dayMap[day];
-          if(!e||!e.teacher) continue;
-          if(extractLastName(e.teacher)===t.lastNameKey)
-            return e.subject+" "+sec;
+          var e2=ss.dayMap[day];
+          if(!e2||!e2.teacher) continue;
+          if(extractLastName(e2.teacher)===t.lastNameKey)
+            return e2.subject.replace(/\n/g," ")+" "+sec2;
         }
       }
     }
     return "";
   }
 
-  let body=schoolHeader("TEACHER'S PROGRAM",teacherName);
-  const colWidths=[tw,mw,dw[0],dw[1],dw[2],dw[3],dw[4]];
-  const rows=[tr(hdrTc("Time",tw)+hdrTc("No. of Mins.",mw)+DAY_LABELS.map(function(d,i){return hdrTc(d,dw[i]);}).join(''))];
+  var body=schoolHeader("TEACHER'S PROGRAM",teacherName);
+  var colWidths=[tw,mw,dw[0],dw[1],dw[2],dw[3],dw[4]];
+  var rows=[tr(
+    hdrTc("Time",tw)+hdrTc("No. of Mins.",mw)
+    +DAY_LABELS.map(function(d,i){return hdrTc(d,dw[i]);}).join('')
+  )];
 
-  for(const slot of allSlots){
-    if(slot.isBreak){rows.push(breakTr(slot.breakLabel||slot.time,tw,mw,dw));continue;}
-    const dayCells=DAYS.map(function(day,i){return dataTc(getEntry(slot.time,day),dw[i],{center:true,sz:18});}).join('');
+  allSlots.forEach(function(slot){
+    if(slot.isBreak){ rows.push(breakTr(slot.breakLabel||slot.time,tw,mw,dw)); return; }
+    var dayCells=DAYS.map(function(day,i){
+      return dataTc(getEntry(slot.time,day),dw[i],{center:true,sz:18});
+    }).join('');
     rows.push(tr(dataTc(slot.time,tw,{center:true,sz:18})+dataTc(slot.mins||"",mw,{center:true,sz:18})+dayCells));
-  }
+  });
 
   body+=makeTbl(TW,colWidths,rows);
   body+=emptyPara();
-  body+=sigBlock(teacherName,"Teacher",SCHOOL.noted_by,SCHOOL.noted_title);
+  body+=sigBlock(teacherName,"Teacher");
   body+=emptyPara();
   body+=summaryTable();
   return docWrap(body);
@@ -615,102 +725,112 @@ function buildTeacherProgramXML(teacherName){
 
 // ═══════════ CLASS PROGRAM ═══════════
 function buildClassProgramXML(teacherName,section){
-  const isJHS=DB.jhs&&DB.jhs.sections.indexOf(section)>=0;
-  const isSHS=DB.shs&&DB.shs.sections.indexOf(section)>=0;
-  const srcSlots=isJHS?DB.jhs.slots:(isSHS?DB.shs.slots:[]);
-  const TW=11052, tw=1530, mw=651;
-  const dw=[1699,1699,1704,1643,2126];
-  const colWidths=[tw,mw,dw[0],dw[1],dw[2],dw[3],dw[4]];
+  var isJHS=DB.jhs&&DB.jhs.sections.indexOf(section)>=0;
+  var isSHS=DB.shs&&DB.shs.sections.indexOf(section)>=0;
+  var srcSlots=isJHS?DB.jhs.slots:(isSHS?DB.shs.slots:[]);
+  var TW=11052, tw=1530, mw=651;
+  var dw=[1699,1699,1704,1643,2126];
+  var colWidths=[tw,mw,dw[0],dw[1],dw[2],dw[3],dw[4]];
 
-  let body=schoolHeader("CLASS PROGRAM",section);
-  const rows=[tr(hdrTc("Time",tw)+hdrTc("No. of Mins.",mw)+DAY_LABELS.map(function(d,i){return hdrTc(d,dw[i]);}).join(''))];
+  var body=schoolHeader("CLASS PROGRAM",section);
+  var rows=[tr(
+    hdrTc("Time",tw)+hdrTc("No. of Mins.",mw)
+    +DAY_LABELS.map(function(d,i){return hdrTc(d,dw[i]);}).join('')
+  )];
 
-  for(const slot of srcSlots){
-    if(slot.isBreak){rows.push(breakTr(slot.breakLabel||slot.time,tw,mw,dw));continue;}
+  srcSlots.forEach(function(slot){
+    if(slot.isBreak){ rows.push(breakTr(slot.breakLabel||slot.time,tw,mw,dw)); return; }
     if(isJHS){
-      const e=slot.sections[section];
-      const dayCells=DAYS.map(function(day,i){
+      var e=slot.sections[section];
+      var dayCells=DAYS.map(function(day,i){
         if(!e||!e.subject) return dataTc("",dw[i],{center:true,sz:18});
-        const days=e.days==="F"?["Friday"]:e.days==="M"?["Monday"]:DAYS;
+        var days=e.days==="F"?["Friday"]:e.days==="M"?["Monday"]:DAYS;
         if(days.indexOf(day)<0) return dataTc("",dw[i],{center:true,sz:18});
         return twoLineTc(e.subject.replace(/\.+$/,""),e.teacher,dw[i]);
       }).join('');
       rows.push(tr(dataTc(slot.time,tw,{center:true,sz:18})+dataTc(slot.mins||"",mw,{center:true,sz:18})+dayCells));
     } else if(isSHS){
-      const ss=slot.sections[section];
-      const dayCells=DAYS.map(function(day,i){
+      var ss=slot.sections[section];
+      var dayCells2=DAYS.map(function(day,i){
         if(!ss||!ss.dayMap||!ss.dayMap[day]) return dataTc("",dw[i],{center:true,sz:18});
-        const e=ss.dayMap[day];
-        return twoLineTc(e.subject,e.teacher,dw[i]);
+        var e2=ss.dayMap[day];
+        return twoLineTc(e2.subject.replace(/\n/g," "),e2.teacher,dw[i]);
       }).join('');
-      rows.push(tr(dataTc(slot.time,tw,{center:true,sz:18})+dataTc("60",mw,{center:true,sz:18})+dayCells));
+      rows.push(tr(dataTc(slot.time,tw,{center:true,sz:18})+dataTc("60",mw,{center:true,sz:18})+dayCells2));
     }
-  }
+  });
 
   body+=makeTbl(TW,colWidths,rows);
-  body+=sigBlock(teacherName,"Teacher/Adviser",SCHOOL.noted_by,SCHOOL.noted_title);
+  body+=sigBlock(teacherName,"Teacher/Adviser");
   return docWrap(body);
 }
 
-// ═══════════ ZIP/DOCX ═══════════
+// ═══════════ ZIP / DOCX ═══════════
 function crc32(data){
   if(!crc32._t){
     crc32._t=new Int32Array(256);
-    for(let i=0;i<256;i++){let c=i;for(let j=0;j<8;j++)c=(c&1)?(0xEDB88320^(c>>>1)):(c>>>1);crc32._t[i]=c;}
+    for(var i=0;i<256;i++){var c=i;for(var j=0;j<8;j++)c=(c&1)?(0xEDB88320^(c>>>1)):(c>>>1);crc32._t[i]=c;}
   }
-  let crc=-1;
-  for(let i=0;i<data.length;i++) crc=crc32._t[(crc^data[i])&0xff]^(crc>>>8);
+  var crc=-1;
+  for(var i=0;i<data.length;i++) crc=crc32._t[(crc^data[i])&0xff]^(crc>>>8);
   return(crc^-1)>>>0;
 }
+
 function buildZip(files){
-  const enc=new TextEncoder(),lhs=[],cds=[];let off=0;
-  for(const [name,content] of Object.entries(files)){
-    const nb=enc.encode(name),db=enc.encode(content),crc=crc32(db);
-    const lh=new Uint8Array(30+nb.length),lv=new DataView(lh.buffer);
+  var enc=new TextEncoder(), lhs=[], cds=[], off=0;
+  Object.keys(files).forEach(function(name){
+    var content=files[name];
+    var nb=enc.encode(name), db=enc.encode(content), crc=crc32(db);
+    var lh=new Uint8Array(30+nb.length), lv=new DataView(lh.buffer);
     lv.setUint32(0,0x04034b50,true);lv.setUint16(4,20,true);lv.setUint16(6,0,true);lv.setUint16(8,0,true);
     lv.setUint16(10,0,true);lv.setUint16(12,0,true);lv.setUint32(14,crc,true);
     lv.setUint32(18,db.length,true);lv.setUint32(22,db.length,true);
     lv.setUint16(26,nb.length,true);lv.setUint16(28,0,true);lh.set(nb,30);
-    const cd=new Uint8Array(46+nb.length),cv=new DataView(cd.buffer);
+    var cd=new Uint8Array(46+nb.length), cv=new DataView(cd.buffer);
     cv.setUint32(0,0x02014b50,true);cv.setUint16(4,20,true);cv.setUint16(6,20,true);
     cv.setUint16(8,0,true);cv.setUint16(10,0,true);cv.setUint16(12,0,true);cv.setUint16(14,0,true);
     cv.setUint32(16,crc,true);cv.setUint32(20,db.length,true);cv.setUint32(24,db.length,true);
     cv.setUint16(28,nb.length,true);cv.setUint16(30,0,true);cv.setUint16(32,0,true);
     cv.setUint16(34,0,true);cv.setUint16(36,0,true);cv.setUint32(38,0,true);cv.setUint32(42,off,true);cd.set(nb,46);
     lhs.push(lh,db);cds.push(cd);off+=lh.length+db.length;
-  }
-  const cdS=off,cdSz=cds.reduce(function(s,b){return s+b.length;},0);
-  const eocd=new Uint8Array(22),ev=new DataView(eocd.buffer);
+  });
+  var cdS=off, cdSz=cds.reduce(function(s,b){return s+b.length;},0);
+  var eocd=new Uint8Array(22), ev=new DataView(eocd.buffer);
   ev.setUint32(0,0x06054b50,true);ev.setUint16(4,0,true);ev.setUint16(6,0,true);
   ev.setUint16(8,cds.length,true);ev.setUint16(10,cds.length,true);
   ev.setUint32(12,cdSz,true);ev.setUint32(16,cdS,true);ev.setUint16(20,0,true);
-  const all=[...lhs,...cds,eocd],total=all.reduce(function(s,b){return s+b.length;},0);
-  const out=new Uint8Array(total);let pos=0;
-  for(const b of all){out.set(b,pos);pos+=b.length;}
+  var all=lhs.concat(cds).concat([eocd]);
+  var total=all.reduce(function(s,b){return s+b.length;},0);
+  var out=new Uint8Array(total), pos=0;
+  all.forEach(function(b){out.set(b,pos);pos+=b.length;});
   return out;
 }
+
 function saveDocx(xml,filename){
-  const ct='<?xml version="1.0" encoding="UTF-8" standalone="yes"?><Types xmlns="http://schemas.openxmlformats.org/package/2006/content-types"><Default Extension="rels" ContentType="application/vnd.openxmlformats-package.relationships+xml"/><Default Extension="xml" ContentType="application/xml"/><Override PartName="/word/document.xml" ContentType="application/vnd.openxmlformats-officedocument.wordprocessingml.document.main+xml"/><Override PartName="/word/styles.xml" ContentType="application/vnd.openxmlformats-officedocument.wordprocessingml.styles+xml"/></Types>';
-  const rels='<?xml version="1.0" encoding="UTF-8" standalone="yes"?><Relationships xmlns="http://schemas.openxmlformats.org/package/2006/relationships"><Relationship Id="rId1" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/officeDocument" Target="word/document.xml"/></Relationships>';
-  const wrels='<?xml version="1.0" encoding="UTF-8" standalone="yes"?><Relationships xmlns="http://schemas.openxmlformats.org/package/2006/relationships"><Relationship Id="rId1" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/styles" Target="styles.xml"/></Relationships>';
-  const styles='<?xml version="1.0" encoding="UTF-8" standalone="yes"?><w:styles xmlns:w="http://schemas.openxmlformats.org/wordprocessingml/2006/main"><w:style w:type="paragraph" w:default="1" w:styleId="Normal"><w:name w:val="Normal"/><w:rPr><w:rFonts w:ascii="'+BKM+'" w:hAnsi="'+BKM+'"/><w:sz w:val="20"/></w:rPr></w:style></w:styles>';
-  const zip=buildZip({"[Content_Types].xml":ct,"_rels/.rels":rels,"word/_rels/document.xml.rels":wrels,"word/styles.xml":styles,"word/document.xml":xml});
+  var ct='<?xml version="1.0" encoding="UTF-8" standalone="yes"?><Types xmlns="http://schemas.openxmlformats.org/package/2006/content-types"><Default Extension="rels" ContentType="application/vnd.openxmlformats-package.relationships+xml"/><Default Extension="xml" ContentType="application/xml"/><Override PartName="/word/document.xml" ContentType="application/vnd.openxmlformats-officedocument.wordprocessingml.document.main+xml"/><Override PartName="/word/styles.xml" ContentType="application/vnd.openxmlformats-officedocument.wordprocessingml.styles+xml"/></Types>';
+  var rels='<?xml version="1.0" encoding="UTF-8" standalone="yes"?><Relationships xmlns="http://schemas.openxmlformats.org/package/2006/relationships"><Relationship Id="rId1" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/officeDocument" Target="word/document.xml"/></Relationships>';
+  var wrels='<?xml version="1.0" encoding="UTF-8" standalone="yes"?><Relationships xmlns="http://schemas.openxmlformats.org/package/2006/relationships"><Relationship Id="rId1" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/styles" Target="styles.xml"/></Relationships>';
+  var styles='<?xml version="1.0" encoding="UTF-8" standalone="yes"?><w:styles xmlns:w="http://schemas.openxmlformats.org/wordprocessingml/2006/main"><w:style w:type="paragraph" w:default="1" w:styleId="Normal"><w:name w:val="Normal"/><w:rPr><w:rFonts w:ascii="'+BKM+'" w:hAnsi="'+BKM+'"/><w:sz w:val="20"/></w:rPr></w:style></w:styles>';
+  var zip=buildZip({"[Content_Types].xml":ct,"_rels/.rels":rels,"word/_rels/document.xml.rels":wrels,"word/styles.xml":styles,"word/document.xml":xml});
   saveAs(new Blob([zip],{type:"application/vnd.openxmlformats-officedocument.wordprocessingml.document"}),filename);
 }
 
 // ═══════════ DOWNLOADS ═══════════
-function dlTeacherProgram(name){
+function dlTeacherProgram(encodedName){
+  var name=decodeURIComponent(encodedName);
   try{
     showToast("Generating Teacher's Program...","info");
     saveDocx(buildTeacherProgramXML(name),"Teachers_Program_"+name.replace(/[^a-zA-Z0-9]/g,"_")+".docx");
     showToast("Downloaded: Teacher's Program","ok");
   }catch(e){showToast("Error: "+e.message,"err");console.error(e);}
 }
-function dlClassProgram(name,section){
+function dlClassProgram(encodedName,encodedSection){
+  var name=decodeURIComponent(encodedName);
+  var section=decodeURIComponent(encodedSection);
   try{
     showToast("Generating Class Program...","info");
     saveDocx(buildClassProgramXML(name,section),"Class_Program_"+section.replace(/[^a-zA-Z0-9]/g,"_")+".docx");
-    showToast("Downloaded: Class Program -- "+section,"ok");
+    showToast("Downloaded: "+section,"ok");
   }catch(e){showToast("Error: "+e.message,"err");console.error(e);}
 }
 
